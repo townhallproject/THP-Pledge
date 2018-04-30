@@ -1,0 +1,33 @@
+#map {
+  min-height: 31vh;
+  margin: 4vh 0;
+
+  &.leaflet-container {
+    background-color:rgba(0,0,0,0.0);
+
+    .filter-dropshadow {
+      filter: url(#filter-dropshadow);
+    }
+  }
+
+  .leaflet-tooltip {
+    padding: 2em;
+  }
+}
+
+
+/* Small desktop */
+@media (min-width: 992px) {
+  #map {
+    height: 80vh;
+    margin: 2vh 0 1vh 0;
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1600px) {
+  #map {
+    height: 56vh;
+    margin: 3vh 0 1vh 0;
+  }
+}
