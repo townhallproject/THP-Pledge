@@ -1,0 +1,33 @@
+{
+  "name": "thp-pledge",
+  "version": "1.0.0",
+  "description": "Town Hall Project's Pledge Tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "livereload": "livereload . -w 1000 -d",
+    "sass": "node-sass --watch scss -o css",
+    "serve": "http-server -a localhost --cors"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pdvorchik/THP-Pledge.git"
+  },
+  "author": "Paolo Unger Dvorchik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pdvorchik/THP-Pledge/issues"
+  },
+  "homepage": "https://github.com/pdvorchik/THP-Pledge#readme",
+  "dependencies": {
+    "eslint": "^4.19.1",
+    "http-server": "^0.11.1",
+    "livereload": "^0.7.0",
+    "node-sass": "^4.9.0",
+    "redux": "^4.0.0",
+    "rxjs": "^6.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  }
+}
