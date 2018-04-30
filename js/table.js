@@ -3,16 +3,6 @@ $( document ).ready(()=> {
 $table = $('#table--state');
 
 filteredData$.subscribe(data => {
-  // Group by state
-  data = data.reduce((res, record) => {
-    let key = record.state;
-    if (!res.hasOwnProperty(key)) {
-      res[key] = [];
-    }
-    res[key].push(record);
-    return res;
-  },{});
-
   $table.empty();
   Object.keys(data).forEach(key => addRow(key, data[key]));
 });
