@@ -1,0 +1,17 @@
+[{
+  "state": "NY",
+  "district": "17",
+  "office": "rep",
+  "firstName": "Test",
+  "lastName": "Rep",
+  "incumbent": true,
+  "pledged": true
+}, {
+  "state": "OH",
+  "district": "",
+  "office": "sen",
+  "firstName": "Test",
+  "lastName": "Sen",
+  "incumbent": true,
+  "pledged": true
+}]
