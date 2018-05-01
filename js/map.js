@@ -88,10 +88,10 @@ function setStateStyle(feature) {
 function fillStateColor(feature) {
   if (stateNameToAbrv[feature.properties.name] in dataByState) {
     let count = dataByState[stateNameToAbrv[feature.properties.name]].length;
-    return count === 1 ? '#cbc9e2' :
-           count === 2 ? '#9e9ac8' :
-           count === 3 ? '#756bb1' :
-                         '#54278f'
+    return count < 2 ? '#cbc9e2' :
+           count < 4 ? '#9e9ac8' :
+           count < 8 ? '#756bb1' :
+                       '#54278f'
   }
   return '#f2f0f7';
 }
