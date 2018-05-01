@@ -1,6 +1,6 @@
 var fullData$ = new Rx.BehaviorSubject();
 var filteredData$ = new Rx.BehaviorSubject();
-var dataByState;
+var dataByStateAndDistrict;
 
 // Setup state selector
 $( document ).ready(()=> {
@@ -8,28 +8,36 @@ $( document ).ready(()=> {
   var selectedState$ = Rx.Observable.fromEvent($('#select--state'), 'change');
   selectedState$.subscribe(function(res) {
     let key = res.currentTarget.value;
-    filteredData$.next(key ? {[key]: dataByState[key]} : dataByState);
+    filteredData$.next(key ? {[key]: dataByStateAndDistrict[key]} : dataByStateAndDistrict);
   });
 });
 
 // Seed initial data
 var initalData = $.ajax({ url: 'data/testData.json' }).then((res) => {
-  dataByState = groupByState(res);
-  filteredData$.next(dataByState);
+  dataByStateAndDistrict = groupByStateAndDistrict(res);
+  filteredData$.next(dataByStateAndDistrict);
   fullData$.next(res);
 });
 
 
 // Helper functions
-function groupByState(data) {
+function groupByStateAndDistrict(data) {
   return data.reduce((res, record) => {
-    let key = record.state;
-    if (!res.hasOwnProperty(key)) {
-      res[key] = [];
+    let state = record.state;
+    let district = getDistrictKey(record);
+    if (!res.hasOwnProperty(state)) {
+      res[state] = {};
     }
-    res[key].push(record);
+    if (!res[state].hasOwnProperty(district)) {
+      res[state][district] = [];
+    }
+    res[state][district].push(record);
     return res;
   }, {});
+}
+
+function getDistrictKey(record) {
+  return record.district || record.office;
 }
 
 function initStateSelector(ele) {

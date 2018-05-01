@@ -24,9 +24,20 @@
 #select--state {
   padding: 0.1em 0.25em;
 }
+
 #input--zipcode {
   width: 5em;
   padding: 0 0.25em;
+}
+
+#table--state {
+  .card-deck .card {
+    .card-header {
+      font-weight: 500;
+    }
+    // Ensure all cards are the same width, even if the row is not full
+    max-width: calc(50% - 30px);
+  } 
 }
 
 
@@ -35,6 +46,16 @@
   #map {
     height: 80vh;
     margin: 2vh 0 1vh 0;
+  }
+}
+
+/* Medium desktop */
+@media (min-width: 1200px) {
+  #table--state {
+    .card-deck .card {
+      // Ensure all cards are the same width, even if the row is not full
+      max-width: calc(33.33% - 30px);
+    } 
   }
 }
 

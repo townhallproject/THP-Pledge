@@ -4,27 +4,42 @@ $table = $('#table--state');
 
 filteredData$.subscribe(data => {
   $table.empty();
+
   let length = Object.keys(data).length;
-  if ( length > 1) {
+  if ( length !== 0) {
     Object.keys(data).forEach(key => {
-      $table.append('<div class="row"><div class="col-12"><h4>' + stateAbrvToName[key] + '</h4></div></div>'); 
-      addRow(data[key])
+      $table.append('<h4 class="mt-4">' + stateAbrvToName[key] + '</h4>'); 
+      addRow(key, data[key])
     });
-  } else if (length === 1) {
-    if (data[Object.keys(data)[0]]) {
-      // Don't bother with headers if only one state is shown
-      addRow(data[Object.keys(data)[0]]);
-    } else {
-      $table.append('<div class="row"><div class="col-12"><h4>No data for ' + stateAbrvToName[Object.keys(data)[0]] + '</h4></div></div>'); 
-    }
+  } else {
+    $table.append('<div class="row mt-4"><div class="col-12"><h4>No data for ' + stateAbrvToName[Object.keys(data)[0]] + '</h4></div></div>'); 
   }
 });
 
-function addRow(arr) {
-  arr.forEach(record => {
-    $table.append('<div class="col-3">' + record.name + '</div>');
+function addRow(stateAbrv, stateObj) {
+  var $row = $('<div class="card-deck"></div>').appendTo($table); 
+  Object.keys(stateObj).forEach((district, index) => {
+    // Card header
+    let card = '<div class="card p-0 mb-5"><div class="card-header">' + 
+                  stateAbrv + (parseInt(district) ? '-' + district + ' ' + officeDict['rep'] : ' ' + officeDict[district]) + 
+               '</div><ul class="list-group list-group-flush">'
+
+    // Card body
+    Object.keys(stateObj[district]).forEach(record => {
+      card += '<li class="list-group-item">' + stateObj[district][record].name + '</li>';
+    });
+
+    card += '</ul></div>';
+    $row.append(card);
+
+    // Add column breaks to improve responsiveness
+    if ((index + 1) % 2 === 0) {
+      $row.append('<div class="w-100 d-block d-xl-none"></div>');
+    }
+    if ((index + 1) % 3 === 0) {
+      $row.append('<div class="w-100 d-none d-xl-block"></div>');
+    }
   });
-  
 }
 
 });
