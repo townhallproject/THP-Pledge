@@ -1,5 +1,6 @@
 $( document ).ready(()=> {
  
+var selectedFeatureId;
 var map = L.map('map', { zoomSnap: 0.1, zoomControl: false});
 map.dragging.disable();
 map.doubleClickZoom.disable();
@@ -14,6 +15,7 @@ var tileLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/
 });
 var districtLayer = new L.GeoJSON.AJAX("data/districts.geojson");
 var stateLayer = new L.GeoJSON.AJAX("data/states.geojson");
+var stateLayerMask = new L.GeoJSON.AJAX("data/states.geojson", {invert: true});
 tileLayer.addTo(map);
 stateLayer.bindTooltip(showStateTooltip).addTo(map);
 
@@ -26,8 +28,15 @@ fullData$.subscribe(data => {
 // Zoom in/out when clicking on a state
 stateLayer.on('click', function(e) {
   map.fitBounds(e.layer.getBounds());
+  
+  // Add mask
+  selectedFeatureId = e.layer.feature.id;
+  if (!map.hasLayer(stateLayerMask)) {
+    map.addLayer(stateLayerMask);
+  }
+  stateLayerMask.setStyle(setStateStyleMask);
 });
-districtLayer.on('click', function(e) {
+stateLayerMask.on('click', function(e) {
   setDefaultZoom();
 });
 
@@ -36,12 +45,19 @@ map.on('zoomend', function() {
   if (map.getZoom() < (calculateZoom() + 1)){
     map.dragging.disable();
     if (map.hasLayer(districtLayer)) {
-        map.removeLayer(districtLayer);
+      map.removeLayer(districtLayer);
+    }
+    if (map.hasLayer(stateLayerMask)) {
+      map.removeLayer(stateLayerMask);
+      selectedFeatureId = false;
     }
   } else {
     map.dragging.enable();
     if (!map.hasLayer(districtLayer)) {
       map.addLayer(districtLayer);
+      if (selectedFeatureId) {
+        stateLayerMask.bringToFront();
+      }
     }
   }
 });
@@ -62,10 +78,10 @@ function setDefaultZoom() {
 function setStateStyle(feature) {
   return {
     fillColor: fillStateColor(feature),
+    fillOpacity: 1,
     weight: 2,
     opacity: 0.5,
     color: '#ccc77a',
-    fillOpacity: 1
   };
 }
 
@@ -78,6 +94,25 @@ function fillStateColor(feature) {
                          '#54278f'
   }
   return '#f2f0f7';
+}
+
+function setStateStyleMask(feature) {
+  if (feature.id === selectedFeatureId) {
+    return {
+      fillColor: '#000000',
+      fillOpacity: .6,
+      weight: 7,
+      opacity: 1,
+      color: '#ffffff',
+    }
+  } else {
+    return {
+      fillOpacity: 0,
+      weight: 2,
+      opacity: 0,
+      color: '#ffffff',
+    };
+  }
 }
 
 function showStateTooltip(layer) {

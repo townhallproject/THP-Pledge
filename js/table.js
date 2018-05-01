@@ -15,7 +15,7 @@ filteredData$.subscribe(data => {
       // Don't bother with headers if only one state is shown
       addRow(data[Object.keys(data)[0]]);
     } else {
-      $table.append('<div class="row"><div class="col-12"><h4>No data for ' + stateDict[Object.keys(data)[0]] + '</h4></div></div>'); 
+      $table.append('<div class="row"><div class="col-12"><h4>No data for ' + stateAbrvToName[Object.keys(data)[0]] + '</h4></div></div>'); 
     }
   }
 });
