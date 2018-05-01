@@ -18,15 +18,14 @@
 </head>
 <body>
   <div id="map"></div>
-  <div class="container-fluid">
-    <h1>Choose your state</h1>
-    <select id="select--state">
-        <option value="All">All</option>
-        <option value="NY">New York</option>
-        <option value="OH">Ohio</option>
-      </select>
-  </div>
-  <div id="table--state">
+  <div class="container">
+    <h1 class="d-inline-block">Filter by </h1>
+    <select id="select--state" class="d-inline-block">
+      <option value="">State</option>
+    </select>
+    <h1 class="d-inline-block"> or </h1>
+    <input id="input--zipcode" type="text" placeholder="Zip code" maxlength="5"/>
+    <div id="table--state"></div>
   </div>
 </body>
 </html>

@@ -1,17 +1,64 @@
 [{
-  "state": "NY",
-  "district": "17",
+  "state": "IL",
+  "district": "13",
   "office": "rep",
-  "firstName": "Test",
-  "lastName": "Rep",
+  "name": "Betsy Londrigan",
+  "incumbent": false,
+  "pledged": true
+}, {
+  "state": "IL",
+  "district": "09",
+  "office": "rep",
+  "name": "Jan Schakowsky",
   "incumbent": true,
+  "pledged": true
+}, {
+  "state": "WV",
+  "district": "3",
+  "office": "rep",
+  "name": "Courtney Tritch",
+  "incumbent": false,
   "pledged": true
 }, {
   "state": "OH",
   "district": "",
   "office": "sen",
-  "firstName": "Test",
-  "lastName": "Sen",
+  "name": "Mike Gibbons",
+  "incumbent": false,
+  "pledged": true
+}, {
+  "state": "OH",
+  "district": "10",
+  "office": "rep",
+  "name": "Theresa Gasper",
+  "incumbent": false,
+  "pledged": true
+}, {
+  "state": "OH",
+  "district": "13",
+  "office": "rep",
+  "name": "Tim Ryan",
   "incumbent": true,
+  "pledged": true
+}, {
+  "state": "NC",
+  "district": "2",
+  "office": "rep",
+  "name": "Wendy Ella May",
+  "incumbent": false,
+  "pledged": true
+}, {
+  "state": "NY",
+  "district": "21",
+  "office": "rep",
+  "name": "Tedra Cobb",
+  "incumbent": false,
+  "pledged": true
+}, {
+  "state": "TX",
+  "district": "7",
+  "office": "rep",
+  "name": "Laura Moser",
+  "incumbent": false,
   "pledged": true
 }]
