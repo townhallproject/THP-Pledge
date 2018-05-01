@@ -1,6 +1,8 @@
 $( document ).ready(()=> {
  
 var map = L.map('map', { zoomSnap: 0.1, zoomControl: false});
+map.dragging.disable();
+map.doubleClickZoom.disable();
 setDefaultZoom();
 // Add zoom to top right
 L.control.zoom({position:'topright'}).addTo(map);
@@ -29,14 +31,16 @@ districtLayer.on('click', function(e) {
   setDefaultZoom();
 });
 
-// Hide district layer unless we're zoomed in
+// Hide district layer and restrict dragging unless we're zoomed in
 map.on('zoomend', function() {
   if (map.getZoom() < (calculateZoom() + 1)){
+    map.dragging.disable();
     if (map.hasLayer(districtLayer)) {
         map.removeLayer(districtLayer);
     }
   } else {
-    if (!map.hasLayer(districtLayer)){
+    map.dragging.enable();
+    if (!map.hasLayer(districtLayer)) {
       map.addLayer(districtLayer);
     }
   }
