@@ -1,4 +1,4 @@
-var fullData;
+var fullData$ = new Rx.BehaviorSubject();
 var filteredData$ = new Rx.BehaviorSubject();
 var dataByState;
 
@@ -14,9 +14,9 @@ $( document ).ready(()=> {
 
 // Seed initial data
 var initalData = $.ajax({ url: 'data/testData.json' }).then((res) => {
-  fullData = res;
   dataByState = groupByState(res);
   filteredData$.next(dataByState);
+  fullData$.next(res);
 });
 
 
@@ -33,13 +33,13 @@ function groupByState(data) {
 }
 
 function initStateSelector(ele) {
-  Object.keys(stateDict).forEach(key => {
-    ele.append('<option value="' + key + '">' + stateDict[key] + '</option>');
+  Object.keys(stateAbrvToName).forEach(key => {
+    ele.append('<option value="' + key + '">' + stateAbrvToName[key] + '</option>');
   });
 }
 
 // Data
-var stateDict = {
+const stateAbrvToName = {
   "AL": "Alabama",
   "AK": "Alaska",
   "AS": "American Samoa",
@@ -97,3 +97,8 @@ var stateDict = {
   "WI": "Wisconsin",
   "WY": "Wyoming",
 }
+
+const stateNameToAbrv = Object.keys(stateAbrvToName).reduce(function(obj, key){
+  obj[stateAbrvToName[key]] = key;
+  return obj;
+}, {});

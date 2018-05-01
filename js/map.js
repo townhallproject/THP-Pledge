@@ -15,6 +15,11 @@ var stateLayer = new L.GeoJSON.AJAX("data/states.geojson");
 tileLayer.addTo(map);
 stateLayer.addTo(map);
 
+fullData$.subscribe(data => {
+  // Add choropleth coloring to layers
+  stateLayer.options = { style: setStateStyle };
+  districtLayer.options = { style: setDistrictStyle };
+});
 
 // Zoom in/out when clicking on a state
 stateLayer.on('click', function(e) {
@@ -48,6 +53,38 @@ function calculateZoom() {
 
 function setDefaultZoom() {
   map.setView([37.8, -96], calculateZoom());
+}
+
+function setStateStyle(feature) {
+  return {
+    fillColor: fillStateColor(feature),
+    weight: 2,
+    opacity: 0.5,
+    color: '#ccc77a',
+    fillOpacity: 1
+  };
+}
+
+function fillStateColor(feature) {
+  if (stateNameToAbrv[feature.properties.name] in dataByState) {
+    let count = dataByState[stateNameToAbrv[feature.properties.name]].length;
+    return count === 1 ? '#cbc9e2' :
+           count === 2 ? '#9e9ac8' :
+           count === 3 ? '#756bb1' :
+                         '#54278f'
+  }
+  return '#f2f0f7';
+}
+
+
+function setDistrictStyle(state) {
+  return {
+    // fillColor: fillColor(state),
+    weight: 3,
+    opacity: 1,
+    color: '#ffffff',
+    fillOpacity: 0
+  };
 }
 
 });

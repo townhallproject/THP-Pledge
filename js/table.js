@@ -7,7 +7,7 @@ filteredData$.subscribe(data => {
   let length = Object.keys(data).length;
   if ( length > 1) {
     Object.keys(data).forEach(key => {
-      $table.append('<div class="row"><div class="col-12"><h4>' + stateDict[key] + '</h4></div></div>'); 
+      $table.append('<div class="row"><div class="col-12"><h4>' + stateAbrvToName[key] + '</h4></div></div>'); 
       addRow(data[key])
     });
   } else if (length === 1) {
