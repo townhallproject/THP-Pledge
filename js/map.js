@@ -2,11 +2,10 @@ $( document ).ready(()=> {
  
 var selectedFeatureId;
 var map = L.map('map', { zoomSnap: 0.1, zoomControl: false});
+L.control.zoom({position:'topright'}).addTo(map);
 map.dragging.disable();
 map.doubleClickZoom.disable();
 setDefaultZoom();
-// Add zoom to top right
-L.control.zoom({position:'topright'}).addTo(map);
 
 var tileLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
@@ -61,6 +60,7 @@ map.on('zoomend', function() {
     }
   }
 });
+
 
 // Helper functions
 function calculateZoom() {
@@ -127,7 +127,6 @@ function showStateTooltip(layer) {
   tooltip += '<h6><em>(Please click for more information)</em></h6>'
   return tooltip;
 }
-
 
 function setDistrictStyle(state) {
   return {
