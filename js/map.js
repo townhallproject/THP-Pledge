@@ -13,7 +13,7 @@ var tileLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/
 var districtLayer = new L.GeoJSON.AJAX("data/districts.geojson");
 var stateLayer = new L.GeoJSON.AJAX("data/states.geojson");
 tileLayer.addTo(map);
-stateLayer.addTo(map);
+stateLayer.bindTooltip(showStateTooltip).addTo(map);
 
 fullData$.subscribe(data => {
   // Add choropleth coloring to layers
@@ -74,6 +74,19 @@ function fillStateColor(feature) {
                          '#54278f'
   }
   return '#f2f0f7';
+}
+
+function showStateTooltip(layer) {
+  let name = layer.feature.properties.name;
+  var tooltip = '<h4>' + name + '</h4>'
+  if (stateNameToAbrv[name] in dataByState) {
+    dataByState[stateNameToAbrv[name]].forEach(person => {
+      tooltip += '<h6>' + person.name + ' (' + person.state + '-' + person.district + ', ' + (person.incumbent ? 'incumbent' : 'candidate') + 
+                 ') has' + (person.pledged ? '' : 'not') + ' taken the town hall pledge.</h6>';
+    });
+  }
+  tooltip += '<h6><em>(Please click for more information)</em></h6>'
+  return tooltip;
 }
 
 
