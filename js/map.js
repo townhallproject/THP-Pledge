@@ -14,7 +14,7 @@ var tileLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/
 });
 var districtLayer = new L.GeoJSON.AJAX("data/districts.geojson");
 var stateLayer = new L.GeoJSON.AJAX("data/states.geojson");
-var stateLayerMask = new L.GeoJSON.AJAX("data/states.geojson", {invert: true});
+var stateLayerMask = new L.GeoJSON.AJAX("data/states.geojson", {invert: true, interactive: false});
 tileLayer.addTo(map);
 stateLayer.bindTooltip(showStateTooltip).addTo(map);
 
@@ -35,7 +35,7 @@ stateLayer.on('click', function(e) {
   }
   stateLayerMask.setStyle(setStateStyleMask);
 });
-stateLayerMask.on('click', function(e) {
+districtLayer.on('click', function(e) {
   setDefaultZoom();
 });
 
