@@ -142,7 +142,7 @@ function setDistrictStyle(district) {
 function fillDistrictColor(district) {
   let count = districtLookup(district.properties.DISTRICT).length;
 
-  return count < 1 ? '#cbc9e2' :
+  return count < 1 ? '#deddf0' :
          count < 2 ? '#9e9ac8' :
          count < 3 ? '#756bb1' :
                      '#54278f'

@@ -135,7 +135,55 @@
     "state": "IL",
     "incumbent": false,
     "pledged": true
- }, {
+  }, {
+    "district": 11,
+    "name": "Dan Haberman",
+    "party": "D",
+    "office": "rep",
+    "state": "MI",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 11,
+    "name": "Haley Stevens",
+    "party": "D",
+    "office": "rep",
+    "state": "MI",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 11,
+    "name": "Fayrouz Saad",
+    "party": "D",
+    "office": "rep",
+    "state": "MI",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 6,
+    "name": "David Benac",
+    "party": "D",
+    "office": "rep",
+    "state": "MI",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 21,
+    "name": "Tedra Cobb",
+    "party": "D",
+    "office": "rep",
+    "state": "NY",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 2,
+    "name": "Liuba Grechen Shirley",
+    "party": "D",
+    "office": "rep",
+    "state": "NY",
+    "incumbent": false,
+    "pledged": true
+  }, {
     "district": 12,
     "name": "Randy Auxier",
     "party": "I",
@@ -175,7 +223,15 @@
     "state": "OH",
     "incumbent": false,
     "pledged": true
- }, {
+  }, {
+    "district": 5,
+    "name": "Ashley Lunkenheimer",
+    "party": "D",
+    "office": "rep",
+    "state": "PA",
+    "incumbent": false,
+    "pledged": true
+  }, {
     "district": 2,
     "name": "Wendy Ella May",
     "party": "D",
@@ -189,14 +245,6 @@
     "party": "D",
     "office": "rep",
     "state": "NC",
-    "incumbent": false,
-    "pledged": true
- }, {
-    "district": 5,
-    "name": "Ashley Lunkenheimer",
-    "party": "D",
-    "office": "rep",
-    "state": "PA",
     "incumbent": false,
     "pledged": true
  }, {
@@ -255,53 +303,5 @@
     "state": "TX",
     "incumbent": false,
     "pledged": true
- }, {
-    "district": 21,
-    "name": "Tedra Cobb",
-    "party": "D",
-    "office": "rep",
-    "state": "NY",
-    "incumbent": false,
-    "pledged": true
- }, {
-    "district": 2,
-    "name": "Liuba Grechen Shirley",
-    "party": "D",
-    "office": "rep",
-    "state": "NY",
-    "incumbent": false,
-    "pledged": true
- }, {
-    "district": 11,
-    "name": "Dan Haberman",
-    "party": "D",
-    "office": "rep",
-    "state": "MI",
-    "incumbent": false,
-    "pledged": true
- }, {
-    "district": 11,
-    "name": "Haley Stevens",
-    "party": "D",
-    "office": "rep",
-    "state": "MI",
-    "incumbent": false,
-    "pledged": true
- }, {
-    "district": 11,
-    "name": "Fayrouz Saad",
-    "party": "D",
-    "office": "rep",
-    "state": "MI",
-    "incumbent": false,
-    "pledged": true
- }, {
-    "district": 6,
-    "name": "David Benac",
-    "party": "D",
-    "office": "rep",
-    "state": "MI",
-    "incumbent": false,
-    "pledged": true
-  }
+ }
 ]
