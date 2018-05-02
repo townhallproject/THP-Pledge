@@ -45,3 +45,11 @@ function initStateSelector(ele) {
     ele.append('<option value="' + key + '">' + stateAbrvToName[key] + '</option>');
   });
 }
+
+function districtLookup(district) {
+  let districtParts = district.split('-');
+  if (districtParts[0] in dataByStateAndDistrict && districtParts[1] in dataByStateAndDistrict[districtParts[0]]) {
+    return dataByStateAndDistrict[districtParts[0]][districtParts[1]];
+  }
+  return [];
+}
