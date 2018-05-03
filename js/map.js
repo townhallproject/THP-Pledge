@@ -123,10 +123,14 @@ function showStateTooltip(layer) {
   let name = layer.feature.properties.name;
   let tooltip = '<h4>' + name + '</h4>'
   if (stateNameToAbrv[name] in dataByStateAndDistrict) {
-    // dataByStateAndDistrict[stateNameToAbrv[name]].forEach(person => {
-    //   tooltip += '<h6>' + person.name + ' (' + person.state + '-' + person.district + ', ' + (person.incumbent ? 'incumbent' : 'candidate') + 
-    //              ') has' + (person.pledged ? '' : 'not') + ' taken the town hall pledge.</h6>';
-    // });
+    ['sen', 'gov'].forEach(stateOffice => {
+      if (stateOffice in dataByStateAndDistrict[stateNameToAbrv[name]]) {
+        dataByStateAndDistrict[stateNameToAbrv[name]][stateOffice].forEach(person => {
+          tooltip += '<h6>' + (person.incumbent ? 'Incumbent ' : 'Candidate ') + person.name + ' (' + officeDict[stateOffice] + ') ' +
+                     ' has' + (person.pledged ? '' : 'not') + ' taken the town hall pledge.</h6>';
+        });
+      }
+    });
   }
   tooltip += '<h6><em>(Please click for more information)</em></h6>'
   return tooltip;
