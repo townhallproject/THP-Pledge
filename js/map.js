@@ -7,12 +7,10 @@ map.dragging.disable();
 map.doubleClickZoom.disable();
 setDefaultZoom();
 
-var tileLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-	subdomains: 'abcd',
+var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
   minZoom: 4.5,
   maxZoom: 19,
-	ext: 'png'
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 });
 
 var districtLayer = new L.GeoJSON.AJAX("data/districts.geojson", {middleware: adaptDistricts}).bindTooltip(showDistrictTooltip);
@@ -87,7 +85,7 @@ function setStateStyle(feature) {
     fillOpacity: 1,
     weight: 2,
     opacity: 0.5,
-    color: '#c39657',
+    color: '#D4D5D4',
   };
 }
 
@@ -129,8 +127,8 @@ function showStateTooltip(layer) {
     ['sen', 'gov'].forEach(stateOffice => {
       if (stateOffice in dataByStateAndDistrict[stateNameToAbrv[name]]) {
         dataByStateAndDistrict[stateNameToAbrv[name]][stateOffice].forEach(person => {
-          tooltip += '<h6>' + (person.incumbent ? 'Incumbent ' : 'Candidate ') + person.name + ' (' + officeDict[stateOffice] + ') ' +
-                     ' has' + (person.pledged ? '' : 'not') + ' taken the town hall pledge.</h6>';
+          tooltip += '<h6>' + (person.incumbent ? 'Incumbent ' : 'Candidate ') + person.name + ' (' + officeDict[stateOffice] + ') ';
+                    //  ' has' + (person.pledged ? '' : 'not') + ' taken the town hall pledge.</h6>';
         });
       }
     });

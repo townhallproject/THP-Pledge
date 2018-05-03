@@ -14,7 +14,7 @@ $brand-white: #ffffff;
 .navbar {
   padding: 0 1em;
   border-bottom: $brand-secondary 2px solid;
-  margin-bottom: 0.2em;
+  margin-bottom: 0;
   background-color: $brand-white;
   box-shadow: 0px 4px 4px rgba(0,0,0,0.1);
 
@@ -28,7 +28,7 @@ $brand-white: #ffffff;
   }
 
   a.linkOut {
-    font-size: 1.75em;
+    font-size: 1.65em;
     color: $brand-text;
     &:hover, &:active, &:visited {
       text-decoration: none;
@@ -56,7 +56,39 @@ h1.background-dark {
   }
 
   .leaflet-tooltip {
+    background: $brand-primary;
+    color: $brand-white;
     padding: 2em;
+    max-width: 25em;
+    opacity: 1!important;
+    border: none;
+    border-radius: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    box-shadow: 0 1px 3px $brand-primary;
+    -webkit-box-shadow: 0 1px 3px $brand-primary;
+  }
+  .leaflet-tooltip-top {
+    &::before {
+      border-top-color: $brand-primary;
+    }
+  }
+  .leaflet-tooltip-right {
+    &::before {
+      border-right-color: $brand-primary;
+    }
+  }
+  .leaflet-tooltip-bottom {
+    &::before {
+      border-bottom-color: $brand-primary;
+    }
+  }
+  .leaflet-tooltip-left {
+    &::before {
+      border-left-color: $brand-primary;
+    }
   }
 }
 
