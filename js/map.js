@@ -90,7 +90,7 @@ function setStateStyle(feature) {
 
 function fillStateColor(feature) {
   if (stateNameToAbrv[feature.properties.name] in dataByStateAndDistrict) {
-    let count = dataByStateAndDistrict[stateNameToAbrv[feature.properties.name]].length;
+    let count = Object.keys(dataByStateAndDistrict[stateNameToAbrv[feature.properties.name]]).length;
     // TODO: Calculate by mode
     return count < 2 ? '#cbc9e2' :
            count < 4 ? '#9e9ac8' :
