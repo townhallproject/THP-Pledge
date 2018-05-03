@@ -5,8 +5,8 @@ $table = $('#table--state');
 filteredData$.subscribe(data => {
   $table.empty();
 
-  let length = Object.keys(data).length;
-  if ( length !== 0) {
+  let hasRecords = Object.keys(data).length > 1 || Object.keys(data[Object.keys(data)[0]]).length > 0;
+  if (hasRecords) {
     Object.keys(data).forEach(key => {
       $table.append('<h4 class="mt-4">' + stateAbrvToName[key] + '</h4>'); 
       addRow(key, data[key])

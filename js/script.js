@@ -8,7 +8,11 @@ $( document ).ready(()=> {
   var selectedState$ = Rx.Observable.fromEvent($('#select--state'), 'change');
   selectedState$.subscribe(function(res) {
     let key = res.currentTarget.value;
-    filteredData$.next(key ? {[key]: dataByStateAndDistrict[key]} : dataByStateAndDistrict);
+    if (key) {
+      filteredData$.next({[key]: (key in dataByStateAndDistrict ? dataByStateAndDistrict[key] : {})}); 
+    } else {
+      filteredData$.next(dataByStateAndDistrict);
+    }
   });
 });
 

@@ -34,9 +34,12 @@ stateLayer.on('click', function(e) {
     map.addLayer(stateLayerMask);
   }
   stateLayerMask.setStyle(setStateStyleMask);
+  // Change data table
+  $("#select--state").val(stateNameToAbrv[e.layer.feature.properties.name]).change();
 });
 districtLayer.on('click', function(e) {
   setDefaultZoom();
+  $("#select--state").val(null).change();
 });
 
 // Hide district layer and restrict dragging unless we're zoomed in
