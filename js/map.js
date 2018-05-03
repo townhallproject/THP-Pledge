@@ -7,11 +7,14 @@ map.dragging.disable();
 map.doubleClickZoom.disable();
 setDefaultZoom();
 
-var tileLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+var tileLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
   minZoom: 4.5,
-  maxZoom: 19
+  maxZoom: 19,
+	ext: 'png'
 });
+
 var districtLayer = new L.GeoJSON.AJAX("data/districts.geojson", {middleware: adaptDistricts}).bindTooltip(showDistrictTooltip);
 var stateLayer = new L.GeoJSON.AJAX("data/states.geojson");
 var stateLayerMask = new L.GeoJSON.AJAX("data/states.geojson", {invert: true, interactive: false});
@@ -84,7 +87,7 @@ function setStateStyle(feature) {
     fillOpacity: 1,
     weight: 2,
     opacity: 0.5,
-    color: '#ccc77a',
+    color: '#c39657',
   };
 }
 
