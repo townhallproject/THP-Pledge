@@ -3,6 +3,7 @@ $( document ).ready(()=> {
 $table = $('#table--state');
 
 filteredData$.subscribe(data => {
+  if (!data) { return; }
   $table.empty();
 
   let hasRecords = Object.keys(data).length > 1 || Object.keys(data[Object.keys(data)[0]]).length > 0;
