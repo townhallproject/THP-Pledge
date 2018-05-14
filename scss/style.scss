@@ -10,6 +10,13 @@ $brand-success: #3facef;
 $brand-info: #132149;
 $brand-secondary-dark : darken($brand-secondary, 20%);
 $brand-white: #ffffff;
+$party-democrat: #66bdf4;
+$party-independent: #5a4c70;
+$party-republican: #f87773;
+
+body {
+  font-size: 1.65em;
+}
 
 .navbar {
   padding: 0 1em;
@@ -37,15 +44,68 @@ $brand-white: #ffffff;
   }
 }
 
-h1.background-dark {
+.background-dark {
   background: $brand-primary;
   color: $brand-white;
+}
+
+h1.background-dark {
   text-align: center;
   padding: 0.25em 0;
 }
 
+.row.header-pledge--CTA {
+  background-image: url('/image/pledgeHeader.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  p {
+    font-size: 1.25em;
+  }
+}
+
+div.header-pledge--count {
+  display: flex;
+  font-size: 2em;
+  text-align: center;
+  color: $brand-white;
+  line-height: 1;
+
+  div {
+    padding: 0.5em 0;
+    overflow: hidden;
+  }
+  
+  // TODO:  Set flex-basis programtically
+  .democrat {
+    background: darken($party-democrat, 25%);
+    flex-basis: 20.83%;
+  }
+  .democrat-candidate {
+    background: $party-democrat;
+    flex-basis: 29.17%;
+  }
+  .independent {
+    background: darken($party-independent, 10%);
+    flex-basis: 2.08%;
+  }
+  .independent-candidate {
+    background: $party-independent;
+    flex-basis: 2.08%;
+  }
+  .republican {
+    background: darken($party-republican, 20%);
+    flex-basis: 16.67%;
+  }
+  .republican-candidate {
+    background: $party-republican;
+    flex-basis: 29.17%;
+  }
+}
+
 #map {
   min-height: 31vh;
+  width: 100%;
 
   &.leaflet-container {
     background-color:rgba(0,0,0,0.0);
@@ -125,7 +185,11 @@ h1.background-dark {
 
 /* Small desktop */
 @media (min-width: 992px) {
+  body {
+    font-size: 1em;
+  }
   #map {
+    width: 100%;
     height: 80vh;
   }
 }
@@ -144,5 +208,12 @@ h1.background-dark {
 @media (min-width: 1600px) {
   #map {
     height: 56vh;
+  }
+}
+
+/* Extra Large desktop */
+@media (min-width: 1700px) {
+  body {
+    font-size: 1.35em;
   }
 }

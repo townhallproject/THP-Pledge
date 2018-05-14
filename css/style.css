@@ -1,3 +1,6 @@
+body {
+  font-size: 1.65em; }
+
 .navbar {
   padding: 0 1em;
   border-bottom: #ff4741 2px solid;
@@ -17,14 +20,52 @@
       text-decoration: none;
       color: #132149; }
 
-h1.background-dark {
+.background-dark {
   background: #0d4668;
-  color: #ffffff;
+  color: #ffffff; }
+
+h1.background-dark {
   text-align: center;
   padding: 0.25em 0; }
 
+.row.header-pledge--CTA {
+  background-image: url("/image/pledgeHeader.png");
+  background-size: cover;
+  background-repeat: no-repeat; }
+  .row.header-pledge--CTA p {
+    font-size: 1.25em; }
+
+div.header-pledge--count {
+  display: flex;
+  font-size: 2em;
+  text-align: center;
+  color: #ffffff;
+  line-height: 1; }
+  div.header-pledge--count div {
+    padding: 0.5em 0;
+    overflow: hidden; }
+  div.header-pledge--count .democrat {
+    background: #0f83cc;
+    flex-basis: 20.83%; }
+  div.header-pledge--count .democrat-candidate {
+    background: #66bdf4;
+    flex-basis: 29.17%; }
+  div.header-pledge--count .independent {
+    background: #423752;
+    flex-basis: 2.08%; }
+  div.header-pledge--count .independent-candidate {
+    background: #5a4c70;
+    flex-basis: 2.08%; }
+  div.header-pledge--count .republican {
+    background: #f31912;
+    flex-basis: 16.67%; }
+  div.header-pledge--count .republican-candidate {
+    background: #f87773;
+    flex-basis: 29.17%; }
+
 #map {
-  min-height: 31vh; }
+  min-height: 31vh;
+  width: 100%; }
   #map.leaflet-container {
     background-color: rgba(0, 0, 0, 0); }
     #map.leaflet-container .filter-dropshadow {
@@ -74,7 +115,10 @@ h1.background-dark {
 
 /* Small desktop */
 @media (min-width: 992px) {
+  body {
+    font-size: 1em; }
   #map {
+    width: 100%;
     height: 80vh; } }
 
 /* Medium desktop */
@@ -86,3 +130,8 @@ h1.background-dark {
 @media (min-width: 1600px) {
   #map {
     height: 56vh; } }
+
+/* Extra Large desktop */
+@media (min-width: 1700px) {
+  body {
+    font-size: 1.35em; } }
