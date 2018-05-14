@@ -2,10 +2,12 @@ $( document ).ready(()=> {
  
 var selectedFeatureId;
 var map = L.map('map', { zoomSnap: 0.1, zoomControl: false});
-L.control.zoom({position:'topright'}).addTo(map);
-map.dragging.disable();
 map.doubleClickZoom.disable();
+map.dragging.disable();
+map.scrollWheelZoom.disable();
+map.touchZoom.disable();
 setDefaultZoom();
+addZoomControl(map);
 
 var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
   minZoom: 4.5,
@@ -25,44 +27,28 @@ fullData$.subscribe(data => {
   districtLayer.options = { style: setDistrictStyle };
 });
 
-// Zoom in/out when clicking on a state
+// Zoom in and show districts when clicking on a state
 stateLayer.on('click', function(e) {
   map.fitBounds(e.layer.getBounds());
-  
-  // Add mask
+  map.dragging.enable();
+
+  // Show district layer
+  if (!map.hasLayer(districtLayer)) {
+    map.addLayer(districtLayer);
+    if (selectedFeatureId) {
+      stateLayerMask.bringToFront();
+    }
+  }
+
+  // Mask out other states
   selectedFeatureId = e.layer.feature.id;
   if (!map.hasLayer(stateLayerMask)) {
     map.addLayer(stateLayerMask);
   }
   stateLayerMask.setStyle(setStateStyleMask);
+
   // Change data table
   $("#select--state").val(stateNameToAbrv[e.layer.feature.properties.name]).change();
-});
-districtLayer.on('click', function(e) {
-  setDefaultZoom();
-  $("#select--state").val(null).change();
-});
-
-// Hide district layer and restrict dragging unless we're zoomed in
-map.on('zoomend', function() {
-  if (map.getZoom() < (calculateZoom() + 1)){
-    map.dragging.disable();
-    if (map.hasLayer(districtLayer)) {
-      map.removeLayer(districtLayer);
-    }
-    if (map.hasLayer(stateLayerMask)) {
-      map.removeLayer(stateLayerMask);
-      selectedFeatureId = false;
-    }
-  } else {
-    map.dragging.enable();
-    if (!map.hasLayer(districtLayer)) {
-      map.addLayer(districtLayer);
-      if (selectedFeatureId) {
-        stateLayerMask.bringToFront();
-      }
-    }
-  }
 });
 
 
@@ -77,6 +63,31 @@ function calculateZoom() {
 
 function setDefaultZoom() {
   map.setView([37.8, -96], calculateZoom());
+}
+
+function addZoomControl(map) {
+  L.control.zoom({position:'topright'}).addTo(map);
+  $('.leaflet-control-zoom').append(
+    '<a class="leaflet-control-zoom-reset" href="" title="Reset zoom" role="button" aria-label="Reset zoom"></a>'
+  ).click(resetMap);
+}
+
+function resetMap(e) {
+  // Reset zoom and data table
+  setDefaultZoom();
+  $("#select--state").val(null).change();
+  map.dragging.disable();
+
+  // Remove district layer and shadow mask
+  if (map.hasLayer(districtLayer)) {
+    map.removeLayer(districtLayer);
+  }
+  if (map.hasLayer(stateLayerMask)) {
+    map.removeLayer(stateLayerMask);
+    selectedFeatureId = false;
+  }
+
+  return false;
 }
 
 function setStateStyle(feature) {

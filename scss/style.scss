@@ -55,6 +55,11 @@ h1.background-dark {
     }
   }
 
+  .leaflet-control-zoom-reset {
+    background-image: url('/image/usa.svg');
+    background-size: 75%;
+  }
+
   .leaflet-tooltip {
     background: $brand-primary;
     color: $brand-white;

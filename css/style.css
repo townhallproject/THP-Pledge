@@ -29,6 +29,9 @@ h1.background-dark {
     background-color: rgba(0, 0, 0, 0); }
     #map.leaflet-container .filter-dropshadow {
       filter: url(#filter-dropshadow); }
+  #map .leaflet-control-zoom-reset {
+    background-image: url("/image/usa.svg");
+    background-size: 75%; }
   #map .leaflet-tooltip {
     background: #0d4668;
     color: #ffffff;
