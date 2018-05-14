@@ -8,13 +8,11 @@ $( document ).ready(()=> {
   selectedState$.subscribe(function(res) {
     let key = res.currentTarget.value;
     if (key) {
-      filteredData$.next({[key]: (key in dataByStateAndDistrict ? dataByStateAndDistrict[key] : {})}); 
+      filteredData$.next({[key]: (key in dataByStateAndDistrict ? dataByStateAndDistrict[key] : {})});
     } else {
       filteredData$.next(dataByStateAndDistrict);
     }
   });
-  // TODO hook up to observable to avoid race condition
-  initStateSelector($('#select--state'), dataByStateAndDistrict);
 });
 
 // Seed initial data
@@ -22,6 +20,7 @@ var initalData = $.ajax({ url: 'data/testData.json' }).then((res) => {
   dataByStateAndDistrict = groupByStateAndDistrict(res);
   filteredData$.next(dataByStateAndDistrict);
   fullData$.next(res);
+  initStateSelector($('#select--state'), dataByStateAndDistrict);
 });
 
 
@@ -47,8 +46,10 @@ function getDistrictKey(record) {
 
 function initStateSelector(ele, data) {
   // TODO alphabatize results
-  Object.keys(data).forEach(key => {
-    ele.append('<option value="' + key + '">' + stateAbrvToName[key] + '</option>');
+  $( document ).ready(()=> {
+    Object.keys(data).forEach(key => {
+      ele.append('<option value="' + key + '">' + stateAbrvToName[key] + '</option>');
+    });
   });
 }
 
