@@ -2,7 +2,8 @@ body {
   font-size: 1.65em; }
 
 .navbar {
-  padding: 0 1em;
+  padding: 0.5em 1em;
+  line-height: 1;
   border-bottom: #ff4741 2px solid;
   margin-bottom: 0;
   background-color: #ffffff;
@@ -10,7 +11,7 @@ body {
   .navbar .navbar-brand {
     font-size: 2em;
     color: #132149;
-    padding: 0.25em 0 0 0; }
+    padding: 0; }
     .navbar .navbar-brand img {
       width: 125px; }
   .navbar a.linkOut {
@@ -29,11 +30,12 @@ h1.background-dark {
   padding: 0.25em 0; }
 
 .row.header-pledge--CTA {
-  background-image: url("/image/pledgeHeader.png");
+  background-image: url("../image/pledgeHeader.png");
   background-size: cover;
   background-repeat: no-repeat; }
   .row.header-pledge--CTA p {
-    font-size: 1.25em; }
+    font-size: 1.25em;
+    line-height: 1.25; }
 
 div.header-pledge--count {
   display: flex;
@@ -71,7 +73,7 @@ div.header-pledge--count {
     #map.leaflet-container .filter-dropshadow {
       filter: url(#filter-dropshadow); }
   #map .leaflet-control-zoom-reset {
-    background-image: url("/image/usa.svg");
+    background-image: url("../image/usa.svg");
     background-size: 75%; }
   #map .leaflet-tooltip {
     background: #0d4668;
@@ -117,6 +119,14 @@ div.header-pledge--count {
 @media (min-width: 992px) {
   body {
     font-size: 1em; }
+  .navbar {
+    padding: 0.5em 1em;
+    line-height: 1; }
+    .navbar .navbar-brand {
+      font-size: 2em;
+      line-height: 1.45; }
+    .navbar a.linkOut {
+      font-size: 1.65em; }
   #map {
     width: 100%;
     height: 80vh; } }
@@ -128,10 +138,24 @@ div.header-pledge--count {
 
 /* Large desktop */
 @media (min-width: 1600px) {
+  .navbar {
+    padding: 0.25em 1em 0.15em 1em; }
+    .navbar .navbar-brand {
+      font-size: 1.85em;
+      line-height: 1.55; }
+    .navbar a.linkOut {
+      font-size: 1.3em; }
   #map {
     height: 56vh; } }
 
 /* Extra Large desktop */
 @media (min-width: 1700px) {
   body {
-    font-size: 1.35em; } }
+    font-size: 1.35em; }
+  .navbar {
+    padding: 0.2em 1em 0.1em 1em; }
+    .navbar .navbar-brand {
+      font-size: 1.5em;
+      line-height: 1.35; }
+    .navbar a.linkOut {
+      font-size: 1.15em; } }
