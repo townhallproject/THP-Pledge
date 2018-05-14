@@ -4,7 +4,6 @@ var dataByStateAndDistrict;
 
 // Setup state selector
 $( document ).ready(()=> {
-  initStateSelector($('#select--state'));
   var selectedState$ = Rx.Observable.fromEvent($('#select--state'), 'change');
   selectedState$.subscribe(function(res) {
     let key = res.currentTarget.value;
@@ -14,6 +13,8 @@ $( document ).ready(()=> {
       filteredData$.next(dataByStateAndDistrict);
     }
   });
+  // TODO hook up to observable to avoid race condition
+  initStateSelector($('#select--state'), dataByStateAndDistrict);
 });
 
 // Seed initial data
@@ -44,8 +45,9 @@ function getDistrictKey(record) {
   return record.district || record.office;
 }
 
-function initStateSelector(ele) {
-  Object.keys(stateAbrvToName).forEach(key => {
+function initStateSelector(ele, data) {
+  // TODO alphabatize results
+  Object.keys(data).forEach(key => {
     ele.append('<option value="' + key + '">' + stateAbrvToName[key] + '</option>');
   });
 }
