@@ -16,11 +16,11 @@ $( document ).ready(()=> {
 });
 
 // Seed initial data
-var initalData = $.ajax({ url: 'data/testData.json' }).then((res) => {
-  dataByStateAndDistrict = groupByStateAndDistrict(res);
-  filteredData$.next(dataByStateAndDistrict);
+firebasedb.ref('town_hall_pledges/').once('value').then(function(snapshot) {
+  const res = groupByStateAndDistrict(snapshot.val());
+  filteredData$.next(res);
   fullData$.next(res);
-  initStateSelector($('#select--state'), dataByStateAndDistrict);
+  initStateSelector($('#select--state'), res);
 });
 
 
