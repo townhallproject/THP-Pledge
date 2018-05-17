@@ -1,6 +1,5 @@
 var fullData$ = new Rx.BehaviorSubject();
 var filteredData$ = new Rx.BehaviorSubject();
-var dataByStateAndDistrict;
 
 // Setup state selector
 $( document ).ready(()=> {
@@ -8,9 +7,9 @@ $( document ).ready(()=> {
   selectedState$.subscribe(function(res) {
     let key = res.currentTarget.value;
     if (key) {
-      filteredData$.next({[key]: (key in dataByStateAndDistrict ? dataByStateAndDistrict[key] : {})});
+      filteredData$.next({[key]: (key in fullData$.getValue() ? fullData$.getValue()[key] : {})});
     } else {
-      filteredData$.next(dataByStateAndDistrict);
+      filteredData$.next(fullData$.getValue());
     }
   });
 });
@@ -22,7 +21,6 @@ firebasedb.ref('town_hall_pledges/').once('value').then(function(snapshot) {
   fullData$.next(res);
   initStateSelector($('#select--state'), res);
 });
-
 
 // Helper functions
 function groupByStateAndDistrict(data) {
@@ -58,4 +56,8 @@ function districtLookup(district) {
     return dataByStateAndDistrict[districtParts[0]][districtParts[1]];
   }
   return [];
+}
+
+function takenThePledge(record) {
+  return record.pledged ? ' has taken the pledge.' : ' has not taken the pledge.'
 }

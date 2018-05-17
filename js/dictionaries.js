@@ -64,7 +64,7 @@ const stateNameToAbrv = Object.keys(stateAbrvToName).reduce(function(obj, key){
 }, {});
 
 const officeDict = {
-  'rep': 'Representative',
-  'sen': 'Senator',
-  'gov': 'Governor',
+  'Rep': 'Representative',
+  'Sen': 'Senator',
+  'Gov': 'Governor',
 }

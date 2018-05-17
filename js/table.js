@@ -6,28 +6,28 @@ filteredData$.subscribe(data => {
   if (!data) { return; }
   $table.empty();
 
-  let hasRecords = Object.keys(data).length > 1 || Object.keys(data[Object.keys(data)[0]]).length > 0;
-  if (hasRecords) {
-    Object.keys(data).forEach(key => {
-      $table.append('<h4 class="mt-4">' + stateAbrvToName[key] + '</h4>'); 
-      addRow(key, data[key])
-    });
-  } else {
-    $table.append('<div class="row mt-4"><div class="col-12"><h4>No data for ' + stateAbrvToName[Object.keys(data)[0]] + '</h4></div></div>'); 
-  }
+  Object.keys(data).forEach(key => {
+    $table.append('<h4 class="mt-4">' + stateAbrvToName[key] + '</h4>');
+    addRow(key, data[key])
+  });
 });
 
 function addRow(stateAbrv, stateObj) {
-  var $row = $('<div class="card-deck"></div>').appendTo($table); 
+  var $row = $('<div class="card-deck"></div>').appendTo($table);
   Object.keys(stateObj).forEach((district, index) => {
     // Card header
-    let card = '<div class="card p-0 mb-5"><div class="card-header">' + 
-                  stateAbrv + (parseInt(district) ? '-' + district + ' ' + officeDict['rep'] : ' ' + officeDict[district]) + 
+    let card = '<div class="card p-0 mb-5"><div class="card-header">' +
+                  stateAbrv + (parseInt(district) ? '-' + district + ' ' + officeDict['Rep'] : ' ' + officeDict[district]) +
                '</div><ul class="list-group list-group-flush">'
 
     // Card body
-    Object.keys(stateObj[district]).forEach(record => {
-      card += '<li class="list-group-item">' + stateObj[district][record].name + '</li>';
+    const incumbent = stateObj[district].filter(record => record.incumbent === true)[0] || false;
+    if (incumbent) {
+      card += '<li class="list-group-item">Incumbent <strong>' + incumbent.displayName + '</strong> ' + takenThePledge(incumbent) + '</li>';
+    }
+
+    stateObj[district].filter(record => record.incumbent === false && record.pledged === true).forEach(candidate => {
+      card += '<li class="list-group-item">Candidate <strong>' + candidate.displayName + '</strong> has taken the pledge.</li>';
     });
 
     card += '</ul></div>';
