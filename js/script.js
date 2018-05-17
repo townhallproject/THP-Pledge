@@ -26,17 +26,16 @@ firebasedb.ref('town_hall_pledges/').once('value').then(function(snapshot) {
 
 // Helper functions
 function groupByStateAndDistrict(data) {
-  return data.reduce((res, record) => {
-    let state = record.state;
-    let district = getDistrictKey(record);
-    if (!res.hasOwnProperty(state)) {
-      res[state] = {};
-    }
-    if (!res[state].hasOwnProperty(district)) {
-      res[state][district] = [];
-    }
-    res[state][district].push(record);
-    return res;
+  return Object.keys(data).reduce((obj, stateAbrv) => {
+    obj[stateAbrv] = Object.keys(data[stateAbrv]).reduce(function(districts, key) {
+      const val = data[stateAbrv][key].district || data[stateAbrv][key].role;
+
+      districts[val] = districts[val] || [];
+      districts[val].push(data[stateAbrv][key]);
+      return districts;
+    }, {});
+
+    return obj;
   }, {});
 }
 
