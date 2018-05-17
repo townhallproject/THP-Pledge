@@ -52,8 +52,8 @@ function initStateSelector(ele, data) {
 
 function districtLookup(district) {
   let districtParts = district.split('-');
-  if (districtParts[0] in dataByStateAndDistrict && districtParts[1] in dataByStateAndDistrict[districtParts[0]]) {
-    return dataByStateAndDistrict[districtParts[0]][districtParts[1]];
+  if (districtParts[0] in fullData$.getValue() && districtParts[1] in fullData$.getValue()[districtParts[0]]) {
+    return fullData$.getValue()[districtParts[0]][districtParts[1]];
   }
   return [];
 }

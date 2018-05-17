@@ -1,5 +1,5 @@
 $( document ).ready(()=> {
- 
+
 var selectedFeatureId;
 var map = L.map('map', { zoomSnap: 0.1, zoomControl: false});
 map.doubleClickZoom.disable();
@@ -23,8 +23,9 @@ stateLayer.bindTooltip(showStateTooltip).addTo(map);
 
 fullData$.subscribe(data => {
   // Add choropleth coloring to layers
-  stateLayer.options = { style: setStateStyle };
-  districtLayer.options = { style: setDistrictStyle };
+  if (!data) { return; }
+  stateLayer.setStyle(setStateStyle);
+  districtLayer.setStyle(setDistrictStyle);
 });
 
 // Zoom in and show districts when clicking on a state
@@ -101,8 +102,8 @@ function setStateStyle(feature) {
 }
 
 function fillStateColor(feature) {
-  if (stateNameToAbrv[feature.properties.name] in dataByStateAndDistrict) {
-    let count = Object.keys(dataByStateAndDistrict[stateNameToAbrv[feature.properties.name]]).length;
+  if (stateNameToAbrv[feature.properties.name] in fullData$.getValue()) {
+    let count = Object.keys(fullData$.getValue()[stateNameToAbrv[feature.properties.name]]).length;
     // TODO: Calculate by mode
     return count < 2 ? '#cbc9e2' :
            count < 4 ? '#9e9ac8' :
@@ -132,14 +133,14 @@ function setStateStyleMask(feature) {
 }
 
 function showStateTooltip(layer) {
+  if (!fullData$.getValue()) { return; }
   let name = layer.feature.properties.name;
   let tooltip = '<h4>' + name + '</h4>'
-  if (stateNameToAbrv[name] in dataByStateAndDistrict) {
+  if (stateNameToAbrv[name] in fullData$.getValue()) {
     ['sen', 'gov'].forEach(stateOffice => {
-      if (stateOffice in dataByStateAndDistrict[stateNameToAbrv[name]]) {
-        dataByStateAndDistrict[stateNameToAbrv[name]][stateOffice].forEach(person => {
+      if (stateOffice in fullData$.getValue()[stateNameToAbrv[name]]) {
+        fullData$.getValue()[stateNameToAbrv[name]][stateOffice].forEach(person => {
           tooltip += '<h6>' + (person.incumbent ? 'Incumbent ' : 'Candidate ') + person.name + ' (' + officeDict[stateOffice] + ') ';
-                    //  ' has' + (person.pledged ? '' : 'not') + ' taken the town hall pledge.</h6>';
         });
       }
     });
@@ -159,7 +160,7 @@ function setDistrictStyle(district) {
 }
 
 function fillDistrictColor(district) {
-  let count = districtLookup(district.properties.DISTRICT).length;
+  let count = districtLookup(district.properties.DISTRICT).filter(person => person.pledged === true).length;
 
   return count < 1 ? '#deddf0' :
          count < 2 ? '#9e9ac8' :
@@ -171,9 +172,12 @@ function showDistrictTooltip(layer) {
   let tooltip = '<h4>' + layer.feature.properties.DISTRICT + '</h4>'
   let people = districtLookup(layer.feature.properties.DISTRICT);
   if (people.length) {
-    people.forEach(person => {
-      tooltip += '<h6>' + (person.incumbent ? 'Incumbent' : 'Candidate') + '<strong> ' + person.name + '</strong> has' + 
-                 (person.pledged ? '' : 'not') + ' taken the pledge.</h6>';
+    const incumbent = people.filter(person => person.incumbent === true)[0] || false;
+    if (incumbent) {
+      tooltip += '<h6>Incumbent <strong>' + incumbent.displayName + '</strong>' + takenThePledge(incumbent) + '</h6>';
+    }
+    people.filter(person => person.incumbent === false).forEach(person => {
+      tooltip += '<h6> Candidate <strong>' + person.displayName + '</strong>' + takenThePledge(person) + '</h6>';
     })
   } else {
     tooltip += '<h6>No one in this district has signed the pledge yet.</h6>'
