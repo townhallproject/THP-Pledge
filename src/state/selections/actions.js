@@ -1,0 +1,61 @@
+import superagent from 'superagent';
+import { values, reduce } from 'lodash';
+import { firebaseUrl } from '../constants';
+
+export const setDistrict = payload => ({
+  payload,
+  type: 'SET_DISTRICT',
+});
+
+export const setUsState = payload => ({
+  payload,
+  type: 'SET_US_STATE',
+});
+
+export const resetSelections = () => ({
+  type: 'RESET_SELECTIONS',
+});
+
+export const resetSearchByZip = () => ({
+  type: 'RESET_LAT_LNG',
+});
+
+export const setDistance = (payload = 50) => ({
+  payload,
+  type: 'SET_DISTANCE',
+});
+
+export const setFilters = payload => ({
+  payload,
+  type: 'SET_FILTERS',
+});
+
+export const changeSearchType = payload => ({
+  payload,
+  type: 'SET_SEARCH_TYPE',
+});
+
+export const setInitialFilters = payload => ({
+  payload,
+  type: 'SET_INITIAL_FILTERS',
+});
+
+export const getDistrictFromZip = payload => (dispatch) => {
+  if (!payload.query) {
+    return dispatch(setDistrict({
+      district: null,
+      state: '',
+    }));
+  }
+  return superagent.get(`${firebaseUrl}/zipToDistrict/${payload.query}.json`)
+    .then((res) => {
+      const districts = values(res.body);
+      const toUpdate = reduce(districts, (acc, cur) => {
+        acc.state = cur.abr;
+        acc.districts.push(cur.dis);
+        return acc;
+      }, { districts: [] });
+      dispatch(setDistrict(toUpdate));
+    })
+    .catch();
+};

@@ -1,0 +1,29 @@
+div.header-pledge--count {
+  display: flex;
+  font-size: 2em;
+  text-align: center;
+  color: #ffffff;
+  line-height: 1; 
+div {
+    padding: 0.5em 0;
+    overflow: hidden; }
+.democrat {
+    background: #0f83cc;
+    flex-basis: 20.83%; }
+.democrat-candidate {
+    background: #66bdf4;
+    flex-basis: 29.17%; }
+.independent {
+    background: #423752;
+    flex-basis: 2.08%; }
+.independent-candidate {
+    background: #5a4c70;
+    flex-basis: 2.08%; }
+.republican {
+    background: #f31912;
+    flex-basis: 16.67%; }
+.republican-candidate {
+    background: #f87773;
+    flex-basis: 29.17%; }
+
+}

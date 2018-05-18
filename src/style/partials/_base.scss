@@ -1,0 +1,15 @@
+// partials director handles the styling for specific elements of our page (buttons, tables, forms, etc.)
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.background-dark {
+  background: #0d4668;
+  color: #ffffff; 
+}
+
+h1.background-dark {
+  text-align: center;
+  padding: 0.25em 0; 
+}
