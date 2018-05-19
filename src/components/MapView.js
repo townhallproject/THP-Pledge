@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { filter } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
 import { stateAbrvToName, fips } from '../data/dictionaries';
+import { takenThePledge } from './utils';
 
 import bboxes from '../data/bboxes';
 import states from '../data/states';
@@ -18,6 +19,8 @@ class MapView extends React.Component {
     this.addClickListener = this.addClickListener.bind(this);
     this.setStateStyle = this.setStateStyle.bind(this);
     this.setDistrictStyle = this.setDistrictStyle.bind(this);
+    this.showStateTooltip = this.showStateTooltip.bind(this);
+    this.showDistrictTooltip = this.showDistrictTooltip.bind(this);
 
     this.focusMap = this.focusMap.bind(this);
     this.handleReset = this.handleReset.bind(this);
@@ -45,6 +48,7 @@ class MapView extends React.Component {
     this.map.metadata = { selectedState: nextProps.selectedState };
     if (selectedState) {
       const bbname = selectedState.toUpperCase();
+      this.map.metadata.level = 'districts';
       if (districts.length > 0) {
         const stateFIPS = states.find(cur => cur.USPS === bbname).FIPS;
         const zeros = '00';
@@ -61,10 +65,12 @@ class MapView extends React.Component {
         };
         this.districtSelect(selectObj);
       }
-
+      
       const stateBB = bboxes[bbname];
       return this.focusMap(stateBB);
     }
+    this.map.metadata.level = 'state';
+
     return this.map.fitBounds([[-128.8, 23.6], [-65.4, 50.2]]);
   }
 
@@ -79,7 +85,6 @@ class MapView extends React.Component {
         const districtId = district;
         const fipsId = fips[state];
         const geoid = fipsId + districtId;
-        console.log(district);
         count += filter((items[state][district]), 'pledged').length;
         if (count >= 3) {
           highNumbers.push(['==', 'GEOID', geoid]);
@@ -186,13 +191,62 @@ class MapView extends React.Component {
     }
   }
 
+  showStateTooltip(state) {
+    const { items } = this.props;
+    const name = stateAbrvToName[state];
+    const itemsInState = items[state];
+    let tooltip = `<h4>${name}</h4>`;
+
+    if (itemsInState) {
+      this.setState({ popoverColor: 'popover-has-data' });
+      tooltip += '<div>Pledge takers:</div>';
+      if (itemsInState.Sen) {
+        const totalstatewide = filter(itemsInState.Sen, 'pledged').length;
+        tooltip += `<div>${totalstatewide} Senate candidates </div>`;
+      }
+      if (itemsInState.Gov) {
+        const totalstatewide = filter(itemsInState.Gov, 'pledged').length;
+        tooltip += `<div>${totalstatewide} candidates for governor </div>`;
+      }
+      const totalDistricts = Object.keys(itemsInState)
+        .reduce((acc, cur) => {
+          acc += filter(itemsInState[cur], 'pledged').length;
+          return acc;
+        }, 0);
+      tooltip += `<div>${totalDistricts} house candidates</div>`;
+      tooltip += '<div><em>Click for details</em></div>';
+    } else {
+      this.setState({ popoverColor: 'popover-no-data' });
+      tooltip += '<div><em>No one has taken the pledge</em></div>';
+    }
+    return tooltip;
+  }
+
+  showDistrictTooltip(state, district) {
+    const { items } = this.props;
+    let tooltip = `<h4>${state} ${district}</h4>`;
+    const people = items[state][district] ? items[state][district] : [];
+    if (people.length) {
+      const incumbent = people.filter(person => person.incumbent === true)[0] || false;
+      if (incumbent) {
+        tooltip += `<div>Incumbent <strong>${incumbent.displayName}</strong>${takenThePledge(incumbent)}</div>`;
+      }
+      people.filter(person => person.incumbent === false).forEach((person) => {
+        tooltip += `<div> Candidate <strong>${person.displayName}</strong>${takenThePledge(person)}</div>`;
+      });
+    } else {
+      tooltip += '<div>No one in this district has signed the pledge yet.</div>';
+    }
+    return tooltip;
+  }
+
   addPopups(layer) {
     const { map } = this;
-    const {
-      items,
-    } = this.props;
     const popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false,
     });
+    const { items } = this.props;
 
     map.on('mousemove', (e) => {
       const features = map.queryRenderedFeatures(e.point, { layers: [layer] });
@@ -206,32 +260,17 @@ class MapView extends React.Component {
         // NAME:"Maine"
         // STATEFP:"23"
         const { properties } = feature;
-
-        const name = stateAbrvToName[properties.ABR];
-        let tooltip = `<h4>${name}</h4>`;
-        const itemsInState = items[properties.ABR];
-        if (itemsInState) {
-          this.setState({ popoverColor: 'popover-has-data' });
-          tooltip += '<div>Pledge takers:</div>';
-          if (itemsInState.Sen) {
-            const totalstatewide = filter(itemsInState.Sen, 'pledged').length;
-            tooltip += `<div>${totalstatewide} Senate candidates </div>`;
+        const stateAbr = properties.ABR;
+        let tooltip;
+        if (map.metadata.level === 'districts') {
+          if (!items[stateAbr]) {
+            return undefined;
           }
-          if (itemsInState.Gov) {
-            const totalstatewide = filter(itemsInState.Gov, 'pledged').length;
-            tooltip += `<div>${totalstatewide} candidates for governor </div>`;
-          }
-          const totalDistricts = Object.keys(itemsInState)
-            .reduce((acc, cur) => {
-              acc += filter(itemsInState[cur], 'pledged').length;
-              return acc;
-            }, 0);
-          tooltip += `<div>${totalDistricts} house candidates</div>`;
-          tooltip += '<div><em>Click for details</em></div>';
+          tooltip = this.showDistrictTooltip(stateAbr, Number(properties.GEOID.substring(2)));
         } else {
-          this.setState({ popoverColor: 'popover-no-data' });
-          tooltip += '<div><em>No one has taken the pledge</em></div>';
+          tooltip = this.showStateTooltip(stateAbr);
         }
+
         return popup.setLngLat(e.lngLat)
           .setHTML(tooltip)
           .addTo(map);
@@ -306,6 +345,7 @@ class MapView extends React.Component {
     this.makeZoomToNationalButton();
     this.map.metadata = {
       selectedState,
+      level: 'states',
     };
     // map on 'load'
     this.map.on('load', () => {
