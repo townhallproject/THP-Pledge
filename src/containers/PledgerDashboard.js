@@ -10,19 +10,18 @@ import {
 
 import { startSetPledgers } from '../state/pledgers/actions';
 
-import {getUsState,} from '../state/selections/selectors';
+import { getUsState, getDistricts} from '../state/selections/selectors';
 import * as selectionActions from '../state/selections/actions';
 
-import MapView from '../components/PledgerMap';
+import MapView from '../components/MapView';
 import WebGlError from '../components/WebGlError';
 
 import SearchBar from './SearchBar';
-import SideBar from '../components/SideBar';
+import Table from '../components/Table';
 
 class pledgerDashboard extends React.Component {
   constructor(props) {
     super(props);
-    this.renderTotal = this.renderTotal.bind(this);
     this.renderMap = this.renderMap.bind(this);
 
     this.state = {
@@ -46,17 +45,6 @@ class pledgerDashboard extends React.Component {
       });
   }
 
-  renderTotal(items) {
-    const { district, filterValue } = this.props;
-    if (district) {
-      return (
-        <p className="pledger-count">
-        Viewing {items.length} pledgers in {filterValue}-{district}
-        </p>);
-    }
-    return (<p className="pledger-count">Viewing {items.length} pledgers</p>);
-  }
-
   renderMap() {
     const {
       resetSelections,
@@ -64,6 +52,7 @@ class pledgerDashboard extends React.Component {
       selectedState,
       pledgersByDistrict,
       setUsState,
+      selectedDistricts,
     } = this.props;
 
     if (!mapboxgl.supported()) {
@@ -74,6 +63,7 @@ class pledgerDashboard extends React.Component {
       items={pledgersByDistrict}
       selectedState={selectedState}
       setUsState={setUsState}
+      districts={selectedDistricts}
       resetSelections={resetSelections}
       searchByDistrict={searchByDistrict}
     />);
@@ -88,23 +78,20 @@ class pledgerDashboard extends React.Component {
     if (this.state.init) {
       return null;
     }
-    console.log(pledgersByDistrict);
     return (
       <div className="pledgers-container main-container">
-        <h2 className="dash-title">pledger Dashboard</h2>
+        <div className="table-container" id='table--state'>
+        <Table
+          items={pledgersByDistrict}
+        />
+        </div>
         <SearchBar
           items={pledgersByDistrict}
           mapType="pledger"
         />
-        <SideBar
-          renderTotal={this.renderTotal}
-          items={pledgersByDistrict}
-          resetSelections={resetSelections}
-        />
         {this.renderMap()}
         <div className="footer" />
       </div>
-
     );
   }
 }
@@ -113,6 +100,7 @@ const mapStateToProps = state => ({
   allPledgers: getAllPledgers(state),
   pledgersByDistrict: getPledgersByDistrict(state),
   selectedState: getUsState(state),
+  selectedDistricts: getDistricts(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -121,8 +109,6 @@ const mapDispatchToProps = dispatch => ({
   searchByDistrict: val => dispatch(selectionActions.setDistrict(val)),
   setFilters: filters => dispatch(selectionActions.setFilters(filters)),
   setInitialFilters: pledgers => dispatch(selectionActions.setInitialFilters(pledgers)),
-  setLatLng: val => dispatch(selectionActions.setLatLng(val)),
-  setRefCode: code => dispatch(selectionActions.setRefCode(code)),
   setUsState: usState => dispatch(selectionActions.setUsState(usState)),
 });
 

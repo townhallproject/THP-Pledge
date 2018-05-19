@@ -61,9 +61,7 @@ class SearchBar extends React.Component {
       return searchByZip(value);
     }
     if (SearchBar.isState(query)) {
-      resetSearchByZip();
-      console.log(SearchBar.isState(query).USPS);
-      return setUsState({ usState: SearchBar.isState(query).USPS });
+      return setDistrict({ state: SearchBar.isState(query).USPS, districts: [] });
     }
     const stateMatch = query.match(/([A-Z]|[a-z]){2}/g)[0];
     const districtMatch = query.match(/([0-9]{2})|([0-9]{1})/g)[0];
@@ -111,7 +109,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  resetSearchByZip: () => dispatch(selectionActions.resetSearchByZip()),
   resetSelections: () => dispatch(selectionActions.resetSelections()),
   searchByZip: zipcode => dispatch(selectionActions.getDistrictFromZip(zipcode)),
   setDistrict: district => dispatch(selectionActions.setDistrict(district)),
