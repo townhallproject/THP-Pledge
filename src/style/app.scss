@@ -4,22 +4,16 @@
 @import './mixins/all';
 
 // Modules and Variables
-@import "modules/colors";
-@import "modules/utility";
+@import "modules/all";
 // Partials
-@import "./partials/base";
-@import "./partials/typography";
-@import "./partials/buttons";
 
 // Components
-@import "./components/footer";
-@import "./components/map";
-@import "./components/main-dashboard";
-@import "./components/popover";
-@import "./components/pledger-list";
-@import "./components/pledger-cell";
-@import "./components/side-bar";
-@import "./components/search-bar";
 @import "./components/nav-bar";
-@import "./components/counter-bar";
 @import "./components/header";
+@import "./components/main-dashboard";
+@import "./components/counter-bar";
+@import "./components/search-bar";
+@import "./components/map";
+@import "./components/popover";
+@import "./components/table";
+@import "./components/footer";
