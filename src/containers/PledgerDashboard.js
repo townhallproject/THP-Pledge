@@ -10,7 +10,7 @@ import {
 
 import { startSetPledgers } from '../state/pledgers/actions';
 
-import { getUsState, getDistricts} from '../state/selections/selectors';
+import { getUsState, getDistricts } from '../state/selections/selectors';
 import * as selectionActions from '../state/selections/actions';
 
 import MapView from '../components/MapView';
@@ -35,12 +35,7 @@ class pledgerDashboard extends React.Component {
     } = this.props;
     getInitialPledgers()
       .then((returned) => {
-        if (this.state.issueFilter) {
-          this.props.setFilters(this.state.issueFilter);
-          this.setState({ issueFilter: null });
-        } else {
-          this.props.setInitialFilters(returned);
-        }
+        this.props.setInitialFilters(returned);
         this.setState({ init: false });
       });
   }
@@ -72,7 +67,6 @@ class pledgerDashboard extends React.Component {
   render() {
     const {
       pledgersByDistrict,
-      resetSelections,
     } = this.props;
 
     if (this.state.init) {
@@ -80,10 +74,10 @@ class pledgerDashboard extends React.Component {
     }
     return (
       <div className="pledgers-container main-container">
-        <div className="table-container" id='table--state'>
-        <Table
-          items={pledgersByDistrict}
-        />
+        <div className="table-container" id="table--state">
+          <Table
+            items={pledgersByDistrict}
+          />
         </div>
         <SearchBar
           items={pledgersByDistrict}
@@ -99,8 +93,8 @@ class pledgerDashboard extends React.Component {
 const mapStateToProps = state => ({
   allPledgers: getAllPledgers(state),
   pledgersByDistrict: getPledgersByDistrict(state),
-  selectedState: getUsState(state),
   selectedDistricts: getDistricts(state),
+  selectedState: getUsState(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -113,11 +107,19 @@ const mapDispatchToProps = dispatch => ({
 });
 
 pledgerDashboard.propTypes = {
-
+  getInitialPledgers: PropTypes.func.isRequired,
+  pledgersByDistrict: PropTypes.shape({}).isRequired,
+  resetSelections: PropTypes.func.isRequired,
+  searchByDistrict: PropTypes.func.isRequired,
+  selectedDistricts: PropTypes.arrayOf(PropTypes.number),
+  selectedState: PropTypes.string,
+  setInitialFilters: PropTypes.func.isRequired,
+  setUsState: PropTypes.func.isRequired,
 };
 
 pledgerDashboard.defaultProps = {
-
+  selectedDistricts: [],
+  selectedState: '',
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(pledgerDashboard);

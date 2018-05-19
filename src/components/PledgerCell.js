@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Card, Icon, List } from 'antd';
-import { officeDict } from '../data/dictionaries';
+import { Icon, List } from 'antd';
 
 class PledgerCell extends React.Component {
   static renderIncumbent(item) {
@@ -21,19 +20,18 @@ class PledgerCell extends React.Component {
       pledged: item.pledged,
       'pledger-cell': true,
     });
-    if (!item.displayName ){
-      console.log(item)
+    if (!item.displayName) {
       return null;
     }
-    const title = `${item.incumbent && item.status ? `${item.role}.` : `${item.status}:`} ${item.displayName} (${item.party})`
-    const description = item.pledged ? (< Icon type = "check-circle" />) : (<Icon type="question-circle-o" />)
+    const title = `${item.incumbent && item.status ? `${item.role}.` : `${item.status}:`} ${item.displayName} (${item.party})`;
+    const description = item.pledged ? (<Icon type="check-circle" />) : (<Icon type="question-circle-o" />);
     return (
-      <List.Item.Meta 
-        bodyStyle={{ padding: '5px' }} className={pledgerCellClass}
+      <List.Item.Meta
+        bodystyle={{ padding: '5px' }}
+        className={pledgerCellClass}
         title={<div>{PledgerCell.renderIncumbent(item)} {title}</div>}
         description={<div>Pledged: {description}</div>}
-      >
-      </List.Item.Meta>
+      />
     );
   }
 }

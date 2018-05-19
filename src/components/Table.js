@@ -27,9 +27,17 @@ class Table extends React.Component {
           <React.Fragment>
             <Card
               key={state}
-              title={stateAbrvToName[state] }
+              title={stateAbrvToName[state]}
               className="state-card"
-              grid={{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 }}
+              grid={{
+                gutter: 16,
+                lg: 4,
+                md: 4,
+                sm: 2,
+                xl: 6,
+                xs: 1,
+                xxl: 3,
+              }}
             >
               <DistrictCell
                 key={`${state}-cell`}

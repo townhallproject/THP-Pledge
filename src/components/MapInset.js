@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { find } from 'lodash';
+import { filter } from 'lodash';
 
 class MapInset extends React.Component {
   constructor(props) {
@@ -9,23 +9,38 @@ class MapInset extends React.Component {
     this.addClickListener = this.addClickListener.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
+    this.setStateStyle = this.setStateStyle.bind(this);
   }
 
   componentDidMount() {
     this.initializeMap();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const {
-      items,
-      type,
-    } = nextProps;
-    this.map.metadata = { searchType: nextProps.searchType };
+  setStateStyle() {
+    const { items, stateName } = this.props;
+    const lowNumbers = ['in', 'ABR'];
+    const medNumbers = ['in', 'ABR'];
+    const highNumbers = ['in', 'ABR'];
+    if (!items) {
+      return;
+    }
+    let count = 0;
+    count += filter((items), 'pledged').length;
+    if (count >= 10) {
+      highNumbers.push(stateName);
+    } else if (count >= 4) {
+      medNumbers.push(stateName);
+    } else if (count > 0 && count < 4) {
+      lowNumbers.push(stateName);
+    }
+    this.toggleFilters('high_number', highNumbers);
+    this.toggleFilters('med_number', medNumbers);
+    this.toggleFilters('low_number', lowNumbers);
   }
 
-  toggleFilters(layer, filter) {
-    this.map.setFilter(layer, filter);
-    this.map.setLayoutProperty(layer, 'visibility', 'visible');
+  handleReset() {
+    this.removeHighlights();
+    this.props.resetSelections();
   }
 
   addClickListener() {
@@ -39,18 +54,15 @@ class MapInset extends React.Component {
       setUsState({ usState: stateName });
     });
   }
-
-  handleReset() {
-    this.removeHighlights();
-    this.props.resetSelections();
+  toggleFilters(layer, filterRules) {
+    this.map.setFilter(layer, filterRules);
+    this.map.setLayoutProperty(layer, 'visibility', 'visible');
   }
 
   initializeMap() {
     const {
       bounds,
       mapId,
-      searchType,
-      stateName,
     } = this.props;
 
     mapboxgl.accessToken =
@@ -65,10 +77,6 @@ class MapInset extends React.Component {
       style: styleUrl,
     });
 
-    // Set Mapbox map controls
-    this.map.metadata = {
-      searchType,
-    };
     // map on 'load'
     this.map.on('load', () => {
       this.map.fitBounds(bounds, {
@@ -76,6 +84,7 @@ class MapInset extends React.Component {
         linear: true,
       });
       this.addClickListener();
+      this.setStateStyle();
     });
   }
 
@@ -98,7 +107,7 @@ class MapInset extends React.Component {
 
 MapInset.propTypes = {
   bounds: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-  items: PropTypes.shape({}).isRequired,
+  items: PropTypes.arrayOf(PropTypes.shape({})),
   mapId: PropTypes.string.isRequired,
   resetSelections: PropTypes.func.isRequired,
   selectedState: PropTypes.string,
@@ -107,6 +116,7 @@ MapInset.propTypes = {
 };
 
 MapInset.defaultProps = {
+  items: [],
   selectedState: '',
 };
 

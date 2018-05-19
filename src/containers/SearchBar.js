@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { find } from 'lodash';
-import { Radio } from 'antd';
 import states from '../data/states';
 import * as selectionActions from '../state/selections/actions';
 
@@ -10,7 +9,6 @@ import * as selectionActions from '../state/selections/actions';
 import SearchInput from '../components/SearchInput';
 import StatusFilterTags from '../components/StatusFilterTags';
 
-const RadioGroup = Radio.Group;
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/radio/style/index.css');
 /* eslint-enable */
@@ -44,15 +42,9 @@ class SearchBar extends React.Component {
     const { query } = value;
     const {
       resetSelections,
-      resetSearchByZip,
       searchByZip,
-      setUsState,
       setDistrict,
     } = this.props;
-    const nameTitleMap = {
-      event: 'title',
-      group: 'name',
-    };
 
     if (!query) {
       return resetSelections();
@@ -61,7 +53,7 @@ class SearchBar extends React.Component {
       return searchByZip(value);
     }
     if (SearchBar.isState(query)) {
-      return setDistrict({ state: SearchBar.isState(query).USPS, districts: [] });
+      return setDistrict({ districts: [], state: SearchBar.isState(query).USPS });
     }
     const stateMatch = query.match(/([A-Z]|[a-z]){2}/g)[0];
     const districtMatch = query.match(/([0-9]{2})|([0-9]{1})/g)[0];
@@ -79,9 +71,6 @@ class SearchBar extends React.Component {
       onFilterChanged,
       selectedFilters,
     } = this.props;
-    if (mapType === 'group') {
-      return null;
-    }
     return (
       <div className="input-group-filters">
         <StatusFilterTags
@@ -112,11 +101,23 @@ const mapDispatchToProps = dispatch => ({
   resetSelections: () => dispatch(selectionActions.resetSelections()),
   searchByZip: zipcode => dispatch(selectionActions.getDistrictFromZip(zipcode)),
   setDistrict: district => dispatch(selectionActions.setDistrict(district)),
-  setUsState: usState => dispatch(selectionActions.setUsState(usState)),
 });
 
 SearchBar.propTypes = {
+  issues: PropTypes.arrayOf(PropTypes.string),
+  onFilterChanged: PropTypes.func,
+  resetSelections: PropTypes.func.isRequired,
+  searchByZip: PropTypes.func.isRequired,
+  selectedFilters: PropTypes.arrayOf(PropTypes.string),
+  setDistrict: PropTypes.func.isRequired,
+  setTextFilter: PropTypes.func,
+};
 
+SearchBar.defaultProps = {
+  issues: [],
+  onFilterChanged: () => {},
+  selectedFilters: [],
+  setTextFilter: () => {},
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

@@ -38,7 +38,7 @@ const filtersReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         filters: uniqBy(payload.pledgers, 'status')
-          .map(item => item.issueFocus)
+          .map(item => item.status),
       };
     default:
       return state;

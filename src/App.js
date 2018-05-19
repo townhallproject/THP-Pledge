@@ -6,11 +6,11 @@ import CounterBar from './components/CounterBar';
 import PledgerDashboard from './containers/PledgerDashboard';
 
 export default () => (
-    <div>
-        <Nav />
-        <Header />
-        <CounterBar />
-        <PledgerDashboard />
-    </div>
+  <div>
+    <Nav />
+    <Header />
+    <CounterBar />
+    <PledgerDashboard />
+  </div>
 );
 

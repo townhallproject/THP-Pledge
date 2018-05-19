@@ -2,15 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Card } from 'antd';
 
-import { officeDict } from '../data/dictionaries'
+import { officeDict } from '../data/dictionaries';
 import PledgerCell from './PledgerCell';
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/list/style/index.css');
 /* eslint-enable */
 
 const gridStyle = {
-  maxWidth: '310px',
   margin: '.5em',
+  maxWidth: '310px',
 };
 
 class DistrictCell extends React.Component {
@@ -29,19 +29,28 @@ class DistrictCell extends React.Component {
           No Pledgers
           </Card>);
       }
-      const title = `${(parseInt(district) ? `${stateName}-${district}` : officeDict[district])}`
+      const title = `${(Number(district) ? `${stateName}-${district}` : officeDict[district])}`;
 
       return (
         <Card
           style={gridStyle}
           title={title}
           bordered={false}
-          hoverable={true}
+          hoverable
         >
           <List
             id={district}
             itemLayout="horizontal"
-            grid={{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 }}
+            grid={
+              {
+                gutter: 16,
+                lg: 4,
+                md: 4,
+                sm: 2,
+                xl: 6,
+                xs: 1,
+                xxl: 3,
+              }}
             dataSource={items[district].sort((a, b) => {
               if (a.incumbent) {
                 return -1;
@@ -53,9 +62,9 @@ class DistrictCell extends React.Component {
             })}
             renderItem={item =>
                 (
-                  <List.Item key={item.id}>
+                  <List.Item key={item.displayName}>
                     <PledgerCell
-                      key={`${item.id}-cell`}
+                      key={`${item.displayName}-cell`}
                       item={item}
                     />
                   </List.Item>
