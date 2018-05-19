@@ -16,23 +16,9 @@ export const resetSelections = () => ({
   type: 'RESET_SELECTIONS',
 });
 
-export const resetSearchByZip = () => ({
-  type: 'RESET_LAT_LNG',
-});
-
-export const setDistance = (payload = 50) => ({
-  payload,
-  type: 'SET_DISTANCE',
-});
-
 export const setFilters = payload => ({
   payload,
   type: 'SET_FILTERS',
-});
-
-export const changeSearchType = payload => ({
-  payload,
-  type: 'SET_SEARCH_TYPE',
 });
 
 export const setInitialFilters = payload => ({

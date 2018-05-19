@@ -26,39 +26,19 @@ const filtersReducer = (state = initialState, { type, payload }) => {
     case 'SET_US_STATE':
       return {
         ...state,
+        districts: [],
         usState: payload.usState,
-      };
-    case 'SET_DISTANCE':
-      return {
-        ...state,
-        distance: payload,
-      };
-    case 'SET_LAT_LNG':
-      return {
-        ...state,
-        location: payload,
-      };
-    case 'RESET_LAT_LNG':
-      return {
-        ...state,
-        location: {},
       };
     case 'SET_FILTERS':
       return {
         ...state,
         filters: payload,
       };
-    case 'SET_SEARCH_TYPE':
-      return {
-        ...state,
-        searchType: payload,
-      };
     case 'SET_INITIAL_FILTERS':
       return {
         ...state,
-        filters: uniqBy(payload.events, 'issueFocus')
+        filters: uniqBy(payload.pledgers, 'status')
           .map(item => item.issueFocus)
-          .filter(item => item !== 'Town Hall'),
       };
     default:
       return state;

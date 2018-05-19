@@ -7,7 +7,7 @@ import {
 } from '../selections/selectors';
 
 export const getAllPledgers = state => state.pledgers.allPledgers;
-export const groupPledgerByDistrict = createSelector(
+export const groupByStateAndDistrict = createSelector(
   [
     getAllPledgers,
   ],
@@ -15,7 +15,6 @@ export const groupPledgerByDistrict = createSelector(
     if (!allPledgers) {
       return null;
     }
-
     return mapValues(allPledgers, allPledgersInState => reduce(allPledgersInState, (acc, cur) => {
       if (cur.district) {
         if (!acc[cur.district]) {
@@ -23,10 +22,10 @@ export const groupPledgerByDistrict = createSelector(
         }
         acc[cur.district].push(cur);
       } else {
-        if (!acc.statewide) {
-          acc.statewide = [];
+        if (!acc[cur.role]) {
+          acc[cur.role] = [];
         }
-        acc.statewide.push(cur);
+        acc[cur.role].push(cur);
       }
       return acc;
     }, {}));
@@ -35,7 +34,7 @@ export const groupPledgerByDistrict = createSelector(
 
 export const getPledgersByUsState = createSelector(
   [
-    groupPledgerByDistrict,
+    groupByStateAndDistrict,
     getUsState,
   ],
   (
@@ -46,11 +45,9 @@ export const getPledgersByUsState = createSelector(
       return pledgersGroupedByDistrict;
     }
     const toReturn = pledgersGroupedByDistrict[usState] ? pledgersGroupedByDistrict[usState] : null;
-    console.log('returning from state lookup', toReturn)
     return { [usState]: toReturn };
   },
 );
-
 
 export const getPledgersByDistrict = createSelector(
   [
@@ -66,15 +63,13 @@ export const getPledgersByDistrict = createSelector(
     if (districts.length === 0 || usState === '') {
       return pledgersInState;
     }
-    console.log('current settings', usState, districts, pledgersInState);
-    if (pledgersInState[usState]) {
+    if (!pledgersInState[usState]) {
       return { [usState]: null };
     }
     const toReturn = reduce(districts, (acc, cur) => {
       acc[cur] = pledgersInState[usState][cur];
       return acc;
     }, {});
-    console.log(toReturn)
     return { [usState]: toReturn };
   },
 );
