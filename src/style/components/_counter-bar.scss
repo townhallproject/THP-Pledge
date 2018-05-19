@@ -8,22 +8,22 @@ div {
     padding: 0.5em 0;
     overflow: hidden; }
 .democrat {
-    background: #0f83cc;
+    background:  $party-democrat;
     flex-basis: 20.83%; }
 .democrat-candidate {
-    background: #66bdf4;
+    background: lighten($color: $party-democrat, $amount: 10);
     flex-basis: 29.17%; }
 .independent {
-    background: #423752;
+    background: $party-independent;
     flex-basis: 2.08%; }
 .independent-candidate {
-    background: #5a4c70;
+    background: lighten($color: $party-independent, $amount: 10);
     flex-basis: 2.08%; }
 .republican {
-    background: #f31912;
+    background: $party-republican;
     flex-basis: 16.67%; }
 .republican-candidate {
-    background: #f87773;
+    background:lighten($color: $party-republican, $amount: 10);
     flex-basis: 29.17%; }
 
 }

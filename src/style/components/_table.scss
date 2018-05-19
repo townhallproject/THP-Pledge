@@ -1,0 +1,75 @@
+#table--state {
+  flex-direction:column;
+  display: flex;
+  align-items:stretch;
+  flex: 1 100%;
+  order: 2;
+  .ant-card-head{
+    background-color: $brand-primary;
+    color: $brand-white;
+  }
+ 
+  .district-card-head {
+    border-bottom: 0.5px solid $brand-gray;
+  }
+  .ant-card-head-title {
+    color: $brand-white;
+    white-space: initial;
+  }
+  .ant-card-grid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .no-results{
+    margin-top: 50%;
+  }
+  ul {
+    list-style: none;
+    padding-left: 0px;
+  }
+  .state-card {
+    .ant-card-body {
+      .ant-card{
+        flex: 1 25%;
+      }
+      @media all and (max-width: $tablet-breakpoint) {
+        .ant-card{
+          margin: auto;
+          flex: 1 100%;
+      }
+    }
+
+  .ant-card-head {
+        background-color: $brand-white;
+        border-bottom: 0.5px solid $brand-gray;
+        .ant-card-head-title{
+          color: $brand-text;
+        }
+      }
+    }
+    .ant-card-body{
+      display: flex;
+      flex-flow: row wrap;
+    }
+  }
+    flex: auto 2;
+    order: 2;
+    margin: auto;
+    margin: 10px;
+    .pledger-cell {
+      ul {
+        list-style-type: none;
+      }
+      &.pledged {
+        .ant-list-item-meta-description{
+          color: $brand-success;
+        }
+      }
+  }
+
+  .ant-card-head{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
