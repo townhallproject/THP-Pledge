@@ -1,4 +1,4 @@
-import { values, mapValues } from 'lodash';
+import { values, mapValues, filter } from 'lodash';
 import request from 'superagent';
 import { firebaseUrl } from '../constants';
 
@@ -12,7 +12,12 @@ export const startSetPledgers = () => (dispatch) => {
   return request(url).then((result) => {
     const allPledgers = result.body;
     const pledgers = mapValues(allPledgers, pledgersInstate =>
-      values(pledgersInstate));
+      values(pledgersInstate).filter((ele) => {
+        if ((ele.status === 'Lost Primary') && (!ele.pledged)) {
+          return false;
+        }
+        return true;
+      }));
     return (dispatch(setPledgers(pledgers)));
   });
 };
