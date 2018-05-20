@@ -15,6 +15,7 @@ import * as selectionActions from '../state/selections/actions';
 
 import MapView from '../components/MapView';
 import WebGlError from '../components/WebGlError';
+import CounterBar from '../components/CounterBar';
 
 import SearchBar from './SearchBar';
 import Table from '../components/Table';
@@ -84,6 +85,7 @@ class pledgerDashboard extends React.Component {
           mapType="pledger"
         />
         {this.renderMap()}
+        <CounterBar />
         <div className="footer" />
       </div>
     );
