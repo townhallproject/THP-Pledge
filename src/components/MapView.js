@@ -201,7 +201,7 @@ class MapView extends React.Component {
       tooltip += '<div>Pledge takers:</div>';
       if (itemsInState.Sen) {
         const totalstatewide = totalPledgedInCategory(itemsInState, 'Sen');
-        tooltip += `<div>${totalstatewide} Senate candidates </div>`;
+        tooltip += `<div>${totalstatewide} U.S. Senate candidates </div>`;
       }
       if (itemsInState.Gov) {
         const totalstatewide = totalPledgedInCategory(itemsInState, 'Gov');
@@ -209,7 +209,7 @@ class MapView extends React.Component {
       }
       const totalDistricts = totalPledgedInDistricts(itemsInState);
  
-      tooltip += `<div>${totalDistricts} House candidates</div>`;
+      tooltip += `<div>${totalDistricts} U.S. House candidates</div>`;
       tooltip += '<div><em>Click for details</em></div>';
     } else {
       this.setState({ popoverColor: 'popover-no-data' });

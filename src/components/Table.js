@@ -30,7 +30,8 @@ class Table extends React.Component {
           <React.Fragment>
             <Card
               key={state}
-              title={<React.Fragment>{stateAbrvToName[state]} <span className="total-pledged">Total pledged candidates: {totalPledgedInState(items[state])}</span></React.Fragment>}
+              extra={<React.Fragment>Total pledged candidates: {totalPledgedInState(items[state])}<div className="card-footer">* Incumbent</div></React.Fragment>}
+              title={stateAbrvToName[state]}
               className="state-card"
               grid={{
                 gutter: 16,

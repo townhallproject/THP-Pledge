@@ -4,13 +4,6 @@ import classNames from 'classnames';
 import { Icon, List } from 'antd';
 
 class PledgerCell extends React.Component {
-  static renderIncumbent(item) {
-    if (item.incumbent) {
-      return `Incumbent ${item.role}.`;
-    }
-    return null;
-  }
-
   render() {
     const {
       item,
@@ -29,7 +22,7 @@ class PledgerCell extends React.Component {
       return null;
     }
 
-    const title = `${item.displayName} (${item.party})`;
+    const title = item.incumbent ? `${item.role}. ${item.displayName}* (${item.party})` : `${item.displayName} (${item.party})`;
 
     const description = item.pledged ? (<Icon type="check-circle" />) : (<Icon type="question-circle-o" />);
     return (
@@ -37,7 +30,7 @@ class PledgerCell extends React.Component {
         <List.Item.Meta
           bodystyle={{ padding: '5px' }}
           className={pledgerCellClass}
-          title={<div>{PledgerCell.renderIncumbent(item)} {title}</div>}
+          title={<div>{title}</div>}
           description={item.status ? <div>{item.status}</div> : null}
         />
         <div className={pledgerStatusClass}>Pledged: {description}</div>

@@ -1,12 +1,16 @@
 // default case
-.mapboxgl-popup-content {
-  @include popover($brand-primary, $brand-white);
-    p {
-      margin:0;
-      text-transform: initial;
-      font-weight: 600;
+.popover-has-data{
+  .mapboxgl-popup-content {
+    @include popover($brand-white, $brand-text);
+      p {
+        margin:0;
+        text-transform: initial;
+        font-weight: 600;
+      }
     }
+    @include popover-tip($brand-white);
 }
+
 .mapboxgl-popup{
   z-index: 10!important;
 }
