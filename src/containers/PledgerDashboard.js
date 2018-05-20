@@ -68,6 +68,7 @@ class pledgerDashboard extends React.Component {
   render() {
     const {
       pledgersByDistrict,
+      allPledgers,
     } = this.props;
 
     if (this.state.init) {
@@ -85,7 +86,9 @@ class pledgerDashboard extends React.Component {
           mapType="pledger"
         />
         {this.renderMap()}
-        <CounterBar />
+        <CounterBar
+          allPledgers={allPledgers}
+        />
         <div className="footer" />
       </div>
     );
