@@ -1,32 +1,30 @@
 @mixin state-card-format (){
+        margin-bottom: 4em;
         .ant-card-head {
-            background-color: $brand-primary;
-            color: $brand-white;
+            border-top: 1px solid #e8e8e8;
+            border-bottom: none;
+            background-color: $brand-white;
+            color: $brand-text;
             padding-left: 10px;
             padding-right: 10px;
             >.ant-card-head-wrapper{
                 >.ant-card-head-title{
-                    color: $brand-white;
+                    color: $brand-text;
                     font-size: 2em;
                     font-weight: 800;
                     white-space: initial;
                 }
-                >.ant-card-extra{
-    
-                }
             }
-        }
-        >.ant-card-body{
         }
 }
 
 @mixin district-card-format (){
         .ant-card-head {
             background-color: $brand-white;
+            border-top: none;
             border-bottom: 0.5px solid $brand-gray;
             padding-left: 10px;
             padding-right: 10px;
-                border-bottom: 0.5px solid $brand-gray;
 
             >.ant-card-head-wrapper{
                 >.ant-card-head-title{

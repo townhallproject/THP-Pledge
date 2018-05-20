@@ -17,10 +17,10 @@
 
 .popover-no-data {
   .mapboxgl-popup-content {
-    @include popover($light-grey, $brand-text);
+    @include popover($brand-gray, $brand-text);
     color: $brand-text;
   }
-  @include popover-tip($light-grey);
+  @include popover-tip($brand-gray);
 }
 
 .mapboxgl-popup-anchor-bottom { padding-bottom: 10px; }
