@@ -21,7 +21,7 @@ class MapView extends React.Component {
     this.setDistrictStyle = this.setDistrictStyle.bind(this);
     this.showStateTooltip = this.showStateTooltip.bind(this);
     this.showDistrictTooltip = this.showDistrictTooltip.bind(this);
-
+    this.setStateStyleMask = this.setStateStyleMask.bind(this);
     this.focusMap = this.focusMap.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
@@ -47,6 +47,7 @@ class MapView extends React.Component {
     } = nextProps;
     this.map.metadata = { selectedState: nextProps.selectedState };
     if (selectedState) {
+      this.setStateStyleMask(selectedState);
       const bbname = selectedState.toUpperCase();
       this.map.metadata.level = 'districts';
       if (districts.length > 0) {
@@ -69,6 +70,7 @@ class MapView extends React.Component {
       return this.focusMap(stateBB);
     }
     this.map.metadata.level = 'state';
+    this.setStateStyleMask();
 
     return this.map.fitBounds([[-128.8, 23.6], [-65.4, 50.2]]);
   }
@@ -98,6 +100,17 @@ class MapView extends React.Component {
     this.toggleFilters('med_number', medNumbers);
     this.toggleFilters('low_number', lowNumbers);
   }
+
+  setStateStyleMask(state) {
+    if (state) {
+      const filterSetting = ['!=', 'ref', state];
+      this.toggleFilters('state-mask', filterSetting);
+    }
+    else {
+      this.map.setLayoutProperty('state-mask', 'visibility', 'none');
+    }
+  }
+
 
   setStateStyle() {
     const { items } = this.props;
@@ -208,7 +221,7 @@ class MapView extends React.Component {
         tooltip += `<div>${totalstatewide} candidates for governor </div>`;
       }
       const totalDistricts = totalPledgedInDistricts(itemsInState);
- 
+
       tooltip += `<div>${totalDistricts} U.S. House candidates</div>`;
       tooltip += '<div><em>Click for details</em></div>';
     } else {
@@ -340,8 +353,8 @@ class MapView extends React.Component {
     this.map.touchZoomRotate.disableRotation();
     this.makeZoomToNationalButton();
     this.map.metadata = {
-      selectedState,
       level: 'states',
+      selectedState,
     };
     // map on 'load'
     this.map.on('load', () => {
