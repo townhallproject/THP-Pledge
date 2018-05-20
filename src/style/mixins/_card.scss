@@ -1,0 +1,46 @@
+@mixin state-card-format (){
+        .ant-card-head {
+            background-color: $brand-primary;
+            color: $brand-white;
+            padding-left: 10px;
+            padding-right: 10px;
+            >.ant-card-head-wrapper{
+                >.ant-card-head-title{
+                    color: $brand-white;
+                    font-size: 2em;
+                    font-weight: 800;
+                    white-space: initial;
+                }
+                >.ant-card-extra{
+    
+                }
+            }
+        }
+        >.ant-card-body{
+        }
+}
+
+@mixin district-card-format (){
+        .ant-card-head {
+            background-color: $brand-white;
+            border-bottom: 0.5px solid $brand-gray;
+            padding-left: 10px;
+            padding-right: 10px;
+                border-bottom: 0.5px solid $brand-gray;
+
+            >.ant-card-head-wrapper{
+                >.ant-card-head-title{
+                    color: $brand-text;
+                    font-size: 1.2em;
+                    font-weight: 400;
+                }
+                >.ant-card-extra{
+                    color: $light-purple;
+                    text-transform: uppercase;
+                }
+            }
+        }
+        >.ant-card-body{
+            padding: 10px 24px 10px 10px;
+        }
+}

@@ -22,7 +22,9 @@ class PledgerCell extends React.Component {
       return null;
     }
 
-    const title = item.incumbent ? `${item.role}. ${item.displayName}* (${item.party})` : `${item.displayName} (${item.party})`;
+    const title = item.incumbent ? (
+      <React.Fragment>{item.role}. {item.displayName}* <span className={item.party}>({item.party})</span></React.Fragment>) :
+      (<React.Fragment>{item.displayName} <span className={item.party}>({item.party})</span></React.Fragment>);
 
     const description = item.pledged ? (<Icon type="check-circle" />) : (<Icon type="question-circle-o" />);
     return (
@@ -33,7 +35,7 @@ class PledgerCell extends React.Component {
           title={<div>{title}</div>}
           description={item.status ? <div>{item.status}</div> : null}
         />
-        <div className={pledgerStatusClass}>Pledged: {description}</div>
+        <div className={pledgerStatusClass}>{description}</div>
       </React.Fragment>
     );
   }

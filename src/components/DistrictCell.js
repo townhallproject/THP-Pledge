@@ -45,8 +45,9 @@ class DistrictCell extends React.Component {
           <Card
             style={gridStyle}
             title={title}
-            extra={<div>Pledge</div>}
+            extra="Pledged"
             bordered={false}
+            className="district-card"
             hoverable
           >
             <List
