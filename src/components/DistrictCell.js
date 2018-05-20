@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Card } from 'antd';
 
-import { officeDict } from '../data/dictionaries';
+import { getTitle } from '../data/dictionaries';
 import PledgerCell from './PledgerCell';
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/list/style/index.css');
@@ -29,7 +29,7 @@ class DistrictCell extends React.Component {
           No Pledgers
           </Card>);
       }
-      const title = `${(Number(district) ? `${stateName}-${district}` : officeDict[district])}`;
+      const title = `${(Number(district) ? `${stateName}-${district}` : getTitle(district))}`;
 
       return (
         <Card
@@ -41,16 +41,16 @@ class DistrictCell extends React.Component {
           <List
             id={district}
             itemLayout="horizontal"
-            grid={
-              {
-                gutter: 16,
-                lg: 4,
-                md: 4,
-                sm: 2,
-                xl: 6,
-                xs: 1,
-                xxl: 3,
-              }}
+            // grid={
+            //   {
+            //     gutter: 16,
+            //     lg: 4,
+            //     md: 4,
+            //     sm: 2,
+            //     xl: 6,
+            //     xs: 1,
+            //     xxl: 3,
+            //   }}
             dataSource={items[district].sort((a, b) => {
               if (a.incumbent) {
                 return -1;

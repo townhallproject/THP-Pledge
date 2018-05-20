@@ -2,24 +2,36 @@
   flex-direction:column;
   display: flex;
   align-items:stretch;
-  flex: 1 100%;
   order: 2;
+  flex: auto 2;
+  margin: auto;
+  
+  .pledge-status {
+    &.pledged {
+      color: $brand-success;
+    }
+  }
   .ant-card-head{
     background-color: $brand-primary;
     color: $brand-white;
+    padding-left: 10px;
+    padding-right: 10px;
   }
  
-  .district-card-head {
-    border-bottom: 0.5px solid $brand-gray;
-  }
   .ant-card-head-title {
     color: $brand-white;
     white-space: initial;
   }
+
   .ant-card-grid {
     padding-left: 10px;
     padding-right: 10px;
   }
+
+  .district-card-head {
+    border-bottom: 0.5px solid $brand-gray;
+  }
+  
   .no-results{
     margin-top: 50%;
   }
@@ -27,6 +39,8 @@
     list-style: none;
     padding-left: 0px;
   }
+
+  // state cards
   .state-card {
     .ant-card-body {
       .ant-card{
@@ -51,25 +65,6 @@
       display: flex;
       flex-flow: row wrap;
     }
-  }
-    flex: auto 2;
-    order: 2;
-    margin: auto;
-    margin: 10px;
-    .pledger-cell {
-      ul {
-        list-style-type: none;
-      }
-      &.pledged {
-        .ant-list-item-meta-description{
-          color: $brand-success;
-        }
-      }
-  }
-
-  .ant-card-head{
-    padding-left: 10px;
-    padding-right: 10px;
   }
 }
 

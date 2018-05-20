@@ -10,7 +10,8 @@ export default () => (
              and in our state and local government--
              to take time to listen to us.
         </p>
-        <p>We are asking every single candidate for public office this year to take the #townhallpledge to their constituents--to
+        <p>We are asking every single candidate for public office this year to take the
+             #townhallpledge to their constituents--to
              hold a minimum of four town hall meetings per year in office.
         </p>
         <p>Ask candidates in your community to take the Pledge today!</p>

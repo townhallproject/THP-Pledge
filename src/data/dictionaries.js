@@ -69,6 +69,8 @@ export const officeDict = {
   Sen: 'Senator',
 };
 
+export const getTitle = key => officeDict[key] ? officeDict[key] : key;
+
 export const fips = {
   AK: '02',
   AL: '01',

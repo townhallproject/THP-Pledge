@@ -65,7 +65,6 @@ class MapView extends React.Component {
         };
         this.districtSelect(selectObj);
       }
-      
       const stateBB = bboxes[bbname];
       return this.focusMap(stateBB);
     }
@@ -406,11 +405,13 @@ MapView.propTypes = {
   items: PropTypes.shape({}).isRequired,
   resetSelections: PropTypes.func.isRequired,
   searchByDistrict: PropTypes.func.isRequired,
+  selectedState: PropTypes.string,
   setUsState: PropTypes.func.isRequired,
 };
 
 MapView.defaultProps = {
   districts: [],
+  selectedState: '',
 };
 
 export default MapView;
