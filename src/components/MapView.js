@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { filter } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
 import { stateAbrvToName, fips } from '../data/dictionaries';
-import { takenThePledge } from './utils';
+import { takenThePledge, totalPledgedInDistricts, totalPledgedInCategory } from './utils';
 
 import bboxes from '../data/bboxes';
 import states from '../data/states';
@@ -200,19 +200,16 @@ class MapView extends React.Component {
       this.setState({ popoverColor: 'popover-has-data' });
       tooltip += '<div>Pledge takers:</div>';
       if (itemsInState.Sen) {
-        const totalstatewide = filter(itemsInState.Sen, 'pledged').length;
+        const totalstatewide = totalPledgedInCategory(itemsInState, 'Sen');
         tooltip += `<div>${totalstatewide} Senate candidates </div>`;
       }
       if (itemsInState.Gov) {
-        const totalstatewide = filter(itemsInState.Gov, 'pledged').length;
+        const totalstatewide = totalPledgedInCategory(itemsInState, 'Gov');
         tooltip += `<div>${totalstatewide} candidates for governor </div>`;
       }
-      const totalDistricts = Object.keys(itemsInState)
-        .reduce((acc, cur) => {
-          acc += filter(itemsInState[cur], 'pledged').length;
-          return acc;
-        }, 0);
-      tooltip += `<div>${totalDistricts} house candidates</div>`;
+      const totalDistricts = totalPledgedInDistricts(itemsInState);
+ 
+      tooltip += `<div>${totalDistricts} House candidates</div>`;
       tooltip += '<div><em>Click for details</em></div>';
     } else {
       this.setState({ popoverColor: 'popover-no-data' });

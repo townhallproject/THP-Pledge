@@ -21,8 +21,8 @@ class PledgerCell extends React.Component {
     });
 
     const pledgerStatusClass = classNames({
-      pledged: item.pledged,
       'pledge-status': true,
+      pledged: item.pledged,
     });
 
     if (!item.displayName) {

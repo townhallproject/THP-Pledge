@@ -4,11 +4,14 @@ import { Card } from 'antd';
 
 import DistrictCell from './DistrictCell';
 import { stateAbrvToName } from '../data/dictionaries';
+import { totalPledgedInState } from './utils';
+
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/card/style/index.css');
 /* eslint-enable */
 
 class Table extends React.Component {
+
   render() {
     const {
       items,
@@ -27,7 +30,7 @@ class Table extends React.Component {
           <React.Fragment>
             <Card
               key={state}
-              title={stateAbrvToName[state]}
+              title={<React.Fragment>{stateAbrvToName[state]} <span className="total-pledged">Total pledged candidates: {totalPledgedInState(items[state])}</span></React.Fragment>}
               className="state-card"
               grid={{
                 gutter: 16,

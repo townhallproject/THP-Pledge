@@ -5,7 +5,9 @@
   order: 2;
   flex: auto 2;
   margin: auto;
-  
+  .total-pledged{
+    float: right;
+  }
   .pledge-status {
     &.pledged {
       color: $brand-success;
