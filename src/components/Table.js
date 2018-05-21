@@ -11,7 +11,6 @@ require('style-loader!css-loader!antd/es/card/style/index.css');
 /* eslint-enable */
 
 class Table extends React.Component {
-
   render() {
     const {
       items,

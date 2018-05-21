@@ -31,9 +31,9 @@ class MapView extends React.Component {
     this.insetOnClickEvent = this.insetOnClickEvent.bind(this);
     this.state = {
       alaskaItems: props.items.AK,
+      filterStyle: 'state',
       hawaiiItems: props.items.HI,
       popoverColor: 'popover-has-data',
-      filterStyle: 'state',
     };
   }
 
@@ -251,9 +251,12 @@ class MapView extends React.Component {
       if (incumbent) {
         tooltip += `<div>Incumbent <strong>${incumbent.displayName}</strong>${takenThePledge(incumbent)}</div>`;
       }
-      people.filter(person => person.incumbent === false).forEach((person) => {
-        tooltip += `<div> Candidate <strong>${person.displayName}</strong>${takenThePledge(person)}</div>`;
-      });
+      const totalR = filter(people, { pledged: true, incumbent: false, party: 'R' }).length;
+      const totalD = filter(people, { pledged: true, incumbent: false, party: 'D' }).length;
+      const totalI = filter(people, { pledged: true, incumbent: false, party: 'I' }).length;
+      tooltip += `<div>Pledged Republican Candidates: <strong>${totalR}</strong></div>`;
+      tooltip += `<div>Pledged Democratic Candidates: <strong>${totalD}</strong></div>`;
+      tooltip += `<div>Pledged Independent Candidates: <strong>${totalI}</strong></div>`;
     } else {
       tooltip += '<div>No one in this district has signed the pledge yet.</div>';
     }
