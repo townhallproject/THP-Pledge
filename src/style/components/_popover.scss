@@ -23,31 +23,30 @@
   @include popover-tip($brand-gray);
 }
 
-.mapboxgl-popup-anchor-bottom { padding-bottom: 10px; }
+.mapboxgl-popup-anchor-bottom { padding-bottom: 0.1rem; }
+.mapboxgl-popup-anchor-top { padding-top: 0.1rem; }
+.mapboxgl-popup-anchor-right { padding-right: 0.1rem; }
+.mapboxgl-popup-anchor-left { padding-left: 0.1rem; }
 
 .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip { border-top-color: $brand-primary; }
 .mapboxgl-popup-anchor-top .mapboxgl-popup-tip { border-bottom-color: $brand-primary; }
 
 .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
   border-right-color: $brand-primary;
-  padding-left: 0.5rem;
 }
 
 .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
   border-left-color: $brand-primary;
-  padding-right: 0.5rem;
 }
 
 .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip { border-bottom-color: $brand-primary; }
 .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip { border-bottom-color: $brand-primary; }
 .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip {
   border-top-color: $brand-primary;
-  padding-bottom: 10px;
 }
 
 .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
   border-top-color: $brand-primary;
-  padding-bottom: 10px;
 }
 
 .mapbox-popup-title {
