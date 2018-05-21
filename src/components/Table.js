@@ -4,7 +4,7 @@ import { Card } from 'antd';
 
 import DistrictCell from './DistrictCell';
 import { stateAbrvToName } from '../data/dictionaries';
-import { totalPledgedInState } from './utils';
+import { totalPledgedInState } from '../utils';
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/card/style/index.css');

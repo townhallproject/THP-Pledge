@@ -1,7 +1,7 @@
 import React from 'react';
 import { Popover } from 'antd';
 
-import { totalIncumbentsForParty } from './utils';
+import { totalIncumbentsForParty } from '../utils';
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/popover/style/index.css');
