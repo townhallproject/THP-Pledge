@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import { filter } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
 import { stateAbrvToName, fips } from '../data/dictionaries';
-import { takenThePledge, totalPledgedInDistricts, totalPledgedInCategory } from '../utils';
+import { 
+  takenThePledge, 
+  totalPledgedInDistricts, 
+  totalPledgedInCategory, 
+  zeroPadding 
+} from '../utils';
 
 import bboxes from '../data/bboxes';
 import states from '../data/states';
@@ -56,12 +61,8 @@ class MapView extends React.Component {
       }
       if (districts.length > 0) {
         const stateFIPS = states.find(cur => cur.USPS === bbname).FIPS;
-        const zeros = '00';
-        const districtString = districts[0].toString();
-        const districtPadded =
-          zeros.substring(0, zeros.length - districtString.length) +
-          districtString;
         // highlight district
+        const districtPadded = zeroPadding(districts[0]);
         const geoID = `${stateFIPS}${districtPadded}`;
         const selectObj = {
           district: districtPadded,
@@ -104,7 +105,7 @@ class MapView extends React.Component {
       }
       Object.keys(items[state]).forEach((district) => {
         let count = 0;
-        const districtId = district;
+        const districtId = zeroPadding(district);
         const fipsId = fips[state];
         const geoid = fipsId + districtId;
         count += filter((items[state][district]), 'pledged').length;
