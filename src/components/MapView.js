@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { filter } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
 import { stateAbrvToName, fips } from '../data/dictionaries';
-import { takenThePledge, totalPledgedInDistricts, totalPledgedInCategory } from './utils';
+import { takenThePledge, totalPledgedInDistricts, totalPledgedInCategory } from '../utils';
 
 import bboxes from '../data/bboxes';
 import states from '../data/states';
@@ -33,6 +33,7 @@ class MapView extends React.Component {
       alaskaItems: props.items.AK,
       hawaiiItems: props.items.HI,
       popoverColor: 'popover-has-data',
+      filterStyle: 'state',
     };
   }
 
@@ -50,6 +51,9 @@ class MapView extends React.Component {
       this.setStateStyleMask(selectedState);
       const bbname = selectedState.toUpperCase();
       this.map.metadata.level = 'districts';
+      if (this.state.filterStyle === 'state') {
+        this.setState({ filterStyle: 'district' });
+      }
       if (districts.length > 0) {
         const stateFIPS = states.find(cur => cur.USPS === bbname).FIPS;
         const zeros = '00';
@@ -69,10 +73,21 @@ class MapView extends React.Component {
       const stateBB = bboxes[bbname];
       return this.focusMap(stateBB);
     }
-    this.map.metadata.level = 'state';
     this.setStateStyleMask();
-
+    this.map.metadata.level = 'state';
+    this.setState({ filterStyle: 'state' });
     return this.map.fitBounds([[-128.8, 23.6], [-65.4, 50.2]]);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // changing between coloring by state and coloring by district
+    const mapStyle = {
+      district: this.setDistrictStyle,
+      state: this.setStateStyle,
+    };
+    if (prevState.filterStyle !== this.state.filterStyle) {
+      mapStyle[this.state.filterStyle]();
+    }
   }
 
   setDistrictStyle() {
@@ -81,8 +96,8 @@ class MapView extends React.Component {
     const medNumbers = ['any'];
     const highNumbers = ['any'];
     Object.keys(items).forEach((state) => {
-      let count = 0;
       Object.keys(items[state]).forEach((district) => {
+        let count = 0;
         const districtId = district;
         const fipsId = fips[state];
         const geoid = fipsId + districtId;
@@ -96,21 +111,19 @@ class MapView extends React.Component {
         }
       });
     });
-    this.toggleFilters('high_number', highNumbers);
-    this.toggleFilters('med_number', medNumbers);
-    this.toggleFilters('low_number', lowNumbers);
+    this.toggleFilters('district_high_number', highNumbers);
+    this.toggleFilters('district_med_number', medNumbers);
+    this.toggleFilters('district_low_number', lowNumbers);
   }
 
   setStateStyleMask(state) {
     if (state) {
       const filterSetting = ['!=', 'ref', state];
       this.toggleFilters('state-mask', filterSetting);
-    }
-    else {
+    } else {
       this.map.setLayoutProperty('state-mask', 'visibility', 'none');
     }
   }
-
 
   setStateStyle() {
     const { items } = this.props;
@@ -130,10 +143,9 @@ class MapView extends React.Component {
         lowNumbers.push(state);
       }
     });
-
-    this.toggleFilters('high_number', highNumbers);
-    this.toggleFilters('med_number', medNumbers);
-    this.toggleFilters('low_number', lowNumbers);
+    this.toggleFilters('district_high_number', highNumbers);
+    this.toggleFilters('district_med_number', medNumbers);
+    this.toggleFilters('district_low_number', lowNumbers);
   }
 
   addClickListener() {
@@ -166,7 +178,6 @@ class MapView extends React.Component {
       }
     });
   }
-
 
   // Handles the highlight for districts when clicked on.
   highlightDistrict(geoid) {

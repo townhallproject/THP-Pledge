@@ -33,9 +33,9 @@ class MapInset extends React.Component {
     } else if (count > 0 && count < 4) {
       lowNumbers.push(stateName);
     }
-    this.toggleFilters('high_number', highNumbers);
-    this.toggleFilters('med_number', medNumbers);
-    this.toggleFilters('low_number', lowNumbers);
+    this.toggleFilters('district_high_number', highNumbers);
+    this.toggleFilters('district_med_number', medNumbers);
+    this.toggleFilters('district_low_number', lowNumbers);
   }
 
   handleReset() {
