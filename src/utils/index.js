@@ -23,4 +23,4 @@ export const totalPledgedInDistricts = itemsInState => Object.keys(itemsInState)
 export const flattenPledgers = pledgerObject => flatten(values(pledgerObject));
 
 export const totalIncumbentsForParty = (pledgerObject, party, incumbent) =>
-  filter(flattenPledgers(pledgerObject), { pledged: true, party, incumbent }).length;
+  filter(flattenPledgers(pledgerObject), { incumbent, party, pledged: true }).length;

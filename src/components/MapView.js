@@ -85,8 +85,10 @@ class MapView extends React.Component {
       district: this.setDistrictStyle,
       state: this.setStateStyle,
     };
-    if (prevState.filterStyle !== this.state.filterStyle) {
+    if (prevState.filterStyle !== this.state.filterStyle || prevProps.selectedState !== this.props.selectedState) {
       mapStyle[this.state.filterStyle]();
+      // clearing any previous popups
+      this.popup.remove();
     }
   }
 
@@ -95,7 +97,11 @@ class MapView extends React.Component {
     const lowNumbers = ['any'];
     const medNumbers = ['any'];
     const highNumbers = ['any'];
+
     Object.keys(items).forEach((state) => {
+      if (!items[state]) {
+        return;
+      }
       Object.keys(items[state]).forEach((district) => {
         let count = 0;
         const districtId = district;
@@ -225,15 +231,15 @@ class MapView extends React.Component {
       tooltip += '<div>Pledge takers:</div>';
       if (itemsInState.Sen) {
         const totalstatewide = totalPledgedInCategory(itemsInState, 'Sen');
-        tooltip += `<div>${totalstatewide} U.S. Senate candidates </div>`;
+        tooltip += `<div>U.S. Senate candidates: <strong>${totalstatewide}</strong></div>`;
       }
       if (itemsInState.Gov) {
         const totalstatewide = totalPledgedInCategory(itemsInState, 'Gov');
-        tooltip += `<div>${totalstatewide} candidates for governor </div>`;
+        tooltip += `<div>Candidates for governor: <strong>${totalstatewide}</strong></div>`;
       }
       const totalDistricts = totalPledgedInDistricts(itemsInState);
 
-      tooltip += `<div>${totalDistricts} U.S. House candidates</div>`;
+      tooltip += `<div>U.S. House candidates: <strong>${totalDistricts}</strong></div>`;
       tooltip += '<div><em>Click for details</em></div>';
     } else {
       this.setState({ popoverColor: 'popover-no-data' });
@@ -245,6 +251,9 @@ class MapView extends React.Component {
   showDistrictTooltip(state, district) {
     const { items } = this.props;
     let tooltip = `<h4>${state} ${district}</h4>`;
+    if (!items[state]) {
+      return null;
+    }
     const people = items[state][district] ? items[state][district] : [];
     if (people.length) {
       const incumbent = people.filter(person => person.incumbent === true)[0] || false;
@@ -254,9 +263,9 @@ class MapView extends React.Component {
       const totalR = filter(people, { pledged: true, incumbent: false, party: 'R' }).length;
       const totalD = filter(people, { pledged: true, incumbent: false, party: 'D' }).length;
       const totalI = filter(people, { pledged: true, incumbent: false, party: 'I' }).length;
-      tooltip += `<div>Pledged Republican Candidates: <strong>${totalR}</strong></div>`;
-      tooltip += `<div>Pledged Democratic Candidates: <strong>${totalD}</strong></div>`;
-      tooltip += `<div>Pledged Independent Candidates: <strong>${totalI}</strong></div>`;
+      tooltip += `<div>Republican candidates: <strong>${totalR}</strong></div>`;
+      tooltip += `<div>Democratic candidates: <strong>${totalD}</strong></div>`;
+      tooltip += `<div>Independent candidates: <strong>${totalI}</strong></div>`;
     } else {
       tooltip += '<div>No one in this district has signed the pledge yet.</div>';
     }
@@ -265,9 +274,9 @@ class MapView extends React.Component {
 
   addPopups(layer) {
     const { map } = this;
-    const popup = new mapboxgl.Popup({
+    this.popup = new mapboxgl.Popup({
       closeButton: false,
-      closeOnClick: false,
+      closeOnClick: true,
     });
     const { items } = this.props;
 
@@ -293,10 +302,11 @@ class MapView extends React.Component {
         } else {
           tooltip = this.showStateTooltip(stateAbr);
         }
-
-        return popup.setLngLat(e.lngLat)
-          .setHTML(tooltip)
-          .addTo(map);
+        if (tooltip) {
+          return this.popup.setLngLat(e.lngLat)
+            .setHTML(tooltip)
+            .addTo(map);
+        }
       }
       return undefined;
     });

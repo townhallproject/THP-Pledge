@@ -79,8 +79,12 @@ class DistrictCell extends React.Component {
 }
 
 DistrictCell.propTypes = {
-  items: PropTypes.shape({}).isRequired,
+  items: PropTypes.shape({}),
   stateName: PropTypes.string.isRequired,
+};
+
+DistrictCell.defaultProps = {
+  items: {},
 };
 
 export default DistrictCell;

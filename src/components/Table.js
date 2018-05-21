@@ -29,7 +29,11 @@ class Table extends React.Component {
           <React.Fragment>
             <Card
               key={state}
-              extra={<React.Fragment>Total pledged candidates: {totalPledgedInState(items[state])}<div className="card-footer">* Incumbent</div></React.Fragment>}
+              extra={items[state] ? (
+                <React.Fragment>Total pledged candidates: {totalPledgedInState(items[state])}
+                  <div className="card-footer">* Incumbent
+                  </div>
+                </React.Fragment>) : null}
               title={stateAbrvToName[state]}
               bordered={false}
               className="state-card"
