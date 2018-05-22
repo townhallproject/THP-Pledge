@@ -1,11 +1,29 @@
-.row.header-pledge--CTA {
-  background-image: url('../src/assets/images/pledgeHeader.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  font-size: 1rem;
+.header-container {
+    font-family: 'Raleway';
+    .header-pledge--CTA {
+        flex: 2;
+        background-image: url('../src/assets/images/pledgeHeader.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        font-size: 1rem;
+    }
+    .text-container{
+        flex: 1;
+        padding: 2em;
+        background: #3facefe0;
+        color: #ffffff;
+        h1{
+            color: $brand-text;
+            font-weight: 900;
+            line-height: 1em;
+            font-size: 3em;
+    
+        }
+        p {
+            font-size: 1.4em;
+            line-height: 1.25;
+        }
+}
 
-  p {
-    font-size: 1.25em;
-    line-height: 1.25;
-  }
+
 }
