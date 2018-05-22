@@ -24,8 +24,12 @@ class Table extends React.Component {
       );
     }
     return Object.keys(items)
-      .map(state =>
-        (
+      .map((state) => {
+        if (!totalPledgedInState(items[state])) {
+          return null;
+        }
+
+        return (
           <React.Fragment>
             <Card
               key={state}
@@ -54,7 +58,8 @@ class Table extends React.Component {
               />
             </Card>
           </React.Fragment>
-        ));
+        );
+      });
   }
 }
 

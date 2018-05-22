@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { filter } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
 import { stateAbrvToName, fips } from '../data/dictionaries';
-import { 
-  takenThePledge, 
-  totalPledgedInDistricts, 
-  totalPledgedInCategory, 
-  zeroPadding 
+import {
+  takenThePledge,
+  totalPledgedInDistricts,
+  totalPledgedInCategory,
+  zeroPadding,
 } from '../utils';
 
 import bboxes from '../data/bboxes';
@@ -33,7 +33,7 @@ class MapView extends React.Component {
     this.highlightDistrict = this.highlightDistrict.bind(this);
     this.districtSelect = this.districtSelect.bind(this);
     this.removeHighlights = this.removeHighlights.bind(this);
-    this.insetOnClickEvent = this.insetOnClickEvent.bind(this);
+
     this.state = {
       alaskaItems: props.items.AK,
       filterStyle: 'state',
@@ -230,13 +230,13 @@ class MapView extends React.Component {
     if (itemsInState) {
       this.setState({ popoverColor: 'popover-has-data' });
       tooltip += '<div>Pledge takers:</div>';
+      if (itemsInState.Gov) {
+        const totalstatewide = totalPledgedInCategory(itemsInState, 'Gov');
+        tooltip += `<div>Gubernatorial candidates: <strong>${totalstatewide}</strong></div>`;
+      }
       if (itemsInState.Sen) {
         const totalstatewide = totalPledgedInCategory(itemsInState, 'Sen');
         tooltip += `<div>U.S. Senate candidates: <strong>${totalstatewide}</strong></div>`;
-      }
-      if (itemsInState.Gov) {
-        const totalstatewide = totalPledgedInCategory(itemsInState, 'Gov');
-        tooltip += `<div>Candidates for governor: <strong>${totalstatewide}</strong></div>`;
       }
       const totalDistricts = totalPledgedInDistricts(itemsInState);
 
@@ -326,14 +326,6 @@ class MapView extends React.Component {
       view.zoom -= 0.5;
     }
     this.map.flyTo(view);
-  }
-
-  insetOnClickEvent(e) {
-    const dataBounds = e.target.parentNode.parentNode.getAttribute('data-bounds').split(',');
-    const boundsOne = [Number(dataBounds[0]), Number(dataBounds[1])];
-    const boundsTwo = [Number(dataBounds[2]), Number(dataBounds[3])];
-    const bounds = boundsOne.concat(boundsTwo);
-    this.map.fitBounds(bounds);
   }
 
   removeHighlights() {

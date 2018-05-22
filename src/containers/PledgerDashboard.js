@@ -112,8 +112,9 @@ const mapDispatchToProps = dispatch => ({
 });
 
 pledgerDashboard.propTypes = {
+  allPledgers: PropTypes.shape({}),
   getInitialPledgers: PropTypes.func.isRequired,
-  pledgersByDistrict: PropTypes.shape({}).isRequired,
+  pledgersByDistrict: PropTypes.shape({}),
   resetSelections: PropTypes.func.isRequired,
   searchByDistrict: PropTypes.func.isRequired,
   selectedDistricts: PropTypes.arrayOf(PropTypes.number),
@@ -123,6 +124,8 @@ pledgerDashboard.propTypes = {
 };
 
 pledgerDashboard.defaultProps = {
+  allPledgers: null,
+  pledgersByDistrict: null,
   selectedDistricts: [],
   selectedState: '',
 };

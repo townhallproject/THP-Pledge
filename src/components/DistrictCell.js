@@ -9,7 +9,6 @@ require('style-loader!css-loader!antd/es/list/style/index.css');
 /* eslint-enable */
 
 const gridStyle = {
-  margin: '.5em',
   maxWidth: '310px',
 };
 
@@ -30,7 +29,7 @@ class DistrictCell extends React.Component {
         if (!Number(b)) {
           return 1;
         }
-        return 0;
+        return a - b;
       })
       .map((district) => {
         if (!items[district]) {

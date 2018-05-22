@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Icon, List } from 'antd';
+import { pledgerShape } from '../state/pledgers/types';
 
 class PledgerCell extends React.Component {
   render() {
@@ -42,7 +43,7 @@ class PledgerCell extends React.Component {
 }
 
 PledgerCell.propTypes = {
-  item: PropTypes.shape({}).isRequired,
+  item: PropTypes.shape(pledgerShape).isRequired,
 };
 
 export default PledgerCell;

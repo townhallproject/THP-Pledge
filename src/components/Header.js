@@ -1,18 +1,13 @@
 import React from 'react';
 
 export default () => (
-  <div className="container-fluid">
+  <div className="container-fluid header-container">
     <div className="row header-pledge--CTA">
-      <div className="col-12 col-lg-7 offset-lg-4 col-xl-5 offset-xl-6 background-light pt-4 pl-5 pb-4 pr-5 mt-lg-5 mb-lg-5">
+      <div className="background-light text-container col-12 offset-lg-4 col-lg-7 pl-5 px-5">
         <h1>Take the Town Hall Pledge:</h1>
         <p>Across party lines, voters in 2018 are demanding accessibility from their lawmakers.
-             We expect those we entrust to represent us in Congress--
-             and in our state and local government--
-             to take time to listen to us.
         </p>
-        <p>We are asking every single candidate for public office this year to take the
-             #townhallpledge to their constituents--to
-             hold a minimum of four town hall meetings per year in office.
+        <p>We are asking every single candidate for public office this year to take the <strong>#townhallpledge</strong> to their constituents to hold a minimum of four town hall meetings per year in office.
         </p>
         <p>Ask candidates in your community to take the Pledge today!</p>
         <h4 className="text-right pt-2">Sign the pledge</h4>

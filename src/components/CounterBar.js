@@ -1,13 +1,14 @@
 import React from 'react';
 import { Popover } from 'antd';
 
+import PropTypes from 'prop-types';
 import { totalIncumbentsForParty } from '../utils';
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/popover/style/index.css');
 /* eslint-enable */
 
-export default (props) => {
+const CounterBar = (props) => {
   const totalDReps = (totalIncumbentsForParty(props.allPledgers, 'D', true));
   const totalDCandidates = (totalIncumbentsForParty(props.allPledgers, 'D', false));
   const totalIReps = (totalIncumbentsForParty(props.allPledgers, 'I', true));
@@ -49,3 +50,8 @@ export default (props) => {
     </div>
   );
 };
+CounterBar.propTypes = {
+  allPledgers: PropTypes.shape({}).isRequired,
+};
+
+export default CounterBar;

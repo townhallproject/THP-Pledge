@@ -13,6 +13,9 @@ export const pledgerShape = {
 };
 
 export const allDataShape = {
-  [PropTypes.string]: PropTypes.arrayOf(PropTypes.shape(pledgerShape)),
+  [PropTypes.string]: PropTypes.arrayOf(PropTypes.shape({ pledgerShape })),
 };
 
+export const allDataByDistrictShape = {
+  [PropTypes.string]: PropTypes.shape({ [PropTypes.number]: PropTypes.arrayOf(PropTypes.shape(pledgerShape)) }),
+};
