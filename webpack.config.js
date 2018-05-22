@@ -6,9 +6,8 @@ const HTMLPlugin = require('html-webpack-plugin');
 // Makes a separate CSS bundle
 const ExtractPlugin = require('extract-text-webpack-plugin');
 
-const { EnvironmentPlugin, DefinePlugin } = require('webpack');
+const { EnvironmentPlugin } = require('webpack');
 
-const production = process.NODE_ENV;
 
 const plugins = [
   new HTMLPlugin({
@@ -16,11 +15,6 @@ const plugins = [
   }),
   new ExtractPlugin('bundle.[hash].css'),
   new EnvironmentPlugin(['NODE_ENV']),
-  new DefinePlugin({
-    __API_URL__: JSON.stringify(process.env.API_URL),
-    __AUTH_URL__: JSON.stringify(process.env.AUTH_URL),
-    __DEBUG__: JSON.stringify(!production),
-  }),
 ];
 
 module.exports = {
