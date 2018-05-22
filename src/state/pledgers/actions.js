@@ -13,7 +13,7 @@ export const startSetPledgers = () => (dispatch) => {
     const allPledgers = result.body;
     const pledgers = mapValues(allPledgers, pledgersInstate =>
       values(pledgersInstate).filter((ele) => {
-        if ((ele.status === 'Lost Primary') && (!ele.pledged)) {
+        if ((ele.status === 'Lost Primary' && !ele.pledged) || (ele.status === 'Active Primary Candidate' && !ele.pledged) || !ele.status) {
           return false;
         }
         return true;
