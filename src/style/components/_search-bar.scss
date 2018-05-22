@@ -1,12 +1,12 @@
 .search-bar {
   flex: 1 100%;
-  @include box-3d;
+  @include box-basic;
   z-index: 99;
   padding: 1vw;
   display: flex;
   flex-flow: row wrap;
   height: 10vw;
-  background-color: $brand-primary;
+  background-color: $brand-text;
   // search input
   .ant-input-search.ant-input-affix-wrapper{
     flex: 1 50%;

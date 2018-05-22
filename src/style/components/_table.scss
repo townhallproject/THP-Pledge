@@ -42,6 +42,7 @@
       .district-card {
           @include district-card-format();
           flex: 1 25%;
+          margin: .5em,
       }
       @media all and (max-width: $tablet-breakpoint) {
         .district-card{
