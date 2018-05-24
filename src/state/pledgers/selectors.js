@@ -1,4 +1,4 @@
-import { reduce, mapValues } from 'lodash';
+import { reduce, mapValues, filter } from 'lodash';
 import { createSelector } from 'reselect';
 
 import {
@@ -7,6 +7,18 @@ import {
 } from '../selections/selectors';
 
 export const getAllPledgers = state => state.pledgers.allPledgers;
+
+export const allTotalPledged = createSelector([getAllPledgers], (allPledgers) => {
+  if (!allPledgers) {
+    return null;
+  }
+
+  return reduce(allPledgers, (acc, pledgersInState) => {
+    acc += filter(pledgersInState, 'pledged').length;
+    return acc;
+  }, 0);
+});
+
 export const groupByStateAndDistrict = createSelector(
   [
     getAllPledgers,

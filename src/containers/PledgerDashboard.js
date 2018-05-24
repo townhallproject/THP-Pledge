@@ -72,7 +72,10 @@ class pledgerDashboard extends React.Component {
     } = this.props;
 
     if (this.state.init) {
-      return null;
+      return (<SearchBar
+        items={pledgersByDistrict}
+        mapType="pledger"
+      />);
     }
     return (
       <div className="pledgers-container main-container">

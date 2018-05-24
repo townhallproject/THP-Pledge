@@ -1,17 +1,35 @@
 .search-bar {
+    width: 100%!important;
+  > div {
+
+  width: 100%!important;
   flex: 1 100%;
   @include box-basic;
-  z-index: 99;
   padding: 1vw;
   display: flex;
   flex-flow: row wrap;
-  height: 10vw;
+  justify-content: center;
   background-color: $brand-text;
+  z-index: 2000;
+  h2 {
+    flex: 1 100%;
+    font-size: 1.6em;
+    font-family: 'Raleway';
+    text-align: center;
+    color: $brand-white;
+  }
+  p {
+    color: $brand-white;
+    font-family: 'Raleway';
+    font-size: 1.4em;
+    font-weight: 200;
+    margin-bottom: 0;
+    text-align: right;
+  }
   // search input
   .ant-input-search.ant-input-affix-wrapper{
     flex: 1 50%;
     width: auto;
-    margin: auto;
     max-width: 300px;
     .ant-btn.ant-input-search-button.ant-btn-primary{
       background-color: $brand-red;
@@ -26,7 +44,7 @@
     margin: auto;
     padding: 1vw;
   }
-}
+}}
 
 @media all and (max-width:778px) {
   .search-bar {

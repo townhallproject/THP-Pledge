@@ -2,9 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { find } from 'lodash';
+import { Icon, Affix } from 'antd';
 import states from '../data/states';
 import * as selectionActions from '../state/selections/actions';
-
+import { allTotalPledged } from '../state/pledgers/selectors';
 
 import SearchInput from '../components/SearchInput';
 import StatusFilterTags from '../components/StatusFilterTags';
@@ -83,17 +84,22 @@ class SearchBar extends React.Component {
   }
 
   render() {
+    const { totalPledged } = this.props;
+
     return (
-      <div className="search-bar">
+      <Affix className="search-bar">
+        <h2>{totalPledged || (<Icon type="loading" />)} candidates have taken the Town Hall Pledge</h2>
+        <p>Find candidates in your district:</p>
         <SearchInput
-          submitHandler={this.searchHandler}
-        />
-      </div>
+            submitHandler={this.searchHandler}
+          />
+      </Affix>
     );
   }
 }
 
 const mapStateToProps = state => ({
+  totalPledged: allTotalPledged(state),
   userSelections: state.selections,
 });
 
@@ -111,6 +117,7 @@ SearchBar.propTypes = {
   selectedFilters: PropTypes.arrayOf(PropTypes.string),
   setDistrict: PropTypes.func.isRequired,
   setTextFilter: PropTypes.func,
+  totalPledged: PropTypes.number,
 };
 
 SearchBar.defaultProps = {
@@ -118,6 +125,7 @@ SearchBar.defaultProps = {
   onFilterChanged: () => {},
   selectedFilters: [],
   setTextFilter: () => {},
+  totalPledged: NaN,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
