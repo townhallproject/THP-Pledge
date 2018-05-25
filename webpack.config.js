@@ -16,12 +16,16 @@ const plugins = [
   }),
   new ExtractPlugin('bundle.[hash].css'),
   new EnvironmentPlugin(['NODE_ENV']),
-  new CopyWebpackPlugin([{
-    flatten: true,
-    from: 'src/assets/downloads/*.pdf',
-    to: 'downloads',
-
-  }]),
+  new CopyWebpackPlugin([
+    {
+      flatten: true,
+      from: 'src/assets/downloads/*.pdf',
+      to: 'downloads',
+    },
+    {
+      from: 'src/CNAME',
+    },
+  ]),
 ];
 
 module.exports = {
