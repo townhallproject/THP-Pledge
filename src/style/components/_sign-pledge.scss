@@ -1,0 +1,14 @@
+.sign-pledge-container {
+    font-family: 'Raleway';
+    display: flex;
+    flex-flow: row wrap;
+    padding: 20px;
+    p {
+        font-size: 1.2em;
+        flex: 1 100%;
+    }
+    .download-button {
+        font-size: 1.4em;
+        margin: auto;
+    }
+}

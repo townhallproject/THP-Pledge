@@ -23,6 +23,12 @@
             font-size: 1.4em;
             line-height: 1.25;
         }
+        button {
+            color: $brand-text;
+            text-align: right;
+            float: right;
+            font-weight: 600;
+        }
 }
 
 

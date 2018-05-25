@@ -2,6 +2,7 @@ require('dotenv').config();
 
 // Dynamic Script and Style Tags
 const HTMLPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Makes a separate CSS bundle
 const ExtractPlugin = require('extract-text-webpack-plugin');
@@ -15,6 +16,12 @@ const plugins = [
   }),
   new ExtractPlugin('bundle.[hash].css'),
   new EnvironmentPlugin(['NODE_ENV']),
+  new CopyWebpackPlugin([{
+    flatten: true,
+    from: 'src/assets/downloads/*.pdf',
+    to: 'downloads',
+
+  }]),
 ];
 
 module.exports = {
