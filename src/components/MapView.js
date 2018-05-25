@@ -7,6 +7,7 @@ import {
   takenThePledge,
   totalPledgedInDistricts,
   totalPledgedInCategory,
+  totalPledgedInState,
   zeroPadding,
 } from '../utils';
 
@@ -94,7 +95,7 @@ class MapView extends React.Component {
   }
 
   setDistrictStyle() {
-    const { items } = this.props;
+    const { items, selectedState } = this.props;
     const lowNumbers = ['any'];
     const medNumbers = ['any'];
     const highNumbers = ['any'];
@@ -103,21 +104,46 @@ class MapView extends React.Component {
       if (!items[state]) {
         return;
       }
-      Object.keys(items[state]).forEach((district) => {
-        let count = 0;
-        const districtId = zeroPadding(district);
-        const fipsId = fips[state];
-        const geoid = fipsId + districtId;
-        count += filter((items[state][district]), 'pledged').length;
-        if (count >= 3) {
-          highNumbers.push(['==', 'GEOID', geoid]);
-        } else if (count >= 2) {
-          medNumbers.push(['==', 'GEOID', geoid]);
-        } else if (count > 0 && count < 2) {
-          lowNumbers.push(['==', 'GEOID', geoid]);
-        }
-      });
+      if (state === 'PA') {
+        Object.keys(items[state]).forEach((district) => {
+          let count = 0;
+          const districtId = zeroPadding(district);
+          count += filter((items[state][district]), 'pledged').length;
+          if (count >= 3) {
+            highNumbers.push(['==', 'DISTRICT', districtId]);
+          } else if (count >= 2) {
+            medNumbers.push(['==', 'DISTRICT', districtId]);
+          } else if (count > 0 && count < 2) {
+            lowNumbers.push(['==', 'DISTRICT', districtId]);
+          }
+        });
+      } else {
+        Object.keys(items[state]).forEach((district) => {
+          let count = 0;
+          const districtId = zeroPadding(district);
+          const fipsId = fips[state];
+          const geoid = fipsId + districtId;
+          count += filter((items[state][district]), 'pledged').length;
+          if (count >= 3) {
+            highNumbers.push(['==', 'GEOID', geoid]);
+          } else if (count >= 2) {
+            medNumbers.push(['==', 'GEOID', geoid]);
+          } else if (count > 0 && count < 2) {
+            lowNumbers.push(['==', 'GEOID', geoid]);
+          }
+        });
+      }
     });
+
+    if (selectedState === 'PA') {
+      this.map.setLayoutProperty('district_high_number', 'visibility', 'none');
+      this.map.setLayoutProperty('district_med_number', 'visibility', 'none');
+      this.map.setLayoutProperty('district_low_number', 'visibility', 'none');
+      this.toggleFilters('district_high_number_pa', highNumbers);
+      this.toggleFilters('district_med_number_pa', medNumbers);
+      this.toggleFilters('district_low_number_pa', lowNumbers);
+      return;
+    }
     this.toggleFilters('district_high_number', highNumbers);
     this.toggleFilters('district_med_number', medNumbers);
     this.toggleFilters('district_low_number', lowNumbers);
@@ -150,6 +176,9 @@ class MapView extends React.Component {
         lowNumbers.push(state);
       }
     });
+    this.map.setLayoutProperty('district_high_number_pa', 'visibility', 'none');
+    this.map.setLayoutProperty('district_med_number_pa', 'visibility', 'none');
+    this.map.setLayoutProperty('district_low_number_pa', 'visibility', 'none');
     this.toggleFilters('district_high_number', highNumbers);
     this.toggleFilters('district_med_number', medNumbers);
     this.toggleFilters('district_low_number', lowNumbers);
@@ -165,16 +194,18 @@ class MapView extends React.Component {
       const features = map.queryRenderedFeatures(
         e.point,
         {
-          layers: ['district_interactive'],
+          layers: ['district_interactive', 'district_interactive_pa'],
         },
       );
       const feature = {};
       if (features.length > 0) {
         feature.state = features[0].properties.ABR;
-        feature.district = features[0].properties.GEOID.substring(2, 4);
+        feature.district = features[0].properties.GEOID ? features[0].properties.GEOID.substring(2, 4) : features[0].properties.DISTRICT;
         feature.geoID = features[0].properties.GEOID;
         let districts = [Number(feature.district)];
-
+        if (!feature.state && features[0].properties.DISTRICT) {
+          feature.state = 'PA';
+        }
         if (map.metadata.selectedState !== feature.state) {
           districts = [];
         }
@@ -197,6 +228,11 @@ class MapView extends React.Component {
         filterSettings.push(['==', 'GEOID', i]);
       });
     } else {
+      if (geoid.substring(0, 2) === '42') {
+        filterSettings = ['all', ['==', 'DISTRICT', geoid.substring(2)]];
+        this.toggleFilters('selected-border-pa', filterSettings);
+        return;
+      }
       filterSettings = ['all', ['==', 'GEOID', geoid]];
     }
     // Set that layer filter to the selected
@@ -217,6 +253,8 @@ class MapView extends React.Component {
       if (visibility === 'visible') {
         this.map.setLayoutProperty('selected-fill', 'visibility', 'none');
         this.map.setLayoutProperty('selected-border', 'visibility', 'none');
+        this.map.setLayoutProperty('selected-border-pa', 'visibility', 'none');
+
       }
     }
   }
@@ -226,21 +264,19 @@ class MapView extends React.Component {
     const name = stateAbrvToName[state];
     const itemsInState = items[state];
     let tooltip = `<h4>${name}</h4>`;
-
-    if (itemsInState) {
+    if (itemsInState && totalPledgedInState(itemsInState)) {
       this.setState({ popoverColor: 'popover-has-data' });
-      tooltip += '<div>Pledge takers:</div>';
       if (itemsInState.Gov) {
         const totalstatewide = totalPledgedInCategory(itemsInState, 'Gov');
-        tooltip += `<div>Gubernatorial candidates: <strong>${totalstatewide}</strong></div>`;
+        tooltip += `<div>Gubernatorial pledge takers: <strong>${totalstatewide}</strong></div>`;
       }
       if (itemsInState.Sen) {
         const totalstatewide = totalPledgedInCategory(itemsInState, 'Sen');
-        tooltip += `<div>U.S. Senate candidates: <strong>${totalstatewide}</strong></div>`;
+        tooltip += `<div>U.S. Senate pledge takers: <strong>${totalstatewide}</strong></div>`;
       }
       const totalDistricts = totalPledgedInDistricts(itemsInState);
 
-      tooltip += `<div>U.S. House candidates: <strong>${totalDistricts}</strong></div>`;
+      tooltip += `<div>U.S. House pledge takers: <strong>${totalDistricts}</strong></div>`;
       tooltip += '<div><em>Click for details</em></div>';
     } else {
       this.setState({ popoverColor: 'popover-no-data' });
@@ -257,16 +293,16 @@ class MapView extends React.Component {
     }
     const people = items[state][district] ? items[state][district] : [];
     if (people.length) {
-      const incumbent = people.filter(person => person.incumbent === true)[0] || false;
+      const incumbent = filter(people, 'incumbent')[0];
       if (incumbent) {
         tooltip += `<div>Incumbent <strong>${incumbent.displayName}</strong>${takenThePledge(incumbent)}</div>`;
       }
       const totalR = filter(people, { pledged: true, incumbent: false, party: 'R' }).length;
       const totalD = filter(people, { pledged: true, incumbent: false, party: 'D' }).length;
       const totalI = filter(people, { pledged: true, incumbent: false, party: 'I' }).length;
-      tooltip += `<div>Republican candidates: <strong>${totalR}</strong></div>`;
-      tooltip += `<div>Democratic candidates: <strong>${totalD}</strong></div>`;
-      tooltip += `<div>Independent candidates: <strong>${totalI}</strong></div>`;
+      tooltip += `<div>Republican pledge takers: <strong>${totalR}</strong></div>`;
+      tooltip += `<div>Democratic pledge takers: <strong>${totalD}</strong></div>`;
+      tooltip += `<div>Independent pledge takers: <strong>${totalI}</strong></div>`;
     } else {
       tooltip += '<div>No one in this district has signed the pledge yet.</div>';
     }
@@ -282,7 +318,7 @@ class MapView extends React.Component {
     const { items } = this.props;
 
     map.on('mousemove', (e) => {
-      const features = map.queryRenderedFeatures(e.point, { layers: [layer] });
+      const features = map.queryRenderedFeatures(e.point, { layers: [layer, 'district_interactive_pa'] });
       // Change the cursor style as a UI indicator.
       map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
@@ -293,13 +329,14 @@ class MapView extends React.Component {
         // NAME:"Maine"
         // STATEFP:"23"
         const { properties } = feature;
-        const stateAbr = properties.ABR;
+        const stateAbr = properties.ABR ? properties.ABR : 'PA';
+        const district = properties.DISTRICT ? properties.DISTRICT : properties.GEOID.substring(2);
         let tooltip;
         if (map.metadata.level === 'districts') {
           if (!items[stateAbr]) {
             return undefined;
           }
-          tooltip = this.showDistrictTooltip(stateAbr, Number(properties.GEOID.substring(2)));
+          tooltip = this.showDistrictTooltip(stateAbr, Number(district));
         } else {
           tooltip = this.showStateTooltip(stateAbr);
         }
@@ -331,6 +368,7 @@ class MapView extends React.Component {
   removeHighlights() {
     this.map.setLayoutProperty('selected-fill', 'visibility', 'none');
     this.map.setLayoutProperty('selected-border', 'visibility', 'none');
+    this.map.setLayoutProperty('selected-border-pa', 'visibility', 'none');
   }
 
   handleReset() {
