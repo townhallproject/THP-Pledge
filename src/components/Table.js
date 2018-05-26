@@ -15,26 +15,15 @@ class Table extends React.Component {
     const {
       items,
     } = this.props;
-    if (!items) {
-      return (
-        <div id="pledgers-list">
-          <p className="no-results">Looks like there are no events near you right now. You can create your own
-          </p>
-        </div>
-      );
-    }
     return Object.keys(items)
-      .map((state) => {
-        if (!totalPledgedInState(items[state])) {
-          return null;
-        }
+      .map(state =>
 
-        return (
+        (
           <React.Fragment>
             <Card
               key={state}
               extra={items[state] ? (
-                <React.Fragment>Total pledged candidates: {totalPledgedInState(items[state])}
+                <React.Fragment>Total pledged candidates: {items[state] ? totalPledgedInState(items[state]) : 0}
                   <div className="card-footer">* Incumbent
                   </div>
                 </React.Fragment>) : null}
@@ -58,8 +47,7 @@ class Table extends React.Component {
               />
             </Card>
           </React.Fragment>
-        );
-      });
+        ));
   }
 }
 
