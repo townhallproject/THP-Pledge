@@ -397,9 +397,12 @@ class MapView extends React.Component {
     const styleUrl = 'mapbox://styles/townhallproject/cjgr7qoqr00012ro4hnwlvsyp';
 
     this.map = new mapboxgl.Map({
+      attributionControl: false,
       container: 'map',
       style: styleUrl,
     });
+    this.map.addControl(new mapboxgl.AttributionControl(), 'top-left');
+
 
     // Set Mapbox map controls
     this.map.addControl(new mapboxgl.NavigationControl());
