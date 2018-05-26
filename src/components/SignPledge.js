@@ -8,7 +8,8 @@ export default () => (
     <p>Download pledge forms here. Feel free to email signed pledges to <a href="mailto:info@townhallproject.com">info@townhallproject.com</a> and/or tweet a photo of your candidate holding the signed pledge.</p>
 
     <p>Thank you for your commitment to accessibility!</p>
-    <a download className="download-button" href="downloads/THP_Pledge_state_and_local.pdf">Download State form <Icon type="download" /></a>
-    <a download className="download-button" href="downloads/THP_Pledge_House.pdf">Download House form <Icon type="download" /></a>
+    <a download className="download-button" href="downloads/THP_Pledge_Statewide.pdf">Download<br /> U.S. Senate/Gubernatorial form <Icon type="download" /></a>
+    <a download className="download-button" href="downloads/THP_Pledge_House.pdf">Download<br /> U.S. House/Legislature form <Icon type="download" /></a>
+    <a download className="download-button" href="downloads/THP_Pledge_state_and_local.pdf">Download<br /> other offices form <Icon type="download" /></a>
   </div>
 );
