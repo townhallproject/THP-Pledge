@@ -16,6 +16,10 @@ class MapInset extends React.Component {
     this.initializeMap();
   }
 
+  componentDidUpdate() {
+    this.map.resize();
+  }
+
   setStateStyle() {
     const { items, stateName } = this.props;
     const lowNumbers = ['in', 'ABR'];
@@ -97,6 +101,9 @@ class MapInset extends React.Component {
       hidden: selectedState,
       inset: true,
     });
+    if (this.map) {
+      this.map.resize();
+    }
     return (
       <React.Fragment>
         <div id={mapId} className={mapClassNames} data-bounds={this.props.bounds} />
