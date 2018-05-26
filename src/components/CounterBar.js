@@ -28,22 +28,22 @@ const CounterBar = (props) => {
   return (
     <div className="container-fluid">
       <div className="row header-pledge--count">
-        <Popover content="Pledged Democratic Representatives" placement="topLeft" >
+        <Popover content="Pledged Democratic incumbents" placement="topLeft" >
           <div style={{ flexBasis: `${dRepsPercent}%` }} className="democrat" >{totalDReps}</div>
         </Popover>
-        <Popover content="Pledged Democratic Candidates" >
+        <Popover content="Pledged Democratic challengers" >
           <div style={{ flexBasis: `${dCandidatePercent}%` }} className="democrat-candidate" title="Democratic Candidates">{totalDCandidates}</div>
         </Popover>
-        <Popover content="Pledged Independent Representatives">
+        <Popover content="Pledged Independent incumbents">
           <div style={{ flexBasis: `${iRepsPercent}%` }} className="independent" title="Independent Representatives">{totalIReps}</div>
         </Popover>
-        <Popover content="Pledged Independent Candidates">
+        <Popover content="Pledged Independent challengers">
           <div style={{ flexBasis: `${iCandidatePercent}%` }} className="independent-candidate" title="Independent Candidates">{totalICandidates}</div>
         </Popover>
-        <Popover content="Pledged Republican Candidates" placement="topRight">
+        <Popover content="Pledged Republican challengers" placement="topRight">
           <div style={{ flexBasis: `${rCandidatePercent}%` }} className="republican-candidate" title="Republican Candidates">{totalRCandidates}</div>
         </Popover>
-        <Popover content="Pledged Republican Representatives" placement="topRight">
+        <Popover content="Pledged Republican incumbents" placement="topRight">
           <div style={{ flexBasis: `${rRepsPercent}%` }} className="republican" title="Republican Representatives">{totalRReps}</div>
         </Popover>
       </div>
