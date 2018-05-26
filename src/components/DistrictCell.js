@@ -11,6 +11,18 @@ require('style-loader!css-loader!antd/es/list/style/index.css');
 const gridStyle = {
   maxWidth: '310px',
 };
+const getOrder = (pledger) => {
+  if (pledger.incumbent) {
+    return 0;
+  }
+  const statusOrder = {
+    'Active Primary Candidate': 2,
+    'Lost Primary': 3,
+    Nominee: 1,
+  };
+  
+  return statusOrder[pledger.status];
+};
 
 class DistrictCell extends React.Component {
   render() {
@@ -52,15 +64,7 @@ class DistrictCell extends React.Component {
             <List
               id={district}
               itemLayout="horizontal"
-              dataSource={items[district].sort((a, b) => {
-              if (a.incumbent) {
-                return -1;
-              }
-              if (b.incumbent) {
-                return 1;
-              }
-              return 0;
-            })}
+              dataSource={items[district].sort((a, b) => getOrder(a) - getOrder(b))}
               renderItem={item =>
                 (
                   <List.Item key={item.displayName}>
