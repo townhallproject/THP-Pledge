@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { filter } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
-import { stateAbrvToName, fips } from '../data/dictionaries';
+import { stateAbrvToName, fips, numOfDistricts } from '../data/dictionaries';
 import {
   takenThePledge,
   totalPledgedInDistricts,
@@ -111,9 +111,9 @@ class MapView extends React.Component {
           count += filter((items[state][district]), 'pledged').length;
           if (count >= 3) {
             highNumbers.push(['==', 'DISTRICT', districtId]);
-          } else if (count >= 2) {
+          } else if (count >= 1) {
             medNumbers.push(['==', 'DISTRICT', districtId]);
-          } else if (count > 0 && count < 2) {
+          } else if (count > 0 && count < 1) {
             lowNumbers.push(['==', 'DISTRICT', districtId]);
           }
         });
@@ -168,11 +168,12 @@ class MapView extends React.Component {
       Object.keys(items[state]).forEach((district) => {
         count += filter((items[state][district]), 'pledged').length;
       });
-      if (count >= 10) {
+      count = (count / numOfDistricts[state]) * 100;
+      if (count >= 70) {
         highNumbers.push(state);
-      } else if (count >= 4) {
+      } else if (count >= 25) {
         medNumbers.push(state);
-      } else if (count > 0 && count < 4) {
+      } else if (count > 0 && count < 25) {
         lowNumbers.push(state);
       }
     });
