@@ -9,13 +9,11 @@ const ExtractPlugin = require('extract-text-webpack-plugin');
 
 const { EnvironmentPlugin } = require('webpack');
 
-
 const plugins = [
   new HTMLPlugin({
     template: `${__dirname}/src/index.html`,
   }),
   new ExtractPlugin('bundle.[hash].css'),
-  new EnvironmentPlugin(['NODE_ENV']),
   new CopyWebpackPlugin([
     {
       flatten: true,
@@ -24,6 +22,11 @@ const plugins = [
     },
     {
       from: 'src/CNAME',
+    },
+    {
+      flatten: true,
+      from: 'src/assets/images',
+      to: 'images',
     },
   ]),
 ];
