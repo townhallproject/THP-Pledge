@@ -6,8 +6,6 @@ import App from './App';
 
 import configureStore from './store/configureStore';
 
-import './style/app.scss';
-
 const store = configureStore();
 
 const jsx = (
