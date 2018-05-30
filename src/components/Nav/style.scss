@@ -1,3 +1,5 @@
+@import "../../style/modules/colors";
+
 .navbar {
     &.justify-content-between {
         -webkit-box-pack: justify !important;
@@ -21,34 +23,58 @@
     border-bottom: $brand-red 2px solid;
     margin-bottom: 0;
     background-color: $brand-white;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1); 
-
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 0;
+        li {
+            font-family: 'Raleway';
+            display: block;
+            position: relative;
+            float: left;
+            padding-left: 10px;
+        }
+    }
     .navbar-brand {
-        font-size: 2em;
-        color: $brand-text;
         padding: 0;
         img {
         width: 125px;
         }
     }
-
     a.linkOut {
-        font-size: 1.65em;
+        &.social-icons {
+            padding-right: 0;
+            padding-left: 5px;
+            padding-top: 15px;
+            font-size: 1.6em;
+        }
         color: $brand-text;
         &:hover, &:active, &:visited {
-        text-decoration: none;
-        color: $brand-text;
+            text-decoration: none;
+            color: $brand-text;
         }
+        .main-site {
+            // content:'';
+            background-image: url('../../src/assets/images/THP_logo_circle.svg');
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+    }
+
+    .navbar-right{
+        float: right;
     }
     /* Small desktop */
     @media (min-width: 992px) {
         padding: 0.5em 1em;
         line-height: 1; }
         .navbar-brand {
-        font-size: 2em;
-        line-height: 1.45; }
-        a.linkOut {
-        font-size: 1.65em; }
+            font-size: 2em;
+            line-height: 1.45;
+     }
     
     /* Large desktop */
     @media (min-width: 1600px) {

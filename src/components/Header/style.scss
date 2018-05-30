@@ -1,17 +1,36 @@
+@import "../../style/modules/colors";
+
 .header-container {
     font-family: 'Raleway';
     .header-pledge--CTA {
         flex: 2;
-        background-image: url('../src/assets/images/pledgeHeader.jpg');
+        display: flex;
+        position: relative;
+        align-content: end;
+        justify-content: flex-end;
         background-size: cover;
         background-repeat: no-repeat;
         font-size: 1rem;
+        @media screen and (min-width: 992px){
+        }
+    }
+    .spacer{
+        flex: 1;
+        @media screen and (max-width: 992px){
+                  display: none;
+              }
+    }
+    img{
+        position: absolute;
+        height: 100%;
+        left: 0;
     }
     .text-container{
         flex: 1;
+        z-index: 1;
         padding: 2em;
-        background: #3facefe0;
-        color: #ffffff;
+        background: #ffffffe0;
+        color: $brand-success;
         h1{
             color: $brand-text;
             font-weight: 900;

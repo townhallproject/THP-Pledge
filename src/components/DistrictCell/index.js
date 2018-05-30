@@ -2,16 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Card } from 'antd';
 
-import { getTitle } from '../data/dictionaries';
-import PledgerCell from './PledgerCell';
-/* eslint-disable */
-require('style-loader!css-loader!antd/es/list/style/index.css');
-/* eslint-enable */
+import { getTitle } from '../../data/dictionaries';
+import PledgerCell from '../PledgerCell';
 
 const gridStyle = {
   maxWidth: '310px',
 };
-const getOrder = (pledger) => {
+
+const getCardOrder = (districtOrStateWide) => {
+  if (Number(districtOrStateWide)) {
+    return districtOrStateWide;
+  }
+  if (districtOrStateWide.split('-').length > 1) {
+    return 500;
+  }
+  return 0;
+};
+
+const getPeopleOrder = (pledger) => {
   if (pledger.incumbent) {
     return 0;
   }
@@ -20,7 +28,7 @@ const getOrder = (pledger) => {
     'Lost Primary': 3,
     Nominee: 1,
   };
-  
+
   return statusOrder[pledger.status];
 };
 
@@ -34,15 +42,7 @@ class DistrictCell extends React.Component {
       return <li>No Pledgers</li>;
     }
     return Object.keys(items)
-      .sort((a, b) => {
-        if (!Number(a)) {
-          return -1;
-        }
-        if (!Number(b)) {
-          return 1;
-        }
-        return a - b;
-      })
+      .sort((a, b) => getCardOrder(a) - getCardOrder(b))
       .map((district) => {
         if (!items[district]) {
           return (
@@ -64,7 +64,7 @@ class DistrictCell extends React.Component {
             <List
               id={district}
               itemLayout="horizontal"
-              dataSource={items[district].sort((a, b) => getOrder(a) - getOrder(b))}
+              dataSource={items[district].sort((a, b) => getPeopleOrder(a) - getPeopleOrder(b))}
               renderItem={item =>
                 (
                   <List.Item key={item.displayName}>

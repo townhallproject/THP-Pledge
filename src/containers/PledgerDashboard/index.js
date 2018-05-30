@@ -6,19 +6,21 @@ import PropTypes from 'prop-types';
 import {
   getAllPledgers,
   getPledgersByDistrict,
-} from '../state/pledgers/selectors';
+} from '../../state/pledgers/selectors';
 
-import { startSetPledgers } from '../state/pledgers/actions';
+import { startSetPledgers } from '../../state/pledgers/actions';
 
-import { getUsState, getDistricts } from '../state/selections/selectors';
-import * as selectionActions from '../state/selections/actions';
+import { getUsState, getDistricts } from '../../state/selections/selectors';
+import * as selectionActions from '../../state/selections/actions';
 
-import MapView from '../components/MapView';
-import WebGlError from '../components/WebGlError';
-import CounterBar from '../components/CounterBar';
+import MapView from '../../components/MapView';
+import WebGlError from '../../components/WebGlError';
+import CounterBar from '../../components/CounterBar';
 
-import SearchBar from './SearchBar';
-import Table from '../components/Table';
+import SearchBar from '../SearchBar';
+import Table from '../../components/Table';
+
+import './style.scss';
 
 class pledgerDashboard extends React.Component {
   constructor(props) {

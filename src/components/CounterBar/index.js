@@ -2,10 +2,11 @@ import React from 'react';
 import { Popover } from 'antd';
 
 import PropTypes from 'prop-types';
-import { totalIncumbentsForParty } from '../utils';
+import { totalIncumbentsForParty } from '../../utils';
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/popover/style/index.css');
+import './style.scss';
 /* eslint-enable */
 
 const CounterBar = (props) => {

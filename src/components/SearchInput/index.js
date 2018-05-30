@@ -2,11 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'antd';
 
-/* eslint-disable */
-require('style-loader!css-loader!antd/es/style/index.css');
-require('style-loader!css-loader!antd/es/input/style/index.css');
-require('style-loader!css-loader!antd/es/button/style/index.css');
-/* eslint-enable */
+
 
 const { Search } = Input;
 

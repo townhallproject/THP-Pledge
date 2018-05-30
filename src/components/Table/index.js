@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'antd';
 
-import DistrictCell from './DistrictCell';
-import { stateAbrvToName } from '../data/dictionaries';
-import { totalPledgedInState } from '../utils';
+import DistrictCell from '../DistrictCell';
+import { stateAbrvToName } from '../../data/dictionaries';
+import { totalPledgedInState } from '../../utils';
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/card/style/index.css');
+require('style-loader!css-loader!antd/es/list/style/index.css');
+import './style.scss';
 /* eslint-enable */
 
 class Table extends React.Component {

@@ -3,15 +3,18 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { find } from 'lodash';
 import { Icon, Affix } from 'antd';
-import states from '../data/states';
-import * as selectionActions from '../state/selections/actions';
-import { allTotalPledged } from '../state/pledgers/selectors';
+import states from '../../data/states';
+import * as selectionActions from '../../state/selections/actions';
+import { allTotalPledged } from '../../state/pledgers/selectors';
 
-import SearchInput from '../components/SearchInput';
-import StatusFilterTags from '../components/StatusFilterTags';
+import SearchInput from '../../components/SearchInput';
+import StatusFilterTags from '../../components/StatusFilterTags';
 
 /* eslint-disable */
-require('style-loader!css-loader!antd/es/radio/style/index.css');
+require('style-loader!css-loader!antd/es/style/index.css');
+require('style-loader!css-loader!antd/es/input/style/index.css');
+require('style-loader!css-loader!antd/es/button/style/index.css');
+import './style.scss';
 /* eslint-enable */
 
 class SearchBar extends React.Component {
@@ -91,8 +94,8 @@ class SearchBar extends React.Component {
         <h2>{totalPledged || (<Icon type="loading" />)} candidates have taken the Town Hall Pledge</h2>
         <p>Find candidates in your district:</p>
         <SearchInput
-            submitHandler={this.searchHandler}
-          />
+          submitHandler={this.searchHandler}
+        />
       </Affix>
     );
   }

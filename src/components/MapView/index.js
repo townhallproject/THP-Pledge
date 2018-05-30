@@ -2,18 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { filter } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
-import { stateAbrvToName, fips, numOfDistricts } from '../data/dictionaries';
+import { stateAbrvToName, fips, numOfDistricts } from '../../data/dictionaries';
 import {
   takenThePledge,
   totalPledgedInDistricts,
   totalPledgedInCategory,
   totalPledgedInState,
   zeroPadding,
-} from '../utils';
+} from '../../utils';
 
-import bboxes from '../data/bboxes';
-import states from '../data/states';
-import MapInset from '../components/MapInset';
+import bboxes from '../../data/bboxes';
+import states from '../../data/states';
+import MapInset from '../../components/MapInset';
+
+import './popover.scss';
+import './style.scss';
 
 class MapView extends React.Component {
   constructor(props) {
@@ -313,7 +316,7 @@ class MapView extends React.Component {
   addPopups(layer) {
     const { map } = this;
     this.popup = new mapboxgl.Popup({
-      closeButton: false,
+      closeButton: true,
       closeOnClick: true,
     });
     const { items } = this.props;
@@ -349,6 +352,9 @@ class MapView extends React.Component {
       }
       return undefined;
     });
+    map.on('mouseleave', 'district_interactive', (e) => {
+      this.popup.remove();
+    })
   }
 
   focusMap(bb) {

@@ -1,8 +1,8 @@
+$tablet-breakpoint : 778px;
+
 .hidden {
     display: none!important;
 }
-
-$tablet-breakpoint : 778px;
 
 .background-light {
   background: $brand-gray;
@@ -84,13 +84,13 @@ h1.background-dark {
 }
 @media (min-width: 992px){
   .offset-lg-4 {
-      margin-left: 66.667%;
+    //   margin-left: 66.667%;
   }
 }
 @media (min-width: 992px){
   .col-lg-7 {
       -webkit-box-flex: 0;
-      max-width: 58.3333%;
-      flex: 0 0 58.3333%;
+    //   max-width: 58.3333%;
+    //   flex: 0 0 58.3333%;
   }
 }

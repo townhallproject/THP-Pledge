@@ -1,3 +1,7 @@
+@import "../../style/modules/colors";
+@import "../../style/mixins/popover";
+@import "../../style/mixins/popover-tip";
+
 // default case
 .popover-has-data{
   .mapboxgl-popup-content {
