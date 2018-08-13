@@ -1,0 +1,55 @@
+// default case
+.popover-has-data{
+  .mapboxgl-popup-content {
+    @include popover($brand-white, $brand-text);
+      p {
+        margin:0;
+        text-transform: initial;
+      }
+    }
+    @include popover-tip($brand-white);
+}
+
+.mapboxgl-popup{
+  z-index: 10!important;
+}
+
+.popover-no-data {
+  .mapboxgl-popup-content {
+    @include popover($brand-gray, $brand-text);
+    color: $brand-text;
+  }
+  @include popover-tip($brand-gray);
+}
+
+.mapboxgl-popup-anchor-bottom { padding-bottom: 0.1rem; }
+.mapboxgl-popup-anchor-top { padding-top: 0.1rem; }
+.mapboxgl-popup-anchor-right { padding-right: 0.1rem; }
+.mapboxgl-popup-anchor-left { padding-left: 0.1rem; }
+
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip { border-top-color: $brand-primary; }
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip { border-bottom-color: $brand-primary; }
+
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: $brand-primary;
+}
+
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: $brand-primary;
+}
+
+.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip { border-bottom-color: $brand-primary; }
+.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip { border-bottom-color: $brand-primary; }
+.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip {
+  border-top-color: $brand-primary;
+}
+
+.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+  border-top-color: $brand-primary;
+}
+
+.mapbox-popup-title {
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+}

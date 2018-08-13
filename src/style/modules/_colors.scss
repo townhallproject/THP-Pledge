@@ -1,0 +1,29 @@
+// From THP
+$brand-primary: #0d4668;
+$brand-primary-lighter: lighten($brand-primary, 17.5%);
+$brand-red: #ff4741;
+$brand-cool: #b6e5fb;
+$brand-text: #132149;
+$brand-gray: #d4e0e5;
+$light-grey  : #829ca6;
+$brand-success: #3facef;
+$brand-info: #132149;
+$brand-secondary-dark : darken($brand-red, 20%);
+$brand-white: #ffffff;
+$party-democrat: #66bdf4;
+$party-independent: #5a4c70;
+$party-republican: #f87773;
+$pledged-purple: #7c20db;
+$light-purple: #9e9ac8;
+
+.D {
+    color: $party-democrat;
+}
+
+.R {
+    color: $party-republican;
+}
+
+.I {
+    color: $party-independent;
+}
