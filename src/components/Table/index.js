@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'antd';
+import {
+  mapKeys,
+  filter,
+} from 'lodash';
 
 import DistrictCell from '../DistrictCell';
 import { stateAbrvToName } from '../../data/dictionaries';
@@ -16,11 +20,17 @@ class Table extends React.Component {
   render() {
     const {
       items,
+      allDoYourJobDistricts,
     } = this.props;
     return Object.keys(items)
-      .map(state =>
-
-        (
+      .map((state) => {
+        if (!totalPledgedInState(items[state])) {
+          return null;
+        }
+  
+        const doYourJobDistricts = filter(allDoYourJobDistricts, ele => (ele.state === state));
+   
+        return (
           <React.Fragment>
             <Card
               key={state}
@@ -46,6 +56,7 @@ class Table extends React.Component {
                 key={`${state}-cell`}
                 stateName={state}
                 items={items[state]}
+                doYourJobDistricts={doYourJobDistricts}
               />
             </Card>
           </React.Fragment>

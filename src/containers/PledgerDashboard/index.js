@@ -75,6 +75,7 @@ class pledgerDashboard extends React.Component {
 
   render() {
     const {
+      allDoYourJobDistricts,
       pledgersByDistrict,
       allPledgers,
     } = this.props;
@@ -89,6 +90,7 @@ class pledgerDashboard extends React.Component {
       <div className="pledgers-container main-container">
         <div className="table-container" id="table--state">
           <Table
+            allDoYourJobDistricts={allDoYourJobDistricts}
             items={pledgersByDistrict}
           />
         </div>

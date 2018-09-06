@@ -1,15 +1,17 @@
 import React from 'react';
-import { chroma } from 'chroma-js';
+import chroma from 'chroma-js';
 import PropTypes from 'prop-types';
 import {
   filter,
   map,
+  mapKeys,
   values,
+  includes,
 } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
-import chroma from 'chroma-js';
+import { stateAbrvToName, fips, numOfDistricts } from '../data/dictionaries';
+import { DYJD_COLOR } from './constants';
 
-import { stateAbrvToName, fips, numOfDistricts } from '../../data/dictionaries';
 import {
   takenThePledge,
   totalPledgedInDistricts,
@@ -26,19 +28,7 @@ import './popover.scss';
 import './style.scss';
 
 class MapView extends React.Component {
-  static createColorExpression(stops, colors, value) {
-    let expression = ['interpolate', ['linear'],
-      ['to-number', value]
-    ];
 
-    for (let i = 0; i < stops.length; i++) {
-      expression.push(stops[i]);
-      expression.push(colors[i]);
-    }
-    console.log(expression);
-    return expression;
-  }
-  
   constructor(props) {
     super(props);
     this.filterDistrict = ['any'];
@@ -57,6 +47,8 @@ class MapView extends React.Component {
     this.highlightDistrict = this.highlightDistrict.bind(this);
     this.districtSelect = this.districtSelect.bind(this);
     this.removeHighlights = this.removeHighlights.bind(this);
+    this.addStateLayers = this.addStateLayers.bind(this);
+    this.setStateDoYourJob = this.setStateDoYourJob.bind(this);
 
     this.state = {
       alaskaItems: props.items.AK,
@@ -118,58 +110,49 @@ class MapView extends React.Component {
   }
 
   setDistrictStyle() {
-    const { items, selectedState } = this.props;
-    const lowNumbers = ['any'];
-    const medNumbers = ['any'];
-    const highNumbers = ['any'];
+    const { items } = this.props;
+
+    const { map } = this;
+
+    map.setLayoutProperty('states-fill', 'visibility', 'none');
+
+     map.addLayer({
+       id: 'districts-fill',
+       type: 'fill',
+       source: 'districts',
+       paint: {
+         'fill-color': ['case',
+          ['boolean', ['feature-state', 'doYourJobDistrict'], true],
+          DYJD_COLOR,
+          '#847aa3',
+          ],
+         'fill-opacity': ['case',
+         ['boolean', ['feature-state', 'pledged'], true],
+         0.8,
+         0,
+       ],
+      }
+     }, 'district_high_number');
 
     Object.keys(items).forEach((state) => {
       if (!items[state]) {
         return;
       }
-      if (state === 'PA') {
-        Object.keys(items[state]).forEach((district) => {
-          let count = 0;
-          const districtId = zeroPadding(district);
-          count += filter((items[state][district]), 'pledged').length;
-          if (count >= 3) {
-            highNumbers.push(['==', 'DISTRICT', districtId]);
-          } else if (count >= 1) {
-            medNumbers.push(['==', 'DISTRICT', districtId]);
-          } else if (count > 0 && count < 1) {
-            lowNumbers.push(['==', 'DISTRICT', districtId]);
-          }
+      Object.keys(items[state]).forEach((district) => {
+        let count = 0;
+        const districtId = zeroPadding(district);
+        const fipsId = fips[state];
+        const geoid = fipsId + districtId;
+        count += filter((items[state][district]), 'pledged').length;
+    
+        map.setFeatureState({
+          id: Number(geoid),
+          source: 'districts',
+        }, {
+          pledged: count > 0,
         });
-      } else {
-        Object.keys(items[state]).forEach((district) => {
-          let count = 0;
-          const districtId = zeroPadding(district);
-          const fipsId = fips[state];
-          const geoid = fipsId + districtId;
-          count += filter((items[state][district]), 'pledged').length;
-          if (count >= 3) {
-            highNumbers.push(['==', 'GEOID', geoid]);
-          } else if (count >= 2) {
-            medNumbers.push(['==', 'GEOID', geoid]);
-          } else if (count > 0 && count < 2) {
-            lowNumbers.push(['==', 'GEOID', geoid]);
-          }
-        });
-      }
+      });
     });
-
-    if (selectedState === 'PA') {
-      this.map.setLayoutProperty('district_high_number', 'visibility', 'none');
-      this.map.setLayoutProperty('district_med_number', 'visibility', 'none');
-      this.map.setLayoutProperty('district_low_number', 'visibility', 'none');
-      this.toggleFilters('district_high_number_pa', highNumbers);
-      this.toggleFilters('district_med_number_pa', medNumbers);
-      this.toggleFilters('district_low_number_pa', lowNumbers);
-      return;
-    }
-    this.toggleFilters('district_high_number', highNumbers);
-    this.toggleFilters('district_med_number', medNumbers);
-    this.toggleFilters('district_low_number', lowNumbers);
   }
 
   setStateStyleMask(state) {
@@ -203,7 +186,7 @@ class MapView extends React.Component {
       type: 'line',
       source: 'states',
       paint: {
-        'line-color': '#ffbd24',
+        'line-color': DYJD_COLOR,
         'line-width': 2,
         'line-opacity': ['case',
           ['boolean', ['feature-state', 'doYourJobDistrict'], true],
@@ -211,20 +194,44 @@ class MapView extends React.Component {
           0,
         ],
       },
-    }, 'district_high_number');
+    });
 
-    map(values(fips), (fip) => {
+    thisMap.addLayer({
+      id: 'district-outline',
+      type: 'line',
+      source: 'districts',
+      paint: {
+        'line-color': DYJD_COLOR,
+        'line-width': 1,
+        'line-opacity': ['case',
+          ['boolean', ['feature-state', 'doYourJobDistrict'], true],
+          1,
+          0,
+        ],
+      },
+    });
+
+    mapKeys(fips, (fip, state) => {
       thisMap.setFeatureState({
         id: Number(fip),
         source: 'states',
       }, {
         doYourJobDistrict: false,
       });
+      for (let step = 0; step <= numOfDistricts[state]; step++) {
+        // highlight district
+        const districtPadded = zeroPadding(step);
+        const geoID = `${fip}${districtPadded}`;
+        thisMap.setFeatureState({
+          id: Number(geoID),
+          source: 'districts',
+        }, {
+          doYourJobDistrict: false,
+        });
+      }
     });
 
-
     Object.keys(allDoYourJobDistricts).forEach((code) => {
-      console.log(code);
       const state = code.split('-')[0];
       const districtNo = code.split('-')[1];
       if (isNaN(Number(districtNo))) {
@@ -234,46 +241,67 @@ class MapView extends React.Component {
         }, {
           doYourJobDistrict: true,
         });
+      } else {
+        thisMap.setFeatureState({
+          id: Number(fips[state] + districtNo),
+          source: 'districts',
+        }, {
+          doYourJobDistrict: true,
+        });
       }
     });
   }
 
   setStateStyle() {
-    const { items } = this.props;
-    const { map } = this;
+      const {
+        map,
+      } = this;
+    if (!map.getLayer('states-fill')) {
+      this.addStateLayers();
+    } else {
+      this.showLayer('states-fill')
+    }
+    if (map.getLayer('districts-fill')) {
+      this.hideLayer('districts-fill')
+    }
+  }
 
+  addStateLayers() {
+    const {
+      items,
+    } = this.props;
+    const {
+      map,
+    } = this;
     map.addLayer({
       id: 'states-fill',
       type: 'fill',
       source: 'states',
-      // "source-layer": "newdistrictsgeojson",
       paint: {
-        'fill-color': 'blue',
-        'fill-opacity': 0.8,
+        'fill-color': '#847aa3',
+        'fill-opacity': ['case',
+          ['boolean', ['feature-state', 'pledged'], true],
+          0.8,
+          0,
+        ],
       },
     }, 'district_high_number');
 
-    const domain = [0];
     Object.keys(items).forEach((state) => {
       let count = 0;
       Object.keys(items[state]).forEach((district) => {
         count += filter((items[state][district]), 'pledged').length;
       });
       count = parseInt((count / numOfDistricts[state]) * 10);
-      if (count > 0) {
-        domain.push(count);
-      }
+ 
       map.setFeatureState({
         id: Number(fips[state]),
         source: 'states',
       }, {
-        colorValue: count || 0,
+        pledged: count > 0,
       });
     });
-    domain.sort((a, b) => parseInt(a) - parseInt(b));
-    const breaks = chroma.limits(domain, 'q', 4);
-    const scale = chroma.scale(['#ffffff', '#7366b7']).colors(5);
-    map.setPaintProperty('states-fill', 'fill-color', MapView.createColorExpression(breaks, scale, ['feature-state', 'colorValue']));
+  
   }
 
   addClickListener() {
@@ -334,7 +362,15 @@ class MapView extends React.Component {
 
   toggleFilters(layer, filterSettings) {
     this.map.setFilter(layer, filterSettings);
+    this.showLayer(layer);
+  }
+
+  showLayer(layer) {
     this.map.setLayoutProperty(layer, 'visibility', 'visible');
+  }
+
+  hideLayer(layer) {
+    this.map.setLayoutProperty(layer, 'visibility', 'none');
   }
 
   districtSelect(feature) {
@@ -515,6 +551,10 @@ class MapView extends React.Component {
       this.map.addSource('states', {
         type: 'geojson',
         data: '../../data/states.geojson',
+      });
+      this.map.addSource('districts', {
+        type: 'geojson',
+        data: '../../data/districts.geojson',
       });
       this.addPopups('district_interactive');
       this.setStateStyle();

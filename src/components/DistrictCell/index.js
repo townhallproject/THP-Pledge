@@ -1,12 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Card } from 'antd';
-
-import { getTitle } from '../../data/dictionaries';
-import PledgerCell from '../PledgerCell';
+import { find } from 'lodash';
+import { getTitle } from '../data/dictionaries';
+import PledgerCell from './PledgerCell';
+import { DYJD_COLOR } from './constants';
+/* eslint-disable */
+require('style-loader!css-loader!antd/es/list/style/index.css');
+/* eslint-enable */
 
 const gridStyle = {
   maxWidth: '310px',
+  borderColor: DYJD_COLOR,
 };
 
 const getCardOrder = (districtOrStateWide) => {
@@ -33,6 +38,21 @@ const getPeopleOrder = (pledger) => {
 };
 
 class DistrictCell extends React.Component {
+  isDoYourJob(district) {
+    const {
+      doYourJobDistricts,
+    } = this.props;
+    let isDoYourJobDistrict;
+    if (doYourJobDistricts.length > 0 && !isNaN(Number(district))) {
+      isDoYourJobDistrict = find(doYourJobDistricts, {
+        district: Number(district),
+      });
+    } else if (doYourJobDistricts.length > 0) {
+      isDoYourJobDistrict = find(doYourJobDistricts, (ele) => (typeof ele.district === 'string' &&  ele.district.slice(0, 3) === district));
+    }
+    return isDoYourJobDistrict;
+  }
+
   render() {
     const {
       items,
@@ -51,13 +71,14 @@ class DistrictCell extends React.Component {
             </Card>);
         }
         const title = `${(Number(district) ? `${stateName}-${district}` : getTitle(district))}`;
+        const isDoYourJob = !!this.isDoYourJob(district);
 
         return (
           <Card
             style={gridStyle}
             title={title}
             extra="Pledged"
-            bordered={false}
+            bordered={isDoYourJob}
             className="district-card"
             hoverable
           >
