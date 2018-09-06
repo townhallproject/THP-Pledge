@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { filter } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
+import chroma from 'chroma-js';
+
 import { stateAbrvToName, fips, numOfDistricts } from '../../data/dictionaries';
 import {
   takenThePledge,
@@ -161,31 +163,80 @@ class MapView extends React.Component {
     }
   }
 
+  static createColorExpression(stops, colors, value) {
+    let expression = ['interpolate', ['linear'], ['to-number', value]];
+
+    for (let i = 0; i < stops.length; i++) {
+      expression.push(stops[i]);
+      expression.push(colors[i]);
+    }
+    console.log(expression);
+    return expression;
+  }
+
   setStateStyle() {
     const { items } = this.props;
-    const lowNumbers = ['in', 'ABR'];
-    const medNumbers = ['in', 'ABR'];
-    const highNumbers = ['in', 'ABR'];
+    const { map } = this;
+    map.addSource('states', {
+      type: 'geojson',
+      // type: "vector",
+      data: '../../data/states.geojson',
+      // url: "mapbox://townhallproject.d46r2w4l",
+    });
+
+    map.addLayer({
+      id: 'states-fill',
+      'type': 'fill',
+      source: 'states',
+      // "source-layer": "newdistrictsgeojson",
+      'paint': {
+        'fill-color': 'blue',
+        'fill-opacity': 0.8,
+      },
+    }, 'district_high_number');
+
+    const domain = [0];
     Object.keys(items).forEach((state) => {
       let count = 0;
       Object.keys(items[state]).forEach((district) => {
         count += filter((items[state][district]), 'pledged').length;
       });
-      count = (count / numOfDistricts[state]) * 100;
-      if (count >= 70) {
-        highNumbers.push(state);
-      } else if (count >= 25) {
-        medNumbers.push(state);
-      } else if (count > 0 && count < 25) {
-        lowNumbers.push(state);
+      count = parseInt((count / numOfDistricts[state]) * 10);
+      if (count > 0) {
+        domain.push(count);
       }
+      map.setFeatureState({
+        id: Number(fips[state]),
+        source: 'states',
+        // "sourceLayer": "newdistrictsgeojson",
+      }, {
+        colorValue: count || 0,
+      });
     });
-    this.map.setLayoutProperty('district_high_number_pa', 'visibility', 'none');
-    this.map.setLayoutProperty('district_med_number_pa', 'visibility', 'none');
-    this.map.setLayoutProperty('district_low_number_pa', 'visibility', 'none');
-    this.toggleFilters('district_high_number', highNumbers);
-    this.toggleFilters('district_med_number', medNumbers);
-    this.toggleFilters('district_low_number', lowNumbers);
+    domain.sort((a, b) => parseInt(a) - parseInt(b));
+    const breaks = chroma.limits(domain, 'q', 4);
+    const scale = chroma.scale(['#ffffff', '#7366b7']).colors(5);
+    map.setPaintProperty('states-fill', 'fill-color', MapView.createColorExpression(breaks, scale, ['feature-state', 'colorValue']));
+
+    // this.map.setLayoutProperty('district_high_number_pa', 'visibility', 'none');
+    // this.map.setLayoutProperty('district_med_number_pa', 'visibility', 'none');
+    // this.map.setLayoutProperty('district_low_number_pa', 'visibility', 'none');
+    // this.toggleFilters('district_high_number', highNumbers);
+    // this.toggleFilters('district_med_number', medNumbers);
+    // this.toggleFilters('district_low_number', lowNumbers);
+
+    // The feature-state dependent fill-opacity expression will render the hover effect
+    //  when a feature's hover state is set to true.
+    // this.map.setLayoutProperty(
+    //       'district_high_number'
+    //   paint: {
+    //     'fill-color': '#627BC1',
+    //     'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false],
+    //       1,
+    //       0.5,
+    //     ],
+    //   },
+    // );
   }
 
   addClickListener() {
@@ -258,7 +309,6 @@ class MapView extends React.Component {
         this.map.setLayoutProperty('selected-fill', 'visibility', 'none');
         this.map.setLayoutProperty('selected-border', 'visibility', 'none');
         this.map.setLayoutProperty('selected-border-pa', 'visibility', 'none');
-
       }
     }
   }
@@ -352,9 +402,9 @@ class MapView extends React.Component {
       }
       return undefined;
     });
-    map.on('mouseleave', 'district_interactive', (e) => {
+    map.on('mouseleave', 'district_interactive', () => {
       this.popup.remove();
-    })
+    });
   }
 
   focusMap(bb) {

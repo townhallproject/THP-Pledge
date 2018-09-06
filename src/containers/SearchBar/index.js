@@ -48,9 +48,13 @@ class SearchBar extends React.Component {
       resetSelections,
       searchByZip,
       setDistrict,
+      totalPledged,
     } = this.props;
 
     if (!query) {
+      return resetSelections();
+    }
+    if (!totalPledged) {
       return resetSelections();
     }
     if (SearchBar.isZipCode(query)) {
