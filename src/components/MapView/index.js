@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { filter } from 'lodash';
+import { 
+  filter, 
+  map, 
+  values,
+} from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
 import chroma from 'chroma-js';
 
@@ -172,6 +176,61 @@ class MapView extends React.Component {
     }
     console.log(expression);
     return expression;
+  }
+  
+  setStateDoYourJob() {
+ 
+    const {
+      allDoYourJobDistricts,
+    } = this.props;
+    const thisMap = this.map;
+    thisMap.addSource('states', {
+      type: 'geojson',
+      data: '../../data/states.geojson',
+    });
+
+    thisMap.addLayer({
+      id: 'states-outline',
+      type: 'line',
+      source: 'states',
+      paint: {
+        "line-color": "#ffbd24",
+        "line-width": 2,
+        "line-opacity": ["case",
+          ["boolean", ["feature-state", "doYourJobDistrict"], true],
+          1,
+          0,
+        ]
+      }
+    }, 'district_high_number');
+
+    map(values(fips), (fip) => {
+      thisMap.setFeatureState({
+        id: Number(fip),
+        source: 'states',
+      }, {
+        doYourJobDistrict: false
+      })
+    })
+
+
+    console.log(fips)
+    Object.keys(allDoYourJobDistricts).forEach((code) => {
+      console.log(code)
+      let state = code.split('-')[0];
+      let districtNo = code.split('-')[1];
+      if (isNaN(Number(districtNo))) {
+        thisMap.setFeatureState({
+          id: Number(fips[state]),
+          source: 'states',
+        }, {
+          doYourJobDistrict: true,
+        });
+          
+      }
+    });
+   
+    // map.setPaintProperty('states-fill', 'fill-color', MapView.createColorExpression(breaks, scale, ['feature-state', 'colorValue']));
   }
 
   setStateStyle() {
@@ -477,6 +536,7 @@ class MapView extends React.Component {
       this.addClickListener();
       this.addPopups('district_interactive');
       this.setStateStyle();
+      this.setStateDoYourJob();
     });
   }
 

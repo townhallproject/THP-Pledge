@@ -49,6 +49,7 @@ class pledgerDashboard extends React.Component {
 
   renderMap() {
     const {
+      allDoYourJobDistricts,
       resetSelections,
       searchByDistrict,
       selectedState,
@@ -62,6 +63,7 @@ class pledgerDashboard extends React.Component {
     }
 
     return (<MapView
+      allDoYourJobDistricts={allDoYourJobDistricts}
       items={pledgersByDistrict}
       selectedState={selectedState}
       setUsState={setUsState}
