@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { 
-  filter, 
-  map, 
+import {
+  filter,
+  map,
   values,
 } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
@@ -179,7 +179,6 @@ class MapView extends React.Component {
   }
   
   setStateDoYourJob() {
- 
     const {
       allDoYourJobDistricts,
     } = this.props;
@@ -194,14 +193,14 @@ class MapView extends React.Component {
       type: 'line',
       source: 'states',
       paint: {
-        "line-color": "#ffbd24",
-        "line-width": 2,
-        "line-opacity": ["case",
-          ["boolean", ["feature-state", "doYourJobDistrict"], true],
+        'line-color': '#ffbd24',
+        'line-width': 2,
+        'line-opacity': ['case',
+          ['boolean', ['feature-state', 'doYourJobDistrict'], true],
           1,
           0,
-        ]
-      }
+        ],
+      },
     }, 'district_high_number');
 
     map(values(fips), (fip) => {
@@ -209,16 +208,15 @@ class MapView extends React.Component {
         id: Number(fip),
         source: 'states',
       }, {
-        doYourJobDistrict: false
-      })
-    })
+        doYourJobDistrict: false,
+      });
+    });
 
 
-    console.log(fips)
     Object.keys(allDoYourJobDistricts).forEach((code) => {
-      console.log(code)
-      let state = code.split('-')[0];
-      let districtNo = code.split('-')[1];
+      console.log(code);
+      const state = code.split('-')[0];
+      const districtNo = code.split('-')[1];
       if (isNaN(Number(districtNo))) {
         thisMap.setFeatureState({
           id: Number(fips[state]),
@@ -226,29 +224,20 @@ class MapView extends React.Component {
         }, {
           doYourJobDistrict: true,
         });
-          
       }
     });
-   
-    // map.setPaintProperty('states-fill', 'fill-color', MapView.createColorExpression(breaks, scale, ['feature-state', 'colorValue']));
   }
 
   setStateStyle() {
     const { items } = this.props;
     const { map } = this;
-    map.addSource('states', {
-      type: 'geojson',
-      // type: "vector",
-      data: '../../data/states.geojson',
-      // url: "mapbox://townhallproject.d46r2w4l",
-    });
 
     map.addLayer({
       id: 'states-fill',
-      'type': 'fill',
+      type: 'fill',
       source: 'states',
       // "source-layer": "newdistrictsgeojson",
-      'paint': {
+      paint: {
         'fill-color': 'blue',
         'fill-opacity': 0.8,
       },
@@ -276,26 +265,6 @@ class MapView extends React.Component {
     const breaks = chroma.limits(domain, 'q', 4);
     const scale = chroma.scale(['#ffffff', '#7366b7']).colors(5);
     map.setPaintProperty('states-fill', 'fill-color', MapView.createColorExpression(breaks, scale, ['feature-state', 'colorValue']));
-
-    // this.map.setLayoutProperty('district_high_number_pa', 'visibility', 'none');
-    // this.map.setLayoutProperty('district_med_number_pa', 'visibility', 'none');
-    // this.map.setLayoutProperty('district_low_number_pa', 'visibility', 'none');
-    // this.toggleFilters('district_high_number', highNumbers);
-    // this.toggleFilters('district_med_number', medNumbers);
-    // this.toggleFilters('district_low_number', lowNumbers);
-
-    // The feature-state dependent fill-opacity expression will render the hover effect
-    //  when a feature's hover state is set to true.
-    // this.map.setLayoutProperty(
-    //       'district_high_number'
-    //   paint: {
-    //     'fill-color': '#627BC1',
-    //     'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false],
-    //       1,
-    //       0.5,
-    //     ],
-    //   },
-    // );
   }
 
   addClickListener() {
