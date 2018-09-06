@@ -197,10 +197,6 @@ class MapView extends React.Component {
       allDoYourJobDistricts,
     } = this.props;
     const thisMap = this.map;
-    thisMap.addSource('states', {
-      type: 'geojson',
-      data: '../../data/states.geojson',
-    });
 
     thisMap.addLayer({
       id: 'states-outline',
@@ -516,6 +512,10 @@ class MapView extends React.Component {
     this.map.on('load', () => {
       this.map.fitBounds([[-128.8, 23.6], [-65.4, 50.2]]);
       this.addClickListener();
+      this.map.addSource('states', {
+        type: 'geojson',
+        data: '../../data/states.geojson',
+      });
       this.addPopups('district_interactive');
       this.setStateStyle();
       this.setStateDoYourJob();
