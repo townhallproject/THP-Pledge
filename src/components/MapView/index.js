@@ -1,4 +1,5 @@
 import React from 'react';
+import { chroma } from 'chroma-js';
 import PropTypes from 'prop-types';
 import {
   filter,
@@ -25,6 +26,19 @@ import './popover.scss';
 import './style.scss';
 
 class MapView extends React.Component {
+  static createColorExpression(stops, colors, value) {
+    let expression = ['interpolate', ['linear'],
+      ['to-number', value]
+    ];
+
+    for (let i = 0; i < stops.length; i++) {
+      expression.push(stops[i]);
+      expression.push(colors[i]);
+    }
+    console.log(expression);
+    return expression;
+  }
+  
   constructor(props) {
     super(props);
     this.filterDistrict = ['any'];
@@ -256,7 +270,6 @@ class MapView extends React.Component {
       map.setFeatureState({
         id: Number(fips[state]),
         source: 'states',
-        // "sourceLayer": "newdistrictsgeojson",
       }, {
         colorValue: count || 0,
       });
