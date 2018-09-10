@@ -27,9 +27,9 @@ class Table extends React.Component {
         if (!totalPledgedInState(items[state])) {
           return null;
         }
-  
+
         const doYourJobDistricts = filter(allDoYourJobDistricts, ele => (ele.state === state));
-   
+
         return (
           <React.Fragment>
             <Card
@@ -60,7 +60,8 @@ class Table extends React.Component {
               />
             </Card>
           </React.Fragment>
-        ));
+        );
+      });
   }
 }
 

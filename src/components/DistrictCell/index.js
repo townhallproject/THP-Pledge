@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Card } from 'antd';
 import { find } from 'lodash';
-import { getTitle } from '../data/dictionaries';
-import PledgerCell from './PledgerCell';
-import { DYJD_COLOR } from './constants';
+import { getTitle } from '../../data/dictionaries';
+import PledgerCell from '../PledgerCell';
+import { DYJD_COLOR } from '../constants';
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/list/style/index.css');
 /* eslint-enable */

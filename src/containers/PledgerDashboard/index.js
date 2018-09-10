@@ -10,10 +10,10 @@ import {
 
 import { startSetPledgers } from '../../state/pledgers/actions';
 
-import { getUsState, getDistricts } from '../state/selections/selectors';
-import * as selectionActions from '../state/selections/actions';
-import { startSetDoYourJobDistricts } from '../state/do-your-job-district/actions';
-import { getDoYourJobDistricts } from '../state/do-your-job-district/selectors';
+import { getUsState, getDistricts } from '../../state/selections/selectors';
+import * as selectionActions from '../../state/selections/actions';
+import { startSetDoYourJobDistricts } from '../../state/do-your-job-district/actions';
+import { getDoYourJobDistricts } from '../../state/do-your-job-district/selectors';
 
 import MapView from '../../components/MapView';
 import WebGlError from '../../components/WebGlError';

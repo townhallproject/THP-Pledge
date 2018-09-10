@@ -2,6 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { filter } from 'lodash';
+import { totalPledgedInState } from '../utils';
+import MbMap from '../utils/mapbox-map';
 
 class MapInset extends React.Component {
   constructor(props) {
@@ -21,25 +23,13 @@ class MapInset extends React.Component {
   }
 
   setStateStyle() {
-    const { items, stateName } = this.props;
-    const lowNumbers = ['in', 'ABR'];
-    const medNumbers = ['in', 'ABR'];
-    const highNumbers = ['in', 'ABR'];
-    if (!items) {
-      return;
-    }
-    let count = 0;
-    count += filter((items), 'pledged').length;
-    if (count >= 10) {
-      highNumbers.push(stateName);
-    } else if (count >= 4) {
-      medNumbers.push(stateName);
-    } else if (count > 0 && count < 4) {
-      lowNumbers.push(stateName);
-    }
-    this.toggleFilters('district_high_number', highNumbers);
-    this.toggleFilters('district_med_number', medNumbers);
-    this.toggleFilters('district_low_number', lowNumbers);
+    const {
+      items,
+    } = this.props;
+    const {
+      mbMap,
+    } = this;
+    mbMap.stateChloroplethFill(items);
   }
 
   handleReset() {
@@ -69,17 +59,15 @@ class MapInset extends React.Component {
       mapId,
     } = this.props;
 
-    mapboxgl.accessToken =
-        'pk.eyJ1IjoidG93bmhhbGxwcm9qZWN0IiwiYSI6ImNqMnRwOG4wOTAwMnMycG1yMGZudHFxbWsifQ.FXyPo3-AD46IuWjjsGPJ3Q';
-    const styleUrl = 'mapbox://styles/townhallproject/cjgr7qoqr00012ro4hnwlvsyp';
-
-    this.map = new mapboxgl.Map({
+   
+    this.mbMap = new MbMap({
       container: mapId,
       doubleClickZoom: false,
       dragPan: false,
       scrollZoom: false,
-      style: styleUrl,
     });
+
+    this.map = this.mbMap.map;
 
     // map on 'load'
     this.map.on('load', () => {
