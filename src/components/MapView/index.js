@@ -1,24 +1,14 @@
 import React from 'react';
-import chroma from 'chroma-js';
 import PropTypes from 'prop-types';
 import {
   filter,
-  map,
   mapKeys,
-  values,
-  includes,
 } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
 import { stateAbrvToName, fips, numOfDistricts } from '../../data/dictionaries';
-import {
-  DYJD_COLOR,
-  PLEDGED_COLOR,
-} from '../constants';
 
 import {
-  takenThePledge,
   totalPledgedInDistricts,
-  totalPledgedInCategory,
   totalPledgedInState,
   zeroPadding,
   formatPledger,
@@ -35,9 +25,6 @@ import MbMap from '../../utils/mapbox-map';
 class MapView extends React.Component {
   constructor(props) {
     super(props);
-    this.filterDistrict = ['any'];
-    this.includedStates = ['in', 'NAME'];
-
     this.addPopups = this.addPopups.bind(this);
     this.addClickListener = this.addClickListener.bind(this);
     this.setStateStyle = this.setStateStyle.bind(this);
@@ -54,10 +41,11 @@ class MapView extends React.Component {
     this.addStateLayers = this.addStateLayers.bind(this);
     this.setStateDoYourJob = this.setStateDoYourJob.bind(this);
     this.setInitialStyles = this.setInitialStyles.bind(this);
+    this.resetDistrictColors = this.resetDistrictColors.bind(this);
+    this.resetAllStateDYJColors = this.resetAllStateDYJColors.bind(this);
+
     this.state = {
-      alaskaItems: props.items.AK,
       filterStyle: 'state',
-      hawaiiItems: props.items.HI,
       popoverColor: 'popover-has-data',
     };
   }
@@ -113,6 +101,11 @@ class MapView extends React.Component {
     }
   }
 
+  setInitialStyles() {
+    this.setStateStyle();
+    this.setStateDoYourJob();
+  }
+
   setDistrictStyle() {
     const {
       items,
@@ -124,6 +117,8 @@ class MapView extends React.Component {
 
     map.setLayoutProperty('states-fill', 'visibility', 'none');
     mbMap.addDYJDistrictFillLayer();
+    this.resetDistrictColors(selectedState);
+
     Object.keys(items).forEach((state) => {
       if (!items[state]) {
         return;
@@ -134,21 +129,13 @@ class MapView extends React.Component {
         const fipsId = fips[state];
         const geoid = fipsId + districtId;
         count += filter((items[state][district]), 'pledged').length;
-        if (state !== selectedState) {
-          mbMap.setFeatureState({
-            id: Number(geoid),
-            source: 'districts',
-          }, {
-            pledged: false,
-          });
-        } else {
-          mbMap.setFeatureState({
-            id: Number(geoid),
-            source: 'districts',
-          }, {
+        mbMap.setFeatureState(
+          Number(geoid),
+          'districts',
+          {
             pledged: count > 0,
-          });
-        }
+          },
+        );
       });
     });
   }
@@ -170,19 +157,7 @@ class MapView extends React.Component {
 
     thisMap.addStateAndDistrictOutlineLayers();
 
-    mapKeys(fips, (fip, state) => {
-      thisMap.setFeatureState(Number(fip), 'states', {
-        doYourJobDistrict: false,
-      });
-      for (let step = 0; step <= numOfDistricts[state]; step++) {
-        // highlight district
-        const districtPadded = zeroPadding(step);
-        const geoID = `${fip}${districtPadded}`;
-        thisMap.setFeatureState(Number(geoID), 'districts', {
-          doYourJobDistrict: false,
-        });
-      }
-    });
+    this.resetAllStateDYJColors();
 
     Object.keys(allDoYourJobDistricts).forEach((code) => {
       const state = code.split('-')[0];
@@ -218,29 +193,6 @@ class MapView extends React.Component {
     if (map.getLayer('districts-fill')) {
       this.hideLayer('districts-fill');
     }
-  }
-
-  // Handles the highlight for districts when clicked on.
-  highlightDistrict(geoid) {
-    let filterSettings;
-    // Filter for which district has been selected.
-    if (typeof geoid === 'object') {
-      filterSettings = ['any'];
-
-      geoid.forEach((i) => {
-        filterSettings.push(['==', 'GEOID', i]);
-      });
-    } else {
-      if (geoid.substring(0, 2) === '42') {
-        filterSettings = ['all', ['==', 'DISTRICT', geoid.substring(2)]];
-        this.toggleFilters('selected-border-pa', filterSettings);
-        return;
-      }
-      filterSettings = ['all', ['==', 'GEOID', geoid]];
-    }
-    // Set that layer filter to the selected
-    this.toggleFilters('selected-fill', filterSettings);
-    this.toggleFilters('selected-border', filterSettings);
   }
 
   toggleFilters(layer, filterSettings) {
@@ -313,14 +265,12 @@ class MapView extends React.Component {
     if (people.length) {
       const incumbent = filter(people, 'incumbent')[0];
       if (incumbent) {
-        tooltip += `<div>Incumbent <strong>${incumbent.displayName}</strong>${takenThePledge(incumbent)}</div>`;
+        tooltip += formatPledger(incumbent);
       }
-      const totalR = filter(people, { pledged: true, incumbent: false, party: 'R' }).length;
-      const totalD = filter(people, { pledged: true, incumbent: false, party: 'D' }).length;
-      const totalI = filter(people, { pledged: true, incumbent: false, party: 'I' }).length;
-      tooltip += `<div>Republican pledge takers: <strong>${totalR}</strong></div>`;
-      tooltip += `<div>Democratic pledge takers: <strong>${totalD}</strong></div>`;
-      tooltip += `<div>Independent pledge takers: <strong>${totalI}</strong></div>`;
+      const challengers = filter(people, { status: 'Nominee', incumbent: false });
+      challengers.forEach((item) => {
+        tooltip += formatPledger(item);
+      });
     } else {
       tooltip += '<div>No one in this district has signed the pledge yet.</div>';
     }
@@ -405,7 +355,6 @@ class MapView extends React.Component {
     const usaButton = document.createElement('button');
     usaButton.className = 'mapboxgl-ctrl-icon mapboxgl-ctrl-usa';
     usaButton.innerHTML = '<span class="usa-icon"></span>';
-
     usaButton.addEventListener('click', this.handleReset);
     document.querySelector('.mapboxgl-ctrl-group').appendChild(usaButton);
   }
@@ -453,15 +402,66 @@ class MapView extends React.Component {
       [-128.8, 23.6],
       [-65.4, 50.2],
     ];
-    this.mbMap.setInitalState(this.setInitialStyles, bounds, this.addClickListener(searchByDistrict), selectedState);
+    this.mbMap.setInitalState(this.setInitialStyles, bounds, {}, this.addClickListener(searchByDistrict), selectedState);
     this.makeZoomToNationalButton();
 
     this.addPopups('district_interactive');
   }
 
-  setInitialStyles() {
-    this.setStateStyle();
-    this.setStateDoYourJob();
+  resetDistrictColors(selectedState) {
+    const thisMap = this.mbMap;
+    mapKeys(fips, (fip, state) => {
+      if (selectedState && selectedState === state) {
+        return;
+      }
+      for (let step = 0; step <= numOfDistricts[state]; step++) {
+        const districtPadded = zeroPadding(step);
+        const geoID = `${fip}${districtPadded}`;
+        thisMap.setFeatureState(Number(geoID), 'districts', {
+          doYourJobDistrict: false,
+        });
+      }
+    });
+  }
+
+  // Handles the highlight for districts when clicked on.
+  highlightDistrict(geoid) {
+    let filterSettings;
+    // Filter for which district has been selected.
+    if (typeof geoid === 'object') {
+      filterSettings = ['any'];
+
+      geoid.forEach((i) => {
+        filterSettings.push(['==', 'GEOID', i]);
+      });
+    } else {
+      if (geoid.substring(0, 2) === '42') {
+        filterSettings = ['all', ['==', 'DISTRICT', geoid.substring(2)]];
+        this.toggleFilters('selected-border-pa', filterSettings);
+        return;
+      }
+      filterSettings = ['all', ['==', 'GEOID', geoid]];
+    }
+    // Set that layer filter to the selected
+    this.toggleFilters('selected-fill', filterSettings);
+    this.toggleFilters('selected-border', filterSettings);
+  }
+
+  resetAllStateDYJColors() {
+    const thisMap = this.mbMap;
+
+    mapKeys(fips, (fip, state) => {
+      thisMap.setFeatureState(Number(fip), 'states', {
+        doYourJobDistrict: false,
+      });
+      for (let step = 0; step <= numOfDistricts[state]; step++) {
+        const districtPadded = zeroPadding(step);
+        const geoID = `${fip}${districtPadded}`;
+        thisMap.setFeatureState(Number(geoID), 'districts', {
+          doYourJobDistrict: false,
+        });
+      }
+    });
   }
 
   addStateLayers() {
@@ -488,7 +488,7 @@ class MapView extends React.Component {
         <div id="map" className={this.state.popoverColor}>
           <div className="map-overlay" id="legend">
             <MapInset
-              items={items.AK}
+              items={items}
               stateName="AK"
               districts={districts}
               selectedState={selectedState}
@@ -499,7 +499,7 @@ class MapView extends React.Component {
               bounds={[[-170.15625, 51.72702815704774], [-127.61718749999999, 71.85622888185527]]}
             />
             <MapInset
-              items={this.state.hawaiiItems}
+              items={items}
               stateName="HI"
               districts={districts}
               selectedState={selectedState}

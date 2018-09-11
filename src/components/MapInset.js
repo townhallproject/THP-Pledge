@@ -44,9 +44,9 @@ class MapInset extends React.Component {
     } = this.props;
     const { map } = this;
 
-    map.on('click', () => {
+    return () => {
       setUsState({ usState: stateName });
-    });
+    };
   }
   toggleFilters(layer, filterRules) {
     this.map.setFilter(layer, filterRules);
@@ -57,9 +57,10 @@ class MapInset extends React.Component {
     const {
       bounds,
       mapId,
+      selectedState,
     } = this.props;
 
-   
+
     this.mbMap = new MbMap({
       container: mapId,
       doubleClickZoom: false,
@@ -68,16 +69,10 @@ class MapInset extends React.Component {
     });
 
     this.map = this.mbMap.map;
-
-    // map on 'load'
-    this.map.on('load', () => {
-      this.map.fitBounds(bounds, {
-        easeTo: { duration: 0 },
-        linear: true,
-      });
-      this.addClickListener();
-      this.setStateStyle();
-    });
+    this.mbMap.setInitalState(this.setStateStyle, bounds, {
+      easeTo: { duration: 0 },
+      linear: true,
+    }, this.addClickListener(), selectedState);
   }
 
   render() {

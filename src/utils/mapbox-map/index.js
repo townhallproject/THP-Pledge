@@ -30,7 +30,7 @@ export default class MbMap {
     });
   }
 
-  setInitalState(setInitialStyles, bounds, clickCallback, selectedState) {
+  setInitalState(setInitialStyles, bounds, boundsOpts, clickCallback, selectedState) {
     this.map.addControl(new mapboxgl.AttributionControl(), 'top-left');
 
     this.map.addControl(new mapboxgl.NavigationControl());
@@ -42,7 +42,7 @@ export default class MbMap {
       selectedState,
     };
     this.map.on('load', () => {
-      this.map.fitBounds(bounds);
+      this.map.fitBounds(bounds, boundsOpts);
       this.addClickListener(clickCallback);
       this.map.addSource('states', {
         data: '../data/states.geojson',
@@ -64,8 +64,11 @@ export default class MbMap {
     map.on('click', callback);
   }
 
-  stateChloroplethFill(items) {
-    const mbMap = this;
+  inidividualStateColor() {
+
+  }
+
+  addStatesFillLayer() {
     this.map.addLayer({
       id: 'states-fill',
       type: 'fill',
@@ -75,7 +78,11 @@ export default class MbMap {
         'fill-opacity': 1,
       },
     }, 'district_high_number');
+  }
 
+  stateChloroplethFill(items) {
+    const mbMap = this;
+    this.addStatesFillLayer();
     const domain = [];
     Object.keys(items).forEach((state) => {
       let count = 0;
