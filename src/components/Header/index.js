@@ -36,7 +36,7 @@ class Header extends React.Component {
               <strong style={{ color: DYJD_COLOR }}>* 31 * DO YOUR JOB DISTRICTS </strong> 
               are currently held by incumbent 
               <strong syle={{ color: 'red'}}> Missing Members </strong> who haven't not held a single open town hall meeting this entire session of Congress running against a challenger who has taken the 
-              <strong style={{ color: PLEDGED_COLOR }}> TOWN HALL PLEDGE</strong>. It’s time to <span style={{ color: DYJD_COLOR }}>Do Your Job*... </span>or let someone else do it for you.</p>
+              <strong style={{ color: PLEDGED_COLOR }}> TOWN HALL PLEDGE</strong>. It’s time to <span style={{ color: DYJD_COLOR }}>Do Your Job... </span>or let someone else do it for you.</p>
             <h2>Take the Town Hall Pledge</h2>
             <p>Across party lines, voters in 2018 are demanding accessibility from their lawmakers.
             </p>
