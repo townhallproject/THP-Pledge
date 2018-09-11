@@ -10,7 +10,10 @@ import {
 } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
 import { stateAbrvToName, fips, numOfDistricts } from '../../data/dictionaries';
-import { DYJD_COLOR } from '../constants';
+import {
+  DYJD_COLOR,
+  PLEDGED_COLOR,
+} from '../constants';
 
 import {
   takenThePledge,
@@ -18,6 +21,7 @@ import {
   totalPledgedInCategory,
   totalPledgedInState,
   zeroPadding,
+  formatPledger,
 } from '../../utils';
 
 import bboxes from '../../data/bboxes';
@@ -273,17 +277,25 @@ class MapView extends React.Component {
     if (itemsInState && totalPledgedInState(itemsInState)) {
       this.setState({ popoverColor: 'popover-has-data' });
       if (itemsInState.Gov) {
-        const totalstatewide = totalPledgedInCategory(itemsInState, 'Gov');
-        tooltip += `<div>Gubernatorial pledge takers: <strong>${totalstatewide}</strong></div>`;
+        tooltip += '<h4>Governor\'s race</h4>';
+        itemsInState.Gov.forEach((item) => {
+          if (item.status === 'Nominee') {
+            tooltip += formatPledger(item);
+          }
+        });
       }
       if (itemsInState.Sen) {
-        const totalstatewide = totalPledgedInCategory(itemsInState, 'Sen');
-        tooltip += `<div>U.S. Senate pledge takers: <strong>${totalstatewide}</strong></div>`;
+        tooltip += '<h4>Senate race</h4>';
+        itemsInState.Sen.forEach((item) => {
+          if (item.status === 'Nominee') {
+            tooltip += formatPledger(item);
+          }
+        });
       }
       const totalDistricts = totalPledgedInDistricts(itemsInState);
 
-      tooltip += `<div>U.S. House pledge takers: <strong>${totalDistricts}</strong></div>`;
-      tooltip += '<div><em>Click for details</em></div>';
+      tooltip += `<h4>U.S. House pledge takers: <strong>${totalDistricts}</strong></h4>`;
+      tooltip += '<div><em>Click for district details</em></div>';
     } else {
       this.setState({ popoverColor: 'popover-no-data' });
       tooltip += '<div><em>No one has taken the pledge</em></div>';
@@ -421,7 +433,7 @@ class MapView extends React.Component {
           state: feature.state,
         });
       }
-    }
+    };
   }
 
   initializeMap() {

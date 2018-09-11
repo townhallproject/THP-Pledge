@@ -16,7 +16,6 @@ export default class MbMap {
       expression.push(stops[i]);
       expression.push(colors[i]);
     }
-    console.log(expression);
     return expression;
   }
 
@@ -92,7 +91,6 @@ export default class MbMap {
       if (count > 0) {
         domain.push(count);
       }
-      console.log(state, count)
       mbMap.setFeatureState(
         Number(fips[state]),
         'states',
