@@ -30,21 +30,27 @@
         flex: 1;
         z-index: 1;
         padding: 2em;
-        background: #ffffffe0;
-        color: $brand-success;
+        background: #2b2b2be0;
+        color: $brand-white;
         h1{
-            color: $brand-text;
+            color: $brand-success;
             font-weight: 900;
             line-height: 1em;
             font-size: 3em;
     
+        }
+        h2{
+            color: $brand-success;
+            font-weight: 600;
+            line-height: 1em;
+            font-size: 1.5em;
         }
         p {
             font-size: 1.4em;
             line-height: 1.25;
         }
         button {
-            color: $brand-text;
+            color: $brand-white;
             text-align: right;
             float: right;
             font-weight: 600;
