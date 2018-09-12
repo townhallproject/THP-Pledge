@@ -1,0 +1,61 @@
+@import "../../style/mixins/card";
+@import "../../style/modules/all";
+
+#table--state {
+  flex-direction:column;
+  display: flex;
+  align-items:stretch;
+  order: 2;
+  flex: auto 2;
+  margin: auto;
+
+  .total-pledged{
+    float: right;
+  }
+
+  .pledge-status {
+    &.pledged {
+      color: $pledged-purple;
+    }
+  }
+
+  .ant-card-grid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .no-results{
+    margin-top: 50%;
+  }
+  ul {
+    list-style: none;
+    padding-left: 0px;
+  }
+
+  // state cards
+  .state-card {
+    @include state-card-format();
+    > .ant-card-body {
+      padding: 10px 10px;
+      display: flex;
+      justify-content: space-evenly;
+      flex-flow: row wrap;
+
+      // district cards 
+      .district-card {
+          @include district-card-format();
+          flex: 1 25%;
+          margin: .5em,
+      }
+      @media all and (max-width: $tablet-breakpoint) {
+        .district-card{
+          margin: auto;
+          flex: 1 100%;
+      }
+    }
+
+    }
+   
+  }
+}
+

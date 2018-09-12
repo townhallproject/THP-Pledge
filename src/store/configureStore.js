@@ -3,10 +3,15 @@ import thunk from 'redux-thunk';
 
 import pledgers from '../state/pledgers/reducers';
 import selections from '../state/selections/reducers';
+import doYourJobDistricts from '../state/do-your-job-district/reducers';
 
 export default () => {
   const store = createStore(
-    combineReducers({ pledgers, selections }),
+    combineReducers({
+      doYourJobDistricts,
+      pledgers,
+      selections,
+    }),
     applyMiddleware(thunk),
   );
   return store;

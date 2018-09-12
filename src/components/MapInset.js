@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { filter } from 'lodash';
+
+import MbMap from '../utils/mapbox-map';
 
 class MapInset extends React.Component {
   constructor(props) {
@@ -10,32 +11,30 @@ class MapInset extends React.Component {
     this.handleReset = this.handleReset.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
     this.setStateStyle = this.setStateStyle.bind(this);
+    this.onLoad = this.onLoad.bind(this);
+    this.colorDistrictsByPledgersAndDJYD = this.colorDistrictsByPledgersAndDJYD.bind(this);
   }
 
   componentDidMount() {
     this.initializeMap();
   }
 
+  componentDidUpdate() {
+    this.map.resize();
+  }
+
+  onLoad() {
+    this.colorDistrictsByPledgersAndDJYD();
+  }
+
   setStateStyle() {
-    const { items, stateName } = this.props;
-    const lowNumbers = ['in', 'ABR'];
-    const medNumbers = ['in', 'ABR'];
-    const highNumbers = ['in', 'ABR'];
-    if (!items) {
-      return;
-    }
-    let count = 0;
-    count += filter((items), 'pledged').length;
-    if (count >= 10) {
-      highNumbers.push(stateName);
-    } else if (count >= 4) {
-      medNumbers.push(stateName);
-    } else if (count > 0 && count < 4) {
-      lowNumbers.push(stateName);
-    }
-    this.toggleFilters('district_high_number', highNumbers);
-    this.toggleFilters('district_med_number', medNumbers);
-    this.toggleFilters('district_low_number', lowNumbers);
+    const {
+      items,
+    } = this.props;
+    const {
+      mbMap,
+    } = this;
+    mbMap.stateChloroplethFill(items);
   }
 
   handleReset() {
@@ -43,17 +42,28 @@ class MapInset extends React.Component {
     this.props.resetSelections();
   }
 
+  colorDistrictsByPledgersAndDJYD() {
+    const {
+      items,
+      allDoYourJobDistricts,
+    } = this.props;
+    const {
+      mbMap,
+    } = this;
+    mbMap.colorStatesByPledgerAndDJYD(allDoYourJobDistricts, items);
+  }
+
   addClickListener() {
     const {
       stateName,
       setUsState,
     } = this.props;
-    const { map } = this;
 
-    map.on('click', () => {
+    return () => {
       setUsState({ usState: stateName });
-    });
+    };
   }
+
   toggleFilters(layer, filterRules) {
     this.map.setFilter(layer, filterRules);
     this.map.setLayoutProperty(layer, 'visibility', 'visible');
@@ -63,29 +73,23 @@ class MapInset extends React.Component {
     const {
       bounds,
       mapId,
+      selectedState,
     } = this.props;
 
-    mapboxgl.accessToken =
-        'pk.eyJ1IjoidG93bmhhbGxwcm9qZWN0IiwiYSI6ImNqMnRwOG4wOTAwMnMycG1yMGZudHFxbWsifQ.FXyPo3-AD46IuWjjsGPJ3Q';
-    const styleUrl = 'mapbox://styles/townhallproject/cjgr7qoqr00012ro4hnwlvsyp';
 
-    this.map = new mapboxgl.Map({
+    this.mbMap = new MbMap({
       container: mapId,
       doubleClickZoom: false,
       dragPan: false,
       scrollZoom: false,
-      style: styleUrl,
     });
 
-    // map on 'load'
-    this.map.on('load', () => {
-      this.map.fitBounds(bounds, {
-        easeTo: { duration: 0 },
-        linear: true,
-      });
-      this.addClickListener();
-      this.setStateStyle();
-    });
+    this.map = this.mbMap.map;
+
+    this.mbMap.setInitalState('inset', this.setStateStyle, bounds, {
+      easeTo: { duration: 0 },
+      linear: true,
+    }, this.addClickListener(), selectedState, this.onLoad);
   }
 
   render() {
@@ -97,6 +101,9 @@ class MapInset extends React.Component {
       hidden: selectedState,
       inset: true,
     });
+    if (this.map) {
+      this.map.resize();
+    }
     return (
       <React.Fragment>
         <div id={mapId} className={mapClassNames} data-bounds={this.props.bounds} />
@@ -106,6 +113,7 @@ class MapInset extends React.Component {
 }
 
 MapInset.propTypes = {
+  allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   bounds: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({})),
   mapId: PropTypes.string.isRequired,

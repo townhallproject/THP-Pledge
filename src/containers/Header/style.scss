@@ -1,0 +1,65 @@
+@import "../../style/modules/colors";
+
+.header-container {
+    font-family: 'Raleway';
+    .header-pledge--CTA {
+        flex: 2;
+        display: flex;
+        overflow: hidden;
+        position: relative;
+        align-content: end;
+        justify-content: flex-end;
+        background-size: cover;
+        background-repeat: no-repeat;
+        font-size: 1rem;
+        @media screen and (min-width: 992px){
+        }
+    }
+    .spacer{
+        flex: 1;
+        @media screen and (max-width: 992px){
+                  display: none;
+              }
+    }
+    img{
+        position: absolute;
+        height: 100%;
+        left: 0;
+    }
+    .do-your-job-banner {
+        border-bottom: $do-your-job-yellow 2px solid;
+    }
+    .text-container{
+        flex: 2;
+        z-index: 1;
+        padding: 2em;
+        background: #ffffffe0;
+        color: $brand-text;
+        h1{
+            text-transform: uppercase;
+            color: $brand-success;
+            font-weight: 900;
+            line-height: 1em;
+            font-size: 3em;
+    
+        }
+        h2{
+            color: $brand-success;
+            font-weight: 600;
+            line-height: 1em;
+            font-size: 1.5em;
+        }
+        p {
+            font-size: 1.4em;
+            line-height: 1.25;
+        }
+        button {
+            color: $brand-text;
+            text-align: right;
+            float: right;
+            font-weight: 600;
+        }
+}
+
+
+}

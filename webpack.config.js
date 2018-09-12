@@ -2,19 +2,33 @@ require('dotenv').config();
 
 // Dynamic Script and Style Tags
 const HTMLPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Makes a separate CSS bundle
 const ExtractPlugin = require('extract-text-webpack-plugin');
 
 const { EnvironmentPlugin } = require('webpack');
 
-
 const plugins = [
   new HTMLPlugin({
     template: `${__dirname}/src/index.html`,
   }),
   new ExtractPlugin('bundle.[hash].css'),
-  new EnvironmentPlugin(['NODE_ENV']),
+  new CopyWebpackPlugin([
+    {
+      flatten: true,
+      from: 'src/assets/downloads/*',
+      to: 'downloads',
+    },
+    {
+      from: 'src/CNAME',
+    },
+    {
+      flatten: true,
+      from: 'src/assets/images',
+      to: 'images',
+    },
+  ]),
 ];
 
 module.exports = {

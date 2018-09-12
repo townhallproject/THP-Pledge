@@ -1,8 +1,8 @@
+$tablet-breakpoint : 778px;
+
 .hidden {
     display: none!important;
 }
-
-$tablet-breakpoint : 778px;
 
 .background-light {
   background: $brand-gray;
@@ -22,6 +22,25 @@ h1.background-dark {
   padding: 0.25em 0; 
 }
 
+//global icon 
+.do-your-job-icon {
+    background-image: url('../../../src/assets/images/do-your-job-logo.svg');
+    height: 80px;
+    background-size: 80px 80px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 80px;
+    vertical-align: middle;
+}
+.do-your-job-icon-small {
+    background-image: url('../../../src/assets/images/do-your-job-logo.svg');
+    height: 25px;
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 25px;
+    vertical-align: middle;
+}
 // bootstrap styles
 .container-fluid {
     width: 100%;
@@ -84,13 +103,13 @@ h1.background-dark {
 }
 @media (min-width: 992px){
   .offset-lg-4 {
-      margin-left: 66.667%;
+    //   margin-left: 66.667%;
   }
 }
 @media (min-width: 992px){
   .col-lg-7 {
       -webkit-box-flex: 0;
-      max-width: 58.3333%;
-      flex: 0 0 58.3333%;
+    //   max-width: 58.3333%;
+    //   flex: 0 0 58.3333%;
   }
 }
