@@ -44,7 +44,10 @@ class DistrictCell extends React.Component {
     } = this.props;
     let isDoYourJobDistrict;
     if (doYourJobDistricts.length > 0 && !isNaN(Number(district))) {
-      isDoYourJobDistrict = find(doYourJobDistricts, ele => Number(ele.district) === Number(district));
+      isDoYourJobDistrict = find(doYourJobDistricts, (ele) => {
+        const testDistrict = Number(ele.district) === 0 ? 1 : Number(ele.district);
+        return testDistrict === Number(district);
+      });
     } else if (doYourJobDistricts.length > 0) {
       isDoYourJobDistrict = find(doYourJobDistricts, ele => (typeof ele.district === 'string' && ele.district.slice(0, 3) === district));
     }
@@ -102,11 +105,13 @@ class DistrictCell extends React.Component {
 }
 
 DistrictCell.propTypes = {
+  doYourJobDistricts: PropTypes.shape({}),
   items: PropTypes.shape({}),
   stateName: PropTypes.string.isRequired,
 };
 
 DistrictCell.defaultProps = {
+  doYourJobDistricts: {},
   items: {},
 };
 
