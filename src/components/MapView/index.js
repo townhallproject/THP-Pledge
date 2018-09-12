@@ -28,7 +28,7 @@ class MapView extends React.Component {
     this.addPopups = this.addPopups.bind(this);
     this.addClickListener = this.addClickListener.bind(this);
     this.setStateStyle = this.setStateStyle.bind(this);
-    this.setDistrictStyle = this.setDistrictStyle.bind(this);
+    this.colorDistrictsByPledgersAndDJYD = this.colorDistrictsByPledgersAndDJYD.bind(this);
     this.showStateTooltip = this.showStateTooltip.bind(this);
     this.showDistrictTooltip = this.showDistrictTooltip.bind(this);
     this.setStateStyleMask = this.setStateStyleMask.bind(this);
@@ -41,7 +41,7 @@ class MapView extends React.Component {
     this.addStateLayers = this.addStateLayers.bind(this);
     this.setStateDoYourJob = this.setStateDoYourJob.bind(this);
     this.setInitialStyles = this.setInitialStyles.bind(this);
-    this.resetDistrictColors = this.resetDistrictColors.bind(this);
+    this.resetDoYourJobFlagToFalse = this.resetDoYourJobFlagToFalse.bind(this);
     this.resetAllStateDYJColors = this.resetAllStateDYJColors.bind(this);
     this.onLoad = this.onLoad.bind(this);
     this.state = {
@@ -96,7 +96,7 @@ class MapView extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     // changing between coloring by state and coloring by district
     const mapStyle = {
-      district: this.setDistrictStyle,
+      district: this.colorDistrictsByPledgersAndDJYD,
       state: this.setStateStyle,
     };
     if (prevState.filterStyle !== this.state.filterStyle || prevProps.selectedState !== this.props.selectedState) {
@@ -111,7 +111,7 @@ class MapView extends React.Component {
     this.setStateDoYourJob();
   }
 
-  setDistrictStyle() {
+  colorDistrictsByPledgersAndDJYD() {
     const {
       items,
       selectedState,
@@ -122,7 +122,7 @@ class MapView extends React.Component {
 
     map.setLayoutProperty('states-fill', 'visibility', 'none');
     mbMap.addDYJDistrictFillLayer();
-    this.resetDistrictColors(selectedState);
+    this.resetDoYourJobFlagToFalse(selectedState);
 
     Object.keys(items).forEach((state) => {
       if (!items[state]) {
@@ -403,7 +403,6 @@ class MapView extends React.Component {
       searchByDistrict,
     } = this.props;
 
-
     this.mbMap = new MbMap({
       attributionControl: false,
       container: 'map',
@@ -415,11 +414,10 @@ class MapView extends React.Component {
       [-65.4, 50.2],
     ];
     this.mbMap.setInitalState('main', this.setInitialStyles, bounds, {}, this.addClickListener(searchByDistrict), selectedState, this.onLoad );
-
     this.addPopups('district_interactive');
   }
 
-  resetDistrictColors(selectedState) {
+  resetDoYourJobFlagToFalse(selectedState) {
     const thisMap = this.mbMap;
     mapKeys(fips, (fip, state) => {
       if (selectedState && selectedState === state) {
