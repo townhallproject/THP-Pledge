@@ -37,12 +37,12 @@ class DYJDModal extends React.Component {
     return (
       <div className="do-your-job-modal">
         <Button type="default" onClick={this.showModal}>
-          Do your job districts infograhic
+          Do Your Job District Report
         </Button>
         <Modal
           style={{ top: 20 }}
           width="80%"
-          cancelText={(<Button download className="download-button" href="downloads/DYJD_Infographic.png">Download DYJD infographic <Icon type="download" /></Button>)}
+          cancelText={(<Button download className="download-button" href="downloads/DYJD_Infographic.png">Download Do Your Job District Report <Icon type="download" /></Button>)}
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
