@@ -102,6 +102,7 @@ export default class MbMap {
       }
       for (let step = 0; step <= numOfDistricts[state]; step++) {
         const districtPadded = zeroPadding(step);
+        console.log('resetting', state, districtPadded)
         const geoID = `${fip}${districtPadded}`;
         thisMap.setFeatureState(Number(geoID), 'districts', {
           doYourJobDistrict: false,
@@ -114,12 +115,15 @@ export default class MbMap {
     const mbMap = this;
     this.addStateAndDistrictDYJDLayers();
     this.addDYJDistrictFillLayer();
-    this.resetDoYourJobDistrictFlagsToFalse(selectedState);
+
     this.resetAllStateDYJFlagsToFalse();
+    this.resetDoYourJobDistrictFlagsToFalse(selectedState);
     Object.keys(allDoYourJobDistricts).forEach((code) => {
       const state = code.split('-')[0];
       const districtNo = code.split('-')[1];
-      console.log(state, districtNo);
+      if (selectedState && state !== selectedState){
+        return;
+      }
       if (isNaN(Number(districtNo))) {
         mbMap.setFeatureState(Number(fips[state]), 'states', {
           doYourJobDistrict: true,
@@ -142,11 +146,10 @@ export default class MbMap {
     const {
       map,
     } = this;
-    if (map.getLayer('states-fill')) {
-      map.setLayoutProperty('states-fill', 'visibility', 'none');
-    }
+    // if (map.getLayer('states-fill')) {
+    //   map.setLayoutProperty('states-fill', 'visibility', 'none');
+    // }
     this.colorByDYJ(allDoYourJobDistricts, selectedState);
-
     Object.keys(items).forEach((state) => {
       if (!items[state]) {
         return;
@@ -165,21 +168,6 @@ export default class MbMap {
         );
       });
     });
-  }
-
-  addStatesFillLayer() {
-    if (!this.map.getSource('states')) {
-      this.addSources();
-    }
-    this.map.addLayer({
-      id: 'states-fill',
-      type: 'fill',
-      source: 'states',
-      paint: {
-        'fill-color': '#847aa3',
-        'fill-opacity': 1,
-      },
-    }, 'district_high_number');
   }
 
   stateChloroplethFill(items) {
@@ -212,6 +200,24 @@ export default class MbMap {
     this.map.setPaintProperty('states-fill', 'fill-color', MbMap.createColorExpression(breaks, colors, ['feature-state', 'colorValue']));
   }
 
+  addStatesFillLayer() {
+    if (this.map.getLayer('states-fill')) {
+      return;
+    }
+    if (!this.map.getSource('states')) {
+      this.addSources();
+    }
+    this.map.addLayer({
+      id: 'states-fill',
+      type: 'fill',
+      source: 'states',
+      paint: {
+        'fill-color': '#847aa3',
+        'fill-opacity': 1,
+      },
+    }, 'district_high_number');
+  }
+
   addDYJDistrictFillLayer() {
     if (this.map.getLayer('districts-fill')) {
       return;
@@ -240,14 +246,14 @@ export default class MbMap {
   }
 
   addStateAndDistrictDYJDLayers() {
-    if (this.map.getLayer('states-outline')) {
+    if (this.map.getLayer('dyj-states-outline')) {
       return;
     }
     if (!this.map.getSource('districts')) {
       this.addSources();
     }
     this.map.addLayer({
-      id: 'states-outline',
+      id: 'dyj-states-outline',
       type: 'line',
       source: 'states',
       paint: {
@@ -262,7 +268,7 @@ export default class MbMap {
     });
 
     this.map.addLayer({
-      id: 'district-outline',
+      id: 'dyj-district-level-color-fill',
       type: 'fill',
       source: 'districts',
       paint: {

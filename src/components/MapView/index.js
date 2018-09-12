@@ -40,6 +40,7 @@ class MapView extends React.Component {
     this.removeHighlights = this.removeHighlights.bind(this);
     this.stateChloroplethFill = this.stateChloroplethFill.bind(this);
     this.setInitialStyles = this.setInitialStyles.bind(this);
+    this.setDistrictLayerStyle = this.setDistrictLayerStyle.bind(this);
     this.onLoad = this.onLoad.bind(this);
     this.state = {
       filterStyle: 'state',
@@ -82,7 +83,7 @@ class MapView extends React.Component {
       return this.focusMap(stateBB);
     }
 
-    // reset to national view 
+    // reset to national view
     this.toggleStateMask();
     this.setInitialStyles();
     this.map.metadata.level = 'state';
@@ -93,9 +94,10 @@ class MapView extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     // changing between coloring by state and coloring by district
     const mapStyle = {
-      district: this.colorDistrictsByPledgersAndDJYD,
+      district: this.setDistrictLayerStyle,
       state: this.setStateStyle,
     };
+    console.log('filter style', this.state.filterStyle);
     if (prevState.filterStyle !== this.state.filterStyle || prevProps.selectedState !== this.props.selectedState) {
       mapStyle[this.state.filterStyle]();
       // clearing any previous popups
@@ -111,10 +113,10 @@ class MapView extends React.Component {
     const {
       items,
       selectedState,
-      allDoYourJobDistricts, 
+      allDoYourJobDistricts,
     } = this.props;
     const { map, mbMap } = this;
-    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState)
+    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState);
   }
 
   toggleStateMask(state) {
@@ -126,15 +128,30 @@ class MapView extends React.Component {
     }
   }
 
+  setDistrictLayerStyle() {
+    const {
+      map,
+    } = this;
+
+    this.colorDistrictsByPledgersAndDJYD();
+
+    this.hideLayer('states-fill');
+    this.hideLayer('dyj-district-level-color-fill');
+    if (map.getLayer('districts-fill')) {
+      this.showLayer('districts-fill');
+    }
+  }
+
   setStateStyle() {
     const {
       map,
     } = this;
-    if (!map.getLayer('states-fill')) {
-      this.stateChloroplethFill();
-    } else {
+    if (map.getLayer('states-fill')) {
       this.showLayer('states-fill');
+      this.showLayer('dyj-district-level-color-fill');
     }
+    this.stateChloroplethFill();
+
     if (map.getLayer('districts-fill')) {
       this.hideLayer('districts-fill');
     }
@@ -353,7 +370,7 @@ class MapView extends React.Component {
       [-128.8, 23.6],
       [-65.4, 50.2],
     ];
-    this.mbMap.setInitalState('main', this.setInitialStyles, bounds, {}, this.addClickListener(searchByDistrict), selectedState, this.onLoad );
+    this.mbMap.setInitalState('main', this.setInitialStyles, bounds, {}, this.addClickListener(searchByDistrict), selectedState, this.onLoad);
     this.addPopups('district_interactive');
   }
 

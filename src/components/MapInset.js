@@ -54,7 +54,7 @@ class MapInset extends React.Component {
       map,
       mbMap
     } = this;
-    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState);
+    mbMap.colorStatesByPledgerAndDJYD(allDoYourJobDistricts, items);
   }
 
   onLoad() {
