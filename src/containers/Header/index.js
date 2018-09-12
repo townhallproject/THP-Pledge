@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Icon } from 'antd';
 import { connect } from 'react-redux';
 
+import DYJDModal from '../../components/DYJD_Modal';
+
 import { DYJD_COLOR, PLEDGED_COLOR } from '../../components/constants';
 import SignPledge from '../../components/SignPledge';
 
@@ -48,7 +50,9 @@ class Header extends React.Component {
               <strong syle={{ color: 'red' }}> Missing Members </strong> who haven't not held a single open town hall meeting this entire Congressional session running against a challenger who has taken the
               <strong style={{ color: PLEDGED_COLOR }}> TOWN HALL PLEDGE</strong>.
             </p>
-          <p><span className="do-your-job-icon"></span>It’s time to <strong style={{ color: DYJD_COLOR }}>Do Your Job... </strong>or let someone else do it for you.</p>
+          <p><span className="do-your-job-icon"></span>It’s time to <strong style={{ color: DYJD_COLOR }}>Do Your Job... </strong>or let someone else do it for you.
+          <DYJDModal />
+         </p>
         </div>
         <div className="header-pledge--CTA">
           <img src={src} alt="banner collage" />

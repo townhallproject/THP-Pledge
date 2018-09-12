@@ -17,7 +17,7 @@ const plugins = [
   new CopyWebpackPlugin([
     {
       flatten: true,
-      from: 'src/assets/downloads/*.pdf',
+      from: 'src/assets/downloads/*',
       to: 'downloads',
     },
     {
