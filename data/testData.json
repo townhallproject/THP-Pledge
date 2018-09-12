@@ -1,0 +1,307 @@
+[
+  {
+    "district": 3,
+    "name": "Marie Newman",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 6,
+    "name": "Becky Anderson Wilkins",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 10,
+    "name": "Sapan Shah",
+    "party": "R",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 13,
+    "name": "Erik Jones",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 13,
+    "name": "Betsy Londrigan",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 9,
+    "name": "Jan Schakowsky",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 6,
+    "name": "Sean Casten",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 6,
+    "name": "Kelly Mazeski",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 8,
+    "name": "Raja Krishnamoorthi",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 12,
+    "name": "David Bequette",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 18,
+    "name": "Junius Rodriguez",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 12,
+    "name": "Brendan Kelly",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 14,
+    "name": "Victor Swanson",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 15,
+    "name": "Carl Spoerer",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 4,
+    "name": "Sol Flores",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 4,
+    "name": "Mark Lorch",
+    "party": "R",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 6,
+    "name": "Ryan Huffman",
+    "party": "D",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 11,
+    "name": "Dan Haberman",
+    "party": "D",
+    "office": "rep",
+    "state": "MI",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 11,
+    "name": "Haley Stevens",
+    "party": "D",
+    "office": "rep",
+    "state": "MI",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 11,
+    "name": "Fayrouz Saad",
+    "party": "D",
+    "office": "rep",
+    "state": "MI",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 6,
+    "name": "David Benac",
+    "party": "D",
+    "office": "rep",
+    "state": "MI",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 21,
+    "name": "Tedra Cobb",
+    "party": "D",
+    "office": "rep",
+    "state": "NY",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 2,
+    "name": "Liuba Grechen Shirley",
+    "party": "D",
+    "office": "rep",
+    "state": "NY",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 12,
+    "name": "Randy Auxier",
+    "party": "I",
+    "office": "rep",
+    "state": "IL",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 14,
+    "name": "Betsy Rader",
+    "party": "D",
+    "office": "rep",
+    "state": "OH",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 13,
+    "name": "Tim Ryan",
+    "party": "D",
+    "office": "rep",
+    "state": "OH",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": null,
+    "name": "Mike Gibbons",
+    "party": "R",
+    "office": "sen",
+    "state": "OH",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 10,
+    "name": "Theresa Gasper",
+    "party": "D",
+    "office": "rep",
+    "state": "OH",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 5,
+    "name": "Ashley Lunkenheimer",
+    "party": "D",
+    "office": "rep",
+    "state": "PA",
+    "incumbent": false,
+    "pledged": true
+  }, {
+    "district": 2,
+    "name": "Wendy Ella May",
+    "party": "D",
+    "office": "rep",
+    "state": "NC",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 7,
+    "name": "Kyle Horton",
+    "party": "D",
+    "office": "rep",
+    "state": "NC",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": null,
+    "name": "Beto O'Rourke",
+    "party": "D",
+    "office": "sen",
+    "state": "TX",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 2,
+    "name": "Todd Litton",
+    "party": "D",
+    "office": "rep",
+    "state": "TX",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 24,
+    "name": "Jan McDowell",
+    "party": "D",
+    "office": "rep",
+    "state": "TX",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 29,
+    "name": "Sylvia R. Garcia",
+    "party": "D",
+    "office": "rep",
+    "state": "TX",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 12,
+    "name": "Vanessa Adia",
+    "party": "D",
+    "office": "rep",
+    "state": "TX",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 14,
+    "name": "Adrienne Bell",
+    "party": "D",
+    "office": "rep",
+    "state": "TX",
+    "incumbent": false,
+    "pledged": true
+ }, {
+    "district": 19,
+    "name": "Miguel Levario",
+    "party": "D",
+    "office": "rep",
+    "state": "TX",
+    "incumbent": false,
+    "pledged": true
+ }
+]
