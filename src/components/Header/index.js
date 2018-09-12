@@ -26,20 +26,21 @@ class Header extends React.Component {
     const src = width > 992 ? 'images/pledgeHeader.jpg' : 'images/pledgeHeader@0,5x.jpg';
     return (
       <div className="header-container">
-        <div className=" header-pledge--CTA">
-          <img src={src} alt="banner collage" />
-          <div className="spacer"/>
-          <div className="background-light text-container">
-          
+        < div className="text-container">
             <h1>Accessibility is on the ballot</h1>
             <p>
               <strong style={{ color: DYJD_COLOR }}>* 31 * DO YOUR JOB DISTRICTS </strong> 
               are currently held by incumbent 
-              <strong syle={{ color: 'red'}}> Missing Members </strong> who haven't not held a single open town hall meeting this entire session of Congress running against a challenger who has taken the 
-              <strong style={{ color: PLEDGED_COLOR }}> TOWN HALL PLEDGE</strong>. It’s time to <span style={{ color: DYJD_COLOR }}>Do Your Job... </span>or let someone else do it for you.</p>
+              <strong syle={{ color: 'red'}}> Missing Members </strong> who haven't not held a single open town hall meeting this entire Congressional session running against a challenger who has taken the 
+              <strong style={{ color: PLEDGED_COLOR }}> TOWN HALL PLEDGE</strong>.</p>
+            <p>It’s time to <strong style={{ color: DYJD_COLOR }}>Do Your Job... </strong>or let someone else do it for you.</p>
+        </div>
+        <div className="header-pledge--CTA">
+          <img src={src} alt="banner collage" />
+          <div className="spacer" />
+          <div className="background-light text-container">
+          
             <h2>Take the Town Hall Pledge</h2>
-            <p>Across party lines, voters in 2018 are demanding accessibility from their lawmakers.
-            </p>
             <p>We are asking every single candidate for public office this year to take the <strong>#townhallpledge</strong> to their constituents to hold a minimum of four town hall meetings per year in office.
             </p>
             <p>Ask candidates in your community to take the Pledge today!</p>
