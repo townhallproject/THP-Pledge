@@ -69,7 +69,7 @@ class MapInset extends React.Component {
     });
 
     this.map = this.mbMap.map;
-    this.mbMap.setInitalState(this.setStateStyle, bounds, {
+    this.mbMap.setInitalState('inset', this.setStateStyle, bounds, {
       easeTo: { duration: 0 },
       linear: true,
     }, this.addClickListener(), selectedState);

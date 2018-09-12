@@ -43,7 +43,7 @@ class MapView extends React.Component {
     this.setInitialStyles = this.setInitialStyles.bind(this);
     this.resetDistrictColors = this.resetDistrictColors.bind(this);
     this.resetAllStateDYJColors = this.resetAllStateDYJColors.bind(this);
-
+    this.onLoad = this.onLoad.bind(this);
     this.state = {
       filterStyle: 'state',
       popoverColor: 'popover-has-data',
@@ -64,9 +64,11 @@ class MapView extends React.Component {
       this.setStateStyleMask(selectedState);
       const bbname = selectedState.toUpperCase();
       this.map.metadata.level = 'districts';
+
       if (this.state.filterStyle === 'state') {
         this.setState({ filterStyle: 'district' });
       }
+
       if (districts.length > 0) {
         const stateFIPS = states.find(cur => cur.USPS === bbname).FIPS;
         // highlight district
@@ -82,7 +84,10 @@ class MapView extends React.Component {
       const stateBB = bboxes[bbname];
       return this.focusMap(stateBB);
     }
+
+    // reset to national view 
     this.setStateStyleMask();
+    this.setInitialStyles();
     this.map.metadata.level = 'state';
     this.setState({ filterStyle: 'state' });
     return this.map.fitBounds([[-128.8, 23.6], [-65.4, 50.2]]);
@@ -156,7 +161,6 @@ class MapView extends React.Component {
     const thisMap = this.mbMap;
 
     thisMap.addStateAndDistrictOutlineLayers();
-
     this.resetAllStateDYJColors();
 
     Object.keys(allDoYourJobDistricts).forEach((code) => {
@@ -348,15 +352,19 @@ class MapView extends React.Component {
   }
   // Creates the button in our zoom controls to go to the national view
   makeZoomToNationalButton() {
-    document.querySelector('.mapboxgl-ctrl-compass').remove();
-    if (document.querySelector('.mapboxgl-ctrl-usa')) {
-      document.querySelector('.mapboxgl-ctrl-usa').remove();
+    const oldButton = document.querySelector('.mapboxgl-ctrl-compass');
+    const currentUSA = document.querySelector('.mapboxgl-ctrl-usa');
+    oldButton.remove();
+    if (currentUSA) {
+      currentUSA.remove();
     }
     const usaButton = document.createElement('button');
-    usaButton.className = 'mapboxgl-ctrl-icon mapboxgl-ctrl-usa';
+    usaButton.classList.add('mapboxgl-ctrl-icon');
+    usaButton.classList.add('mapboxgl-ctrl-usa');
     usaButton.innerHTML = '<span class="usa-icon"></span>';
     usaButton.addEventListener('click', this.handleReset);
     document.querySelector('.mapboxgl-ctrl-group').appendChild(usaButton);
+    console.log('made button');
   }
 
   addClickListener(searchByDistrict) {
@@ -385,6 +393,10 @@ class MapView extends React.Component {
     };
   }
 
+  onLoad() {
+    this.makeZoomToNationalButton()
+  }
+
   initializeMap() {
     const {
       selectedState,
@@ -402,8 +414,7 @@ class MapView extends React.Component {
       [-128.8, 23.6],
       [-65.4, 50.2],
     ];
-    this.mbMap.setInitalState(this.setInitialStyles, bounds, {}, this.addClickListener(searchByDistrict), selectedState);
-    this.makeZoomToNationalButton();
+    this.mbMap.setInitalState('main', this.setInitialStyles, bounds, {}, this.addClickListener(searchByDistrict), selectedState, this.onLoad );
 
     this.addPopups('district_interactive');
   }

@@ -30,19 +30,25 @@ export default class MbMap {
     });
   }
 
-  setInitalState(setInitialStyles, bounds, boundsOpts, clickCallback, selectedState) {
-    this.map.addControl(new mapboxgl.AttributionControl(), 'top-left');
+  setInitalState(type, setInitialStyles, bounds, boundsOpts, clickCallback, selectedState, onLoadCallback) {
+    if (type === 'main'){
 
-    this.map.addControl(new mapboxgl.NavigationControl());
-    this.map.scrollZoom.disable();
-    this.map.dragRotate.disable();
-    this.map.touchZoomRotate.disableRotation();
+      this.map.addControl(new mapboxgl.AttributionControl(), 'top-left');
+      this.map.addControl(new mapboxgl.NavigationControl());
+      this.map.scrollZoom.disable();
+      this.map.dragRotate.disable();
+      this.map.touchZoomRotate.disableRotation();
+    }
     this.map.metadata = {
       level: 'states',
       selectedState,
     };
     this.map.on('load', () => {
       this.map.fitBounds(bounds, boundsOpts);
+      if (onLoadCallback) {
+
+        onLoadCallback()
+      }
       this.addClickListener(clickCallback);
       this.map.addSource('states', {
         data: '../data/states.geojson',
@@ -111,6 +117,9 @@ export default class MbMap {
   }
 
   addDYJDistrictFillLayer() {
+    if (this.map.getLayer('districts-fill')) {
+      return;
+    }
     this.map.addLayer({
       id: 'districts-fill',
       type: 'fill',
