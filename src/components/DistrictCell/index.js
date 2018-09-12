@@ -45,7 +45,6 @@ class DistrictCell extends React.Component {
     let isDoYourJobDistrict;
     if (doYourJobDistricts.length > 0 && !isNaN(Number(district))) {
       isDoYourJobDistrict = find(doYourJobDistricts, ele => Number(ele.district) === Number(district));
-      console.log(district);
     } else if (doYourJobDistricts.length > 0) {
       isDoYourJobDistrict = find(doYourJobDistricts, ele => (typeof ele.district === 'string' && ele.district.slice(0, 3) === district));
     }
