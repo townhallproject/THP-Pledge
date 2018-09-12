@@ -12,8 +12,8 @@ import { startSetPledgers } from '../../state/pledgers/actions';
 
 import { getUsState, getDistricts } from '../../state/selections/selectors';
 import * as selectionActions from '../../state/selections/actions';
-import { startSetDoYourJobDistricts } from '../../state/do-your-job-district/actions';
 import { getDoYourJobDistricts } from '../../state/do-your-job-district/selectors';
+
 
 import MapView from '../../components/MapView';
 import WebGlError from '../../components/WebGlError';
@@ -37,9 +37,7 @@ class pledgerDashboard extends React.Component {
   componentDidMount() {
     const {
       getInitialPledgers,
-      getDoYourJobDistricts,
     } = this.props;
-    getDoYourJobDistricts();
     getInitialPledgers()
       .then((returned) => {
         this.props.setInitialFilters(returned);
@@ -117,7 +115,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getDoYourJobDistricts: () => dispatch(startSetDoYourJobDistricts()),
   getInitialPledgers: () => dispatch(startSetPledgers()),
   resetSelections: () => dispatch(selectionActions.resetSelections()),
   searchByDistrict: val => dispatch(selectionActions.setDistrict(val)),
