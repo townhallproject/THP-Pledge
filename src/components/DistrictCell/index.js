@@ -44,11 +44,10 @@ class DistrictCell extends React.Component {
     } = this.props;
     let isDoYourJobDistrict;
     if (doYourJobDistricts.length > 0 && !isNaN(Number(district))) {
-      isDoYourJobDistrict = find(doYourJobDistricts, {
-        district: Number(district),
-      });
+      isDoYourJobDistrict = find(doYourJobDistricts, ele => Number(ele.district) === Number(district));
+      console.log(district);
     } else if (doYourJobDistricts.length > 0) {
-      isDoYourJobDistrict = find(doYourJobDistricts, (ele) => (typeof ele.district === 'string' &&  ele.district.slice(0, 3) === district));
+      isDoYourJobDistrict = find(doYourJobDistricts, ele => (typeof ele.district === 'string' && ele.district.slice(0, 3) === district));
     }
     return isDoYourJobDistrict;
   }
@@ -77,7 +76,7 @@ class DistrictCell extends React.Component {
           <Card
             style={gridStyle}
             title={(
-              <React.Fragment>{title} {isDoYourJob ? <span className="do-your-job-icon-small" /> : null }</React.Fragment>) }
+              <React.Fragment>{title} {isDoYourJob ? <span className="do-your-job-icon-small" /> : null }</React.Fragment>)}
             extra="Pledged"
             bordered={isDoYourJob}
             className="district-card"
