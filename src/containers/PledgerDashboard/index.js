@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import {
   getAllPledgers,
   getPledgersByDistrict,
+  getPledgersByUsState,
 } from '../../state/pledgers/selectors';
 
 import { startSetPledgers } from '../../state/pledgers/actions';
@@ -48,6 +49,7 @@ class pledgerDashboard extends React.Component {
   renderMap() {
     const {
       allDoYourJobDistricts,
+      pledgersByState,
       resetSelections,
       searchByDistrict,
       selectedState,
@@ -62,7 +64,7 @@ class pledgerDashboard extends React.Component {
 
     return (<MapView
       allDoYourJobDistricts={allDoYourJobDistricts}
-      items={pledgersByDistrict}
+      items={pledgersByState}
       selectedState={selectedState}
       setUsState={setUsState}
       districts={selectedDistricts}
@@ -109,6 +111,7 @@ class pledgerDashboard extends React.Component {
 const mapStateToProps = state => ({
   allDoYourJobDistricts: getDoYourJobDistricts(state),
   allPledgers: getAllPledgers(state),
+  pledgersByState: getPledgersByUsState(state),
   pledgersByDistrict: getPledgersByDistrict(state),
   selectedDistricts: getDistricts(state),
   selectedState: getUsState(state),
