@@ -26,6 +26,9 @@
         height: 100%;
         left: 0;
     }
+    .do-your-job-banner {
+        border-bottom: $do-your-job-yellow 2px solid;
+    }
     .text-container{
         flex: 2;
         z-index: 1;

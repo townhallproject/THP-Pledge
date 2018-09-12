@@ -22,6 +22,16 @@ h1.background-dark {
   padding: 0.25em 0; 
 }
 
+//global icon 
+.do-your-job-icon {
+    background-image: url('../../../src/assets/images/do-your-job-logo.svg');
+    height: 80px;
+    background-size: 80px 80px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 80px;
+    vertical-align: middle;
+}
 // bootstrap styles
 .container-fluid {
     width: 100%;
