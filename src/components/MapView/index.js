@@ -31,18 +31,15 @@ class MapView extends React.Component {
     this.colorDistrictsByPledgersAndDJYD = this.colorDistrictsByPledgersAndDJYD.bind(this);
     this.showStateTooltip = this.showStateTooltip.bind(this);
     this.showDistrictTooltip = this.showDistrictTooltip.bind(this);
-    this.setStateStyleMask = this.setStateStyleMask.bind(this);
+    this.toggleStateMask = this.toggleStateMask.bind(this);
     this.focusMap = this.focusMap.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
     this.highlightDistrict = this.highlightDistrict.bind(this);
     this.districtSelect = this.districtSelect.bind(this);
     this.removeHighlights = this.removeHighlights.bind(this);
-    this.addStateLayers = this.addStateLayers.bind(this);
-    this.setStateDoYourJob = this.setStateDoYourJob.bind(this);
+    this.stateChloroplethFill = this.stateChloroplethFill.bind(this);
     this.setInitialStyles = this.setInitialStyles.bind(this);
-    this.resetDoYourJobFlagToFalse = this.resetDoYourJobFlagToFalse.bind(this);
-    this.resetAllStateDYJColors = this.resetAllStateDYJColors.bind(this);
     this.onLoad = this.onLoad.bind(this);
     this.state = {
       filterStyle: 'state',
@@ -61,7 +58,7 @@ class MapView extends React.Component {
     } = nextProps;
     this.map.metadata = { selectedState: nextProps.selectedState };
     if (selectedState) {
-      this.setStateStyleMask(selectedState);
+      this.toggleStateMask(selectedState);
       const bbname = selectedState.toUpperCase();
       this.map.metadata.level = 'districts';
 
@@ -86,7 +83,7 @@ class MapView extends React.Component {
     }
 
     // reset to national view 
-    this.setStateStyleMask();
+    this.toggleStateMask();
     this.setInitialStyles();
     this.map.metadata.level = 'state';
     this.setState({ filterStyle: 'state' });
@@ -108,44 +105,19 @@ class MapView extends React.Component {
 
   setInitialStyles() {
     this.setStateStyle();
-    this.setStateDoYourJob();
   }
 
   colorDistrictsByPledgersAndDJYD() {
     const {
       items,
       selectedState,
-
+      allDoYourJobDistricts, 
     } = this.props;
-
     const { map, mbMap } = this;
-
-    map.setLayoutProperty('states-fill', 'visibility', 'none');
-    mbMap.addDYJDistrictFillLayer();
-    this.resetDoYourJobFlagToFalse(selectedState);
-
-    Object.keys(items).forEach((state) => {
-      if (!items[state]) {
-        return;
-      }
-      Object.keys(items[state]).forEach((district) => {
-        let count = 0;
-        const districtId = zeroPadding(district);
-        const fipsId = fips[state];
-        const geoid = fipsId + districtId;
-        count += filter((items[state][district]), 'pledged').length;
-        mbMap.setFeatureState(
-          Number(geoid),
-          'districts',
-          {
-            pledged: count > 0,
-          },
-        );
-      });
-    });
+    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState)
   }
 
-  setStateStyleMask(state) {
+  toggleStateMask(state) {
     if (state) {
       const filterSetting = ['!=', 'ref', state];
       this.toggleFilters('state-mask', filterSetting);
@@ -154,43 +126,12 @@ class MapView extends React.Component {
     }
   }
 
-  setStateDoYourJob() {
-    const {
-      allDoYourJobDistricts,
-    } = this.props;
-    const thisMap = this.mbMap;
-
-    thisMap.addStateAndDistrictOutlineLayers();
-    this.resetAllStateDYJColors();
-
-    Object.keys(allDoYourJobDistricts).forEach((code) => {
-      const state = code.split('-')[0];
-      const districtNo = code.split('-')[1];
-      if (isNaN(Number(districtNo))) {
-        thisMap.setFeatureState(
-          Number(fips[state]), 'states',
-          {
-            doYourJobDistrict: true,
-          },
-        );
-      } else {
-        thisMap.setFeatureState(
-          Number(fips[state] + districtNo),
-          'districts',
-          {
-            doYourJobDistrict: true,
-          },
-        );
-      }
-    });
-  }
-
   setStateStyle() {
     const {
       map,
     } = this;
     if (!map.getLayer('states-fill')) {
-      this.addStateLayers();
+      this.stateChloroplethFill();
     } else {
       this.showLayer('states-fill');
     }
@@ -249,7 +190,6 @@ class MapView extends React.Component {
         });
       }
       const totalDistricts = totalPledgedInDistricts(itemsInState);
-
       tooltip += `<h4>U.S. House pledge takers: <strong>${totalDistricts}</strong></h4>`;
       tooltip += '<div><em>Click for district details</em></div>';
     } else {
@@ -394,7 +334,7 @@ class MapView extends React.Component {
   }
 
   onLoad() {
-    this.makeZoomToNationalButton()
+    this.makeZoomToNationalButton();
   }
 
   initializeMap() {
@@ -415,22 +355,6 @@ class MapView extends React.Component {
     ];
     this.mbMap.setInitalState('main', this.setInitialStyles, bounds, {}, this.addClickListener(searchByDistrict), selectedState, this.onLoad );
     this.addPopups('district_interactive');
-  }
-
-  resetDoYourJobFlagToFalse(selectedState) {
-    const thisMap = this.mbMap;
-    mapKeys(fips, (fip, state) => {
-      if (selectedState && selectedState === state) {
-        return;
-      }
-      for (let step = 0; step <= numOfDistricts[state]; step++) {
-        const districtPadded = zeroPadding(step);
-        const geoID = `${fip}${districtPadded}`;
-        thisMap.setFeatureState(Number(geoID), 'districts', {
-          doYourJobDistrict: false,
-        });
-      }
-    });
   }
 
   // Handles the highlight for districts when clicked on.
@@ -456,35 +380,20 @@ class MapView extends React.Component {
     this.toggleFilters('selected-border', filterSettings);
   }
 
-  resetAllStateDYJColors() {
-    const thisMap = this.mbMap;
-
-    mapKeys(fips, (fip, state) => {
-      thisMap.setFeatureState(Number(fip), 'states', {
-        doYourJobDistrict: false,
-      });
-      for (let step = 0; step <= numOfDistricts[state]; step++) {
-        const districtPadded = zeroPadding(step);
-        const geoID = `${fip}${districtPadded}`;
-        thisMap.setFeatureState(Number(geoID), 'districts', {
-          doYourJobDistrict: false,
-        });
-      }
-    });
-  }
-
-  addStateLayers() {
+  stateChloroplethFill() {
     const {
       items,
+      allDoYourJobDistricts,
     } = this.props;
     const {
       mbMap,
     } = this;
-    mbMap.stateChloroplethFill(items);
+    mbMap.colorStatesByPledgerAndDJYD(allDoYourJobDistricts, items);
   }
 
   render() {
     const {
+      allDoYourJobDistricts,
       districts,
       selectedState,
       resetSelections,
@@ -503,6 +412,7 @@ class MapView extends React.Component {
               selectedState={selectedState}
               resetSelections={resetSelections}
               searchByDistrict={searchByDistrict}
+              allDoYourJobDistricts={allDoYourJobDistricts}
               setUsState={setUsState}
               mapId="map-overlay-alaska"
               bounds={[[-170.15625, 51.72702815704774], [-127.61718749999999, 71.85622888185527]]}
@@ -513,6 +423,7 @@ class MapView extends React.Component {
               districts={districts}
               selectedState={selectedState}
               resetSelections={resetSelections}
+              allDoYourJobDistricts={allDoYourJobDistricts}
               searchByDistrict={searchByDistrict}
               setUsState={setUsState}
               mapId="map-overlay-hawaii"

@@ -1,7 +1,8 @@
-import { filter } from 'lodash';
+import { filter, mapKeys } from 'lodash';
 import chroma from 'chroma-js';
 import { DYJD_COLOR, PLEDGED_COLOR } from '../../components/constants';
-import { fips } from '../../data/dictionaries';
+import { stateAbrvToName, fips, numOfDistricts } from '../../data/dictionaries';
+import { zeroPadding } from '../index';
 
 export default class MbMap {
   static createColorExpression(stops, colors, value) {
@@ -30,9 +31,19 @@ export default class MbMap {
     });
   }
 
-  setInitalState(type, setInitialStyles, bounds, boundsOpts, clickCallback, selectedState, onLoadCallback) {
-    if (type === 'main'){
+  addSources() {
+    this.map.addSource('states', {
+      data: '../data/states.geojson',
+      type: 'geojson',
+    });
+    this.map.addSource('districts', {
+      data: '../data/districts.geojson',
+      type: 'geojson',
+    });
+  }
 
+  setInitalState(type, setInitialStyles, bounds, boundsOpts, clickCallback, selectedState, onLoadCallback) {
+    if (type === 'main') {
       this.map.addControl(new mapboxgl.AttributionControl(), 'top-left');
       this.map.addControl(new mapboxgl.NavigationControl());
       this.map.scrollZoom.disable();
@@ -44,20 +55,13 @@ export default class MbMap {
       selectedState,
     };
     this.map.on('load', () => {
+      this.addSources();
       this.map.fitBounds(bounds, boundsOpts);
       if (onLoadCallback) {
-
-        onLoadCallback()
+        onLoadCallback();
       }
       this.addClickListener(clickCallback);
-      this.map.addSource('states', {
-        data: '../data/states.geojson',
-        type: 'geojson',
-      });
-      this.map.addSource('districts', {
-        data: '../data/districts.geojson',
-        type: 'geojson',
-      });
+
       setInitialStyles();
     });
   }
@@ -74,7 +78,99 @@ export default class MbMap {
 
   }
 
+  resetAllStateDYJFlagsToFalse() {
+    const thisMap = this;
+    mapKeys(fips, (fip, state) => {
+      thisMap.setFeatureState(Number(fip), 'states', {
+        doYourJobDistrict: false,
+      });
+      for (let step = 0; step <= numOfDistricts[state]; step++) {
+        const districtPadded = zeroPadding(step);
+        const geoID = `${fip}${districtPadded}`;
+        thisMap.setFeatureState(Number(geoID), 'districts', {
+          doYourJobDistrict: false,
+        });
+      }
+    });
+  }
+
+  resetDoYourJobDistrictFlagsToFalse(selectedState) {
+    const thisMap = this;
+    mapKeys(fips, (fip, state) => {
+      if (selectedState && selectedState === state) {
+        return;
+      }
+      for (let step = 0; step <= numOfDistricts[state]; step++) {
+        const districtPadded = zeroPadding(step);
+        const geoID = `${fip}${districtPadded}`;
+        thisMap.setFeatureState(Number(geoID), 'districts', {
+          doYourJobDistrict: false,
+        });
+      }
+    });
+  }
+
+  colorByDYJ(allDoYourJobDistricts, selectedState) {
+    const mbMap = this;
+    this.addStateAndDistrictDYJDLayers();
+    this.addDYJDistrictFillLayer();
+    this.resetDoYourJobDistrictFlagsToFalse(selectedState);
+    this.resetAllStateDYJFlagsToFalse();
+    Object.keys(allDoYourJobDistricts).forEach((code) => {
+      const state = code.split('-')[0];
+      const districtNo = code.split('-')[1];
+      console.log(state, districtNo);
+      if (isNaN(Number(districtNo))) {
+        mbMap.setFeatureState(Number(fips[state]), 'states', {
+          doYourJobDistrict: true,
+        });
+      } else {
+        mbMap.setFeatureState(Number(fips[state] + districtNo), 'districts', {
+          doYourJobDistrict: true,
+        });
+      }
+    });
+  }
+
+  colorStatesByPledgerAndDJYD(allDoYourJobDistricts, items) {
+    this.stateChloroplethFill(items);
+    this.colorByDYJ(allDoYourJobDistricts);
+  }
+
+  colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState) {
+    const mbMap = this;
+    const {
+      map,
+    } = this;
+    if (map.getLayer('states-fill')) {
+      map.setLayoutProperty('states-fill', 'visibility', 'none');
+    }
+    this.colorByDYJ(allDoYourJobDistricts, selectedState);
+
+    Object.keys(items).forEach((state) => {
+      if (!items[state]) {
+        return;
+      }
+      Object.keys(items[state]).forEach((district) => {
+        let count = 0;
+        const districtId = zeroPadding(district);
+        const fipsId = fips[state];
+        const geoid = fipsId + districtId;
+        count += filter((items[state][district]), 'pledged').length;
+        mbMap.setFeatureState(
+          Number(geoid),
+          'districts', {
+            pledged: count > 0,
+          },
+        );
+      });
+    });
+  }
+
   addStatesFillLayer() {
+    if (!this.map.getSource('states')) {
+      this.addSources();
+    }
     this.map.addLayer({
       id: 'states-fill',
       type: 'fill',
@@ -120,6 +216,10 @@ export default class MbMap {
     if (this.map.getLayer('districts-fill')) {
       return;
     }
+    if (!this.map.getSource('districts')) {
+      this.addSources();
+    }
+
     this.map.addLayer({
       id: 'districts-fill',
       type: 'fill',
@@ -139,7 +239,13 @@ export default class MbMap {
     }, 'district_high_number');
   }
 
-  addStateAndDistrictOutlineLayers() {
+  addStateAndDistrictDYJDLayers() {
+    if (this.map.getLayer('states-outline')) {
+      return;
+    }
+    if (!this.map.getSource('districts')) {
+      this.addSources();
+    }
     this.map.addLayer({
       id: 'states-outline',
       type: 'line',

@@ -1,8 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { filter } from 'lodash';
-import { totalPledgedInState } from '../utils';
+import { mapKeys } from 'lodash';
+import {
+  stateAbrvToName,
+  fips,
+  numOfDistricts
+} from '../data/dictionaries';
+
 import MbMap from '../utils/mapbox-map';
 
 class MapInset extends React.Component {
@@ -12,6 +17,8 @@ class MapInset extends React.Component {
     this.handleReset = this.handleReset.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
     this.setStateStyle = this.setStateStyle.bind(this);
+    this.onLoad = this.onLoad.bind(this);
+    this.colorDistrictsByPledgersAndDJYD = this.colorDistrictsByPledgersAndDJYD.bind(this);
   }
 
   componentDidMount() {
@@ -37,6 +44,29 @@ class MapInset extends React.Component {
     this.props.resetSelections();
   }
 
+  colorDistrictsByPledgersAndDJYD() {
+    const {
+      items,
+      selectedState,
+      allDoYourJobDistricts
+    } = this.props;
+    const {
+      map,
+      mbMap
+    } = this;
+    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState);
+  }
+
+  onLoad() {
+    const {
+      setStateDoYourJob,
+    } = this.props;
+    const {
+      mbMap,
+    } = this;
+    this.colorDistrictsByPledgersAndDJYD()
+  }
+
   addClickListener() {
     const {
       stateName,
@@ -48,6 +78,7 @@ class MapInset extends React.Component {
       setUsState({ usState: stateName });
     };
   }
+
   toggleFilters(layer, filterRules) {
     this.map.setFilter(layer, filterRules);
     this.map.setLayoutProperty(layer, 'visibility', 'visible');
@@ -69,10 +100,11 @@ class MapInset extends React.Component {
     });
 
     this.map = this.mbMap.map;
+
     this.mbMap.setInitalState('inset', this.setStateStyle, bounds, {
       easeTo: { duration: 0 },
       linear: true,
-    }, this.addClickListener(), selectedState);
+    }, this.addClickListener(), selectedState, this.onLoad);
   }
 
   render() {
