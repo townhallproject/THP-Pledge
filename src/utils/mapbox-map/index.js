@@ -1,7 +1,7 @@
 import { filter, mapKeys } from 'lodash';
 import chroma from 'chroma-js';
 import { DYJD_COLOR, PLEDGED_COLOR } from '../../components/constants';
-import { stateAbrvToName, fips, numOfDistricts } from '../../data/dictionaries';
+import { fips, numOfDistricts } from '../../data/dictionaries';
 import { zeroPadding } from '../index';
 
 export default class MbMap {
@@ -74,10 +74,6 @@ export default class MbMap {
     map.on('click', callback);
   }
 
-  inidividualStateColor() {
-
-  }
-
   resetAllStateDYJFlagsToFalse() {
     const thisMap = this;
     mapKeys(fips, (fip, state) => {
@@ -102,7 +98,6 @@ export default class MbMap {
       }
       for (let step = 0; step <= numOfDistricts[state]; step++) {
         const districtPadded = zeroPadding(step);
-        console.log('resetting', state, districtPadded)
         const geoID = `${fip}${districtPadded}`;
         thisMap.setFeatureState(Number(geoID), 'districts', {
           doYourJobDistrict: false,
@@ -121,7 +116,7 @@ export default class MbMap {
     Object.keys(allDoYourJobDistricts).forEach((code) => {
       const state = code.split('-')[0];
       const districtNo = code.split('-')[1];
-      if (selectedState && state !== selectedState){
+      if (selectedState && state !== selectedState) {
         return;
       }
       if (isNaN(Number(districtNo))) {
@@ -143,12 +138,7 @@ export default class MbMap {
 
   colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState) {
     const mbMap = this;
-    const {
-      map,
-    } = this;
-    // if (map.getLayer('states-fill')) {
-    //   map.setLayoutProperty('states-fill', 'visibility', 'none');
-    // }
+ 
     this.colorByDYJ(allDoYourJobDistricts, selectedState);
     Object.keys(items).forEach((state) => {
       if (!items[state]) {

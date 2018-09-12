@@ -1,12 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { mapKeys } from 'lodash';
-import {
-  stateAbrvToName,
-  fips,
-  numOfDistricts
-} from '../data/dictionaries';
 
 import MbMap from '../utils/mapbox-map';
 
@@ -29,6 +23,10 @@ class MapInset extends React.Component {
     this.map.resize();
   }
 
+  onLoad() {
+    this.colorDistrictsByPledgersAndDJYD();
+  }
+
   setStateStyle() {
     const {
       items,
@@ -47,24 +45,12 @@ class MapInset extends React.Component {
   colorDistrictsByPledgersAndDJYD() {
     const {
       items,
-      selectedState,
-      allDoYourJobDistricts
-    } = this.props;
-    const {
-      map,
-      mbMap
-    } = this;
-    mbMap.colorStatesByPledgerAndDJYD(allDoYourJobDistricts, items);
-  }
-
-  onLoad() {
-    const {
-      setStateDoYourJob,
+      allDoYourJobDistricts,
     } = this.props;
     const {
       mbMap,
     } = this;
-    this.colorDistrictsByPledgersAndDJYD()
+    mbMap.colorStatesByPledgerAndDJYD(allDoYourJobDistricts, items);
   }
 
   addClickListener() {
@@ -72,7 +58,6 @@ class MapInset extends React.Component {
       stateName,
       setUsState,
     } = this.props;
-    const { map } = this;
 
     return () => {
       setUsState({ usState: stateName });

@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  filter,
-  mapKeys,
-} from 'lodash';
+import { filter } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
-import { stateAbrvToName, fips, numOfDistricts } from '../../data/dictionaries';
+import { stateAbrvToName } from '../../data/dictionaries';
 
 import {
   totalPledgedInDistricts,
@@ -97,7 +94,6 @@ class MapView extends React.Component {
       district: this.setDistrictLayerStyle,
       state: this.setStateStyle,
     };
-    console.log('filter style', this.state.filterStyle);
     if (prevState.filterStyle !== this.state.filterStyle || prevProps.selectedState !== this.props.selectedState) {
       mapStyle[this.state.filterStyle]();
       // clearing any previous popups
@@ -105,27 +101,8 @@ class MapView extends React.Component {
     }
   }
 
-  setInitialStyles() {
-    this.setStateStyle();
-  }
-
-  colorDistrictsByPledgersAndDJYD() {
-    const {
-      items,
-      selectedState,
-      allDoYourJobDistricts,
-    } = this.props;
-    const { map, mbMap } = this;
-    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState);
-  }
-
-  toggleStateMask(state) {
-    if (state) {
-      const filterSetting = ['!=', 'ref', state];
-      this.toggleFilters('state-mask', filterSetting);
-    } else {
-      this.map.setLayoutProperty('state-mask', 'visibility', 'none');
-    }
+  onLoad() {
+    this.makeZoomToNationalButton();
   }
 
   setDistrictLayerStyle() {
@@ -142,6 +119,10 @@ class MapView extends React.Component {
     }
   }
 
+  setInitialStyles() {
+    this.setStateStyle();
+  }
+
   setStateStyle() {
     const {
       map,
@@ -155,6 +136,27 @@ class MapView extends React.Component {
     if (map.getLayer('districts-fill')) {
       this.hideLayer('districts-fill');
     }
+  }
+
+  toggleStateMask(state) {
+    if (state) {
+      const filterSetting = ['!=', 'ref', state];
+      this.toggleFilters('state-mask', filterSetting);
+    } else {
+      this.map.setLayoutProperty('state-mask', 'visibility', 'none');
+    }
+  }
+
+  colorDistrictsByPledgersAndDJYD() {
+    const {
+      items,
+      selectedState,
+      allDoYourJobDistricts,
+    } = this.props;
+    const {
+      mbMap,
+    } = this;
+    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState);
   }
 
   toggleFilters(layer, filterSettings) {
@@ -321,7 +323,6 @@ class MapView extends React.Component {
     usaButton.innerHTML = '<span class="usa-icon"></span>';
     usaButton.addEventListener('click', this.handleReset);
     document.querySelector('.mapboxgl-ctrl-group').appendChild(usaButton);
-    console.log('made button');
   }
 
   addClickListener(searchByDistrict) {
@@ -348,10 +349,6 @@ class MapView extends React.Component {
         });
       }
     };
-  }
-
-  onLoad() {
-    this.makeZoomToNationalButton();
   }
 
   initializeMap() {

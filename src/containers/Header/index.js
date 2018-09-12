@@ -36,7 +36,6 @@ class Header extends React.Component {
 
   render() {
     const { allDoYourJobDistricts } = this.props;
-    console.log(allDoYourJobDistricts)
     const width = window.innerWidth;
     const src = width > 992 ? 'images/pledgeHeader.jpg' : 'images/pledgeHeader@0,5x.jpg';
     return (
