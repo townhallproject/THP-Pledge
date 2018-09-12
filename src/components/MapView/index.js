@@ -224,6 +224,9 @@ class MapView extends React.Component {
     if (!items[state]) {
       return null;
     }
+    if (district === 0) {
+      district = 1;
+    }
     const people = items[state][district] ? items[state][district] : [];
     if (people.length) {
       const incumbent = filter(people, 'incumbent')[0];
