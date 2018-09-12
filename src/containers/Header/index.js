@@ -59,7 +59,7 @@ class Header extends React.Component {
           <div className="background-light text-container">
 
             <h2>Take the Town Hall Pledge</h2>
-            <p>We are asking every single candidate for public office this year to take the <strong>#townhallpledge</strong> to their constituents to hold a minimum of four town hall meetings per year in office.
+            <p>We are asking every single candidate for public office this year to take the <strong>#TownHallPledge</strong> to their constituents to hold a minimum of four town hall meetings per year in office.
             </p>
             <p>Ask candidates in your community to take the Pledge today!</p>
             <Button ghost onClick={this.toggleInfo} className="text-right pt-2">Download the pledge</Button>
