@@ -454,6 +454,7 @@ class MapView extends React.Component {
 }
 
 MapView.propTypes = {
+  allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   districts: PropTypes.arrayOf(PropTypes.number),
   items: PropTypes.shape({}).isRequired,
   resetSelections: PropTypes.func.isRequired,

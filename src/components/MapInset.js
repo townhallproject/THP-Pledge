@@ -113,6 +113,7 @@ class MapInset extends React.Component {
 }
 
 MapInset.propTypes = {
+  allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   bounds: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({})),
   mapId: PropTypes.string.isRequired,

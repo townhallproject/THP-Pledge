@@ -53,7 +53,6 @@ class pledgerDashboard extends React.Component {
       resetSelections,
       searchByDistrict,
       selectedState,
-      pledgersByDistrict,
       setUsState,
       selectedDistricts,
     } = this.props;
@@ -111,8 +110,8 @@ class pledgerDashboard extends React.Component {
 const mapStateToProps = state => ({
   allDoYourJobDistricts: getDoYourJobDistricts(state),
   allPledgers: getAllPledgers(state),
-  pledgersByState: getPledgersByUsState(state),
   pledgersByDistrict: getPledgersByDistrict(state),
+  pledgersByState: getPledgersByUsState(state),
   selectedDistricts: getDistricts(state),
   selectedState: getUsState(state),
 });
@@ -127,9 +126,11 @@ const mapDispatchToProps = dispatch => ({
 });
 
 pledgerDashboard.propTypes = {
+  allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   allPledgers: PropTypes.shape({}),
   getInitialPledgers: PropTypes.func.isRequired,
   pledgersByDistrict: PropTypes.shape({}),
+  pledgersByState: PropTypes.shape({}),
   resetSelections: PropTypes.func.isRequired,
   searchByDistrict: PropTypes.func.isRequired,
   selectedDistricts: PropTypes.arrayOf(PropTypes.number),
@@ -141,6 +142,7 @@ pledgerDashboard.propTypes = {
 pledgerDashboard.defaultProps = {
   allPledgers: null,
   pledgersByDistrict: null,
+  pledgersByState: null,
   selectedDistricts: [],
   selectedState: '',
 };

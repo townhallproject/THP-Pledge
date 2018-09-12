@@ -76,7 +76,8 @@ class DistrictCell extends React.Component {
         return (
           <Card
             style={gridStyle}
-            title={title}
+            title={(
+              <React.Fragment>{title} {isDoYourJob ? <span className="do-your-job-icon-small" /> : null }</React.Fragment>) }
             extra="Pledged"
             bordered={isDoYourJob}
             className="district-card"
