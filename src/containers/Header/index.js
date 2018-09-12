@@ -46,7 +46,7 @@ class Header extends React.Component {
               <strong style={{ color: DYJD_COLOR }}>{allDoYourJobDistricts ? `${allDoYourJobDistricts} ` : (<Icon type="loading" />)} 
               DO YOUR JOB DISTRICTS </strong>
               are currently held by incumbent
-              <strong syle={{ color: 'red' }}> Missing Members </strong> who have not held a single open town hall meeting this entire Congressional session running against a challenger who has taken the
+              <strong syle={{ color: 'red' }}> <a href="https://townhallproject.com/#missing-members" target="_blank" rel="noopener noreferrer">Missing Members </a></strong> who have not held a single open town hall meeting this entire Congressional session running against a challenger who has taken the
               <strong style={{ color: PLEDGED_COLOR }}> TOWN HALL PLEDGE</strong>.
             </p>
           <p><span className="do-your-job-icon"></span>It’s time to <strong style={{ color: DYJD_COLOR }}>Do Your Job... </strong>or let someone else do it for you.
