@@ -1,10 +1,14 @@
-import { uniqBy } from 'lodash';
+import {
+  uniqBy,
+  mapValues,
+} from 'lodash';
 
 const initialState = {
   districts: [],
-  filters: 'init',
+  filters: [],
   usState: '',
   zipcode: '',
+  filterBy: { status: 'Nominee' },
 };
 
 const filtersReducer = (state = initialState, { type, payload }) => {
@@ -33,6 +37,26 @@ const filtersReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         filters: payload,
+      };
+    case 'ADD_FILTER_BY':
+      console.log('add', payload);
+      return {
+        ...state,
+        filterBy: {
+          ...state.filterBy,
+          ...payload,
+        },
+      };
+    case 'REMOVE_FILTER_BY':
+      console.log('remove', payload);
+      const newState = delete state.filterBy[payload];
+      console.log(newState)
+      return {
+        ...state,
+        filterBy: {
+          ...newState,
+          },
+      
       };
     case 'SET_INITIAL_FILTERS':
       return {

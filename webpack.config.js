@@ -28,6 +28,11 @@ const plugins = [
       from: 'src/assets/images',
       to: 'images',
     },
+    {
+      flatten: true,
+      from: 'data',
+      to: 'data',
+    },
   ]),
 ];
 
