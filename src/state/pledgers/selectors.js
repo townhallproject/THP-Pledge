@@ -1,12 +1,26 @@
-import { reduce, mapValues, filter } from 'lodash';
+import {
+  mapKeys,
+  reduce,
+  mapValues,
+  filter,
+} from 'lodash';
 import { createSelector } from 'reselect';
 
 import {
   getUsState,
   getDistricts,
+  getFilterBy,
 } from '../selections/selectors';
 
 export const getAllPledgers = state => state.pledgers.allPledgers;
+
+export const getFilteredPledgers = createSelector([getAllPledgers, getFilterBy], (allPledgers, filterBy) => {
+  if (!allPledgers) {
+    return null;
+  }
+
+  return mapValues(allPledgers, pledgersInState => filter(pledgersInState, filterBy));
+});
 
 export const allTotalPledged = createSelector([getAllPledgers], (allPledgers) => {
   if (!allPledgers) {
@@ -19,9 +33,20 @@ export const allTotalPledged = createSelector([getAllPledgers], (allPledgers) =>
   }, 0);
 });
 
+export const allPledgersOnBallot = createSelector([getAllPledgers], (allPledgers) => {
+  if (!allPledgers) {
+    return null;
+  }
+
+  return reduce(allPledgers, (acc, pledgersInState) => {
+    acc += filter(pledgersInState, { pledged: true, status: 'Nominee' }).length;
+    return acc;
+  }, 0);
+});
+
 export const groupByStateAndDistrict = createSelector(
   [
-    getAllPledgers,
+    getFilteredPledgers,
   ],
   (allPledgers) => {
     if (!allPledgers) {

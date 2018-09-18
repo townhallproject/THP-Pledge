@@ -21,6 +21,16 @@ export const setFilters = payload => ({
   type: 'SET_FILTERS',
 });
 
+export const addFilterBy = payload => ({
+  payload,
+  type: 'ADD_FILTER_BY',
+});
+
+export const removeFilterBy = payload => ({
+  payload,
+  type: 'REMOVE_FILTER_BY',
+});
+
 export const setInitialFilters = payload => ({
   payload,
   type: 'SET_INITIAL_FILTERS',
