@@ -95,7 +95,7 @@ class MapView extends React.Component {
       state: this.setStateStyle,
     };
     if (prevState.filterStyle !== this.state.filterStyle || prevProps.selectedState !== this.props.selectedState) {
-      mapStyle[this.state.filterStyle]();
+      // mapStyle[this.state.filterStyle]();
       // clearing any previous popups
       this.popup.remove();
     }
@@ -120,7 +120,7 @@ class MapView extends React.Component {
   }
 
   setInitialStyles() {
-    this.setStateStyle();
+    this.setDistrictLayerStyle();
   }
 
   setStateStyle() {

@@ -12,8 +12,16 @@ import './style.scss';
 const CounterBar = (props) => {
   const totalDReps = (totalIncumbentsForParty(props.allPledgers, 'D', true));
   const totalDCandidates = (totalIncumbentsForParty(props.allPledgers, 'D', false));
-  const totalIReps = (totalIncumbentsForParty(props.allPledgers, 'I', true));
-  const totalICandidates = (totalIncumbentsForParty(props.allPledgers, 'I', false));
+  const totalIReps = (
+    totalIncumbentsForParty(props.allPledgers, 'I', true) +
+    totalIncumbentsForParty(props.allPledgers, 'G', true) + 
+    totalIncumbentsForParty(props.allPledgers, 'L', true)
+  );
+  const totalICandidates = (
+    totalIncumbentsForParty(props.allPledgers, 'I', false) +
+    totalIncumbentsForParty(props.allPledgers, 'G', false) +
+    totalIncumbentsForParty(props.allPledgers, 'L', false)
+  );
   const totalRCandidates = (totalIncumbentsForParty(props.allPledgers, 'R', false));
   const totalRReps = (totalIncumbentsForParty(props.allPledgers, 'R', true));
 
