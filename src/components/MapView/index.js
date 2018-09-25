@@ -90,10 +90,6 @@ class MapView extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     // changing between coloring by state and coloring by district
-    const mapStyle = {
-      district: this.setDistrictLayerStyle,
-      state: this.setStateStyle,
-    };
     if (prevState.filterStyle !== this.state.filterStyle || prevProps.selectedState !== this.props.selectedState) {
       // mapStyle[this.state.filterStyle]();
       // clearing any previous popups
@@ -112,7 +108,6 @@ class MapView extends React.Component {
 
     this.colorDistrictsByPledgersAndDJYD();
 
-    this.hideLayer('states-fill');
     this.hideLayer('dyj-district-level-color-fill');
     if (map.getLayer('districts-fill')) {
       this.showLayer('districts-fill');

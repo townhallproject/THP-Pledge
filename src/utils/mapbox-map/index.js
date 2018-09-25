@@ -1,10 +1,16 @@
 import { filter, mapKeys } from 'lodash';
 import chroma from 'chroma-js';
-import { DYJD_COLOR, PLEDGED_COLOR } from '../../components/constants';
+import { DYJD_COLOR, PLEDGED_COLOR_LIGHT, PLEDGED_COLOR_DARK } from '../../components/constants';
 import { fips, numOfDistricts } from '../../data/dictionaries';
 import { zeroPadding } from '../index';
 
 export default class MbMap {
+  static isStateWide(district) {
+    if (district) {
+      return isNaN(district) && district.toString().split('-').length < 2;
+    }
+    return false;
+  }
   static createColorExpression(stops, colors, value) {
     const expression = ['interpolate', ['linear'],
       ['to-number', value],
@@ -132,13 +138,12 @@ export default class MbMap {
   }
 
   colorStatesByPledgerAndDJYD(allDoYourJobDistricts, items) {
-    this.stateChloroplethFill(items);
     this.colorByDYJ(allDoYourJobDistricts);
   }
 
   colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState) {
     const mbMap = this;
- 
+    this.stateOutline(items);
     this.colorByDYJ(allDoYourJobDistricts, selectedState);
     Object.keys(items).forEach((state) => {
       if (!items[state]) {
@@ -160,52 +165,51 @@ export default class MbMap {
     });
   }
 
-  stateChloroplethFill(items) {
+  stateOutline(items) {
     const mbMap = this;
     this.addStatesFillLayer();
-    const domain = [];
     Object.keys(items).forEach((state) => {
       let count = 0;
 
       Object.keys(items[state]).forEach((district) => {
-        count += filter((items[state][district]), {
-          pledged: true,
-          status: 'Nominee',
-        }).length;
+        count += filter(
+          (items[state][district]),
+          ele => ele.pledged === true &&
+           ele.status === 'Nominee' &&
+           MbMap.isStateWide(district),
+        ).length;
       });
 
-      count = ((count / (Object.keys(items[state]).length * 2)) * 10);
-      if (count > 0) {
-        domain.push(count);
-      }
+
       mbMap.setFeatureState(
         Number(fips[state]),
         'states',
-        { colorValue: count || 0 },
+        { statePledged: count > 0 },
       );
     });
-    domain.sort((a, b) => parseInt(a) - parseInt(b));
-    const colors = chroma.scale(['#d4d0f1', '#7366b7']).colors(4);
-    const breaks = chroma.limits(domain, 'q', 3);
-    this.map.setPaintProperty('states-fill', 'fill-color', MbMap.createColorExpression(breaks, colors, ['feature-state', 'colorValue']));
   }
 
   addStatesFillLayer() {
-    if (this.map.getLayer('states-fill')) {
+    if (this.map.getLayer('states-outline-line')) {
       return;
     }
     if (!this.map.getSource('states')) {
       this.addSources();
     }
     this.map.addLayer({
-      id: 'states-fill',
-      type: 'fill',
+      id: 'states-outline-line',
+      type: 'line',
       source: 'states',
       paint: {
-        'fill-color': '#847aa3',
-        'fill-opacity': 1,
+        'line-color': PLEDGED_COLOR_DARK,
+        'line-width': 2,
+        'line-opacity': ['case',
+          ['boolean', ['feature-state', 'statePledged'], true],
+          1,
+          0,
+        ],
       },
-    }, 'district_high_number');
+    });
   }
 
   addDYJDistrictFillLayer() {
@@ -224,12 +228,21 @@ export default class MbMap {
         'fill-color': ['case',
           ['boolean', ['feature-state', 'doYourJobDistrict'], true],
           DYJD_COLOR,
-          '#847aa3',
+          PLEDGED_COLOR_LIGHT,
         ],
         'fill-opacity': ['case',
-          ['boolean', ['feature-state', 'pledged'], true],
-          0.6,
+          ['boolean', ['feature-state', 'doYourJobDistrict'], true],
+          0.5,
           0,
+          ['boolean', ['feature-state', 'pledged'], true],
+          1,
+          0,
+        ],
+        'fill-outline-color': ['case',
+          ['boolean', ['feature-state', 'doYourJobDistrict'], true],
+
+          PLEDGED_COLOR_DARK,
+          '#6e6e6e',
         ],
       },
     }, 'district_high_number');
@@ -270,11 +283,11 @@ export default class MbMap {
         'fill-color': ['case',
           ['boolean', ['feature-state', 'doYourJobDistrict'], true],
           DYJD_COLOR,
-          PLEDGED_COLOR,
+          PLEDGED_COLOR_LIGHT,
         ],
         'fill-outline-color': ['case',
           ['boolean', ['feature-state', 'doYourJobDistrict'], true],
-          PLEDGED_COLOR,
+          PLEDGED_COLOR_LIGHT,
           'white',
         ],
       },
