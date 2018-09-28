@@ -209,7 +209,7 @@ export default class MbMap {
           0,
         ],
       },
-    });
+    }, 'district_interactive');
   }
 
   addDYJDistrictFillLayer() {
@@ -231,11 +231,8 @@ export default class MbMap {
           PLEDGED_COLOR_LIGHT,
         ],
         'fill-opacity': ['case',
-          ['boolean', ['feature-state', 'doYourJobDistrict'], true],
-          0.5,
-          0,
           ['boolean', ['feature-state', 'pledged'], true],
-          1,
+          0.9,
           0,
         ],
         'fill-outline-color': ['case',
