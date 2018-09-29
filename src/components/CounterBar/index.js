@@ -43,10 +43,10 @@ const CounterBar = (props) => {
         <Popover content="Pledged Democratic challengers" >
           <div style={{ flexBasis: `${dCandidatePercent}%` }} className="democrat-candidate" title="Democratic Candidates">{totalDCandidates}</div>
         </Popover>
-        <Popover content="Pledged Independent incumbents">
+        <Popover content="Pledged Independent and 3rd Party incumbents">
           <div style={{ flexBasis: `${iRepsPercent}%` }} className="independent" title="Independent Representatives">{totalIReps}</div>
         </Popover>
-        <Popover content="Pledged Independent challengers">
+        <Popover content="Pledged Independent and 3rd Party challengers">
           <div style={{ flexBasis: `${iCandidatePercent}%` }} className="independent-candidate" title="Independent Candidates">{totalICandidates}</div>
         </Popover>
         <Popover content="Pledged Republican challengers" placement="topRight">

@@ -9,19 +9,19 @@ export default class Legend extends React.Component {
         <ul className="list-inline">
           <li className="map-legend-li hide-if-no-webgl">
             <dt className="statewide-dyjd" />
-            <dd>Do Your Job State</dd>
+            <dd><strong>Do Your Job</strong> State</dd>
           </li>
           <li className="map-legend-li hide-if-no-webgl">
             <dt className="statewide-pledger" />
-            <dd>Statewide Town Hall Pledge</dd>
+            <dd>Governor/US Senate <strong>Town Hall Pledge</strong></dd>
           </li>
           <li className="map-legend-li hide-if-no-webgl">
             <dt className="district-dyjd" />
-            <dd>Do your job district</dd>
+            <dd><strong>Do Your Job</strong> District</dd>
           </li>
           <li className="map-legend-li hide-if-no-webgl">
             <dt className="district-pledger" />
-            <dd>U.S. House Town Hall Pledge</dd>
+            <dd>U.S. House <strong>Town Hall Pledge</strong></dd>
           </li>
         </ul>
       </div>

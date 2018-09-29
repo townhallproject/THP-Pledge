@@ -33,7 +33,7 @@ export const zeroPadding = (district) => {
 };
 
 export const formatPledger = (item) => {
-  const title = item.incumbent ? `${item.role}. ${item.displayName}* <span class=${item.party}>(${item.party}) </span> ${item.pledged ? 'PLEDGED' : ''} ${item.missingMember ? '<strong style={color:"red";}>MISSING</strong>' : ''}` :
+  const title = item.incumbent ? `${item.role}. ${item.displayName}* <span class=${item.party}>(${item.party}) </span> ${item.pledged ? 'PLEDGED' : ''} ${item.missingMember ? '<strong style="color:red;">MISSING</strong>' : ''}` :
     `${item.displayName} <span class=${item.party}>(${item.party})</span> ${item.pledged ? '<strong>PLEDGED</strong>' : ''}`;
   return `<div style="color:${item.pledged ? `${PLEDGED_COLOR};` : 'none;'}">${title}</div>`;
 };
