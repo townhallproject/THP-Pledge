@@ -1,5 +1,4 @@
 import { filter, mapKeys } from 'lodash';
-import chroma from 'chroma-js';
 import { DYJD_COLOR, PLEDGED_COLOR_LIGHT, PLEDGED_COLOR_DARK } from '../../components/constants';
 import { fips, numOfDistricts } from '../../data/dictionaries';
 import { zeroPadding } from '../index';
@@ -137,7 +136,7 @@ export default class MbMap {
     });
   }
 
-  colorStatesByPledgerAndDJYD(allDoYourJobDistricts, items) {
+  colorStatesByPledgerAndDJYD(allDoYourJobDistricts) {
     this.colorByDYJ(allDoYourJobDistricts);
   }
 
@@ -269,18 +268,16 @@ export default class MbMap {
 
     this.map.addLayer({
       id: 'dyj-district-level-color-fill',
-      type: 'fill',
-      source: 'districts',
       paint: {
-        'fill-opacity': ['case',
-          ['boolean', ['feature-state', 'doYourJobDistrict'], true],
-          1,
-          0,
-        ],
         'fill-color': ['case',
           ['boolean', ['feature-state', 'doYourJobDistrict'], true],
           DYJD_COLOR,
           PLEDGED_COLOR_LIGHT,
+        ],
+        'fill-opacity': ['case',
+          ['boolean', ['feature-state', 'doYourJobDistrict'], true],
+          1,
+          0,
         ],
         'fill-outline-color': ['case',
           ['boolean', ['feature-state', 'doYourJobDistrict'], true],
@@ -288,7 +285,8 @@ export default class MbMap {
           'white',
         ],
       },
-
+      source: 'districts',
+      type: 'fill',
     }, 'state border');
   }
 

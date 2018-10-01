@@ -213,7 +213,10 @@ class MapView extends React.Component {
       if (incumbent) {
         tooltip += formatPledger(incumbent);
       }
-      const challengers = filter(people, { status: 'Nominee', incumbent: false });
+      const challengers = filter(people, {
+        incumbent: false,
+        status: 'Nominee',
+      });
       challengers.forEach((item) => {
         tooltip += formatPledger(item);
       });

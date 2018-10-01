@@ -14,7 +14,7 @@ const CounterBar = (props) => {
   const totalDCandidates = (totalIncumbentsForParty(props.allPledgers, 'D', false));
   const totalIReps = (
     totalIncumbentsForParty(props.allPledgers, 'I', true) +
-    totalIncumbentsForParty(props.allPledgers, 'G', true) + 
+    totalIncumbentsForParty(props.allPledgers, 'G', true) +
     totalIncumbentsForParty(props.allPledgers, 'L', true)
   );
   const totalICandidates = (

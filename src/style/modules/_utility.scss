@@ -37,7 +37,6 @@ h1.background-dark {
     height: 50px;
     background-size: 50px 50px;
     background-repeat: no-repeat;
-    display: inline-block;
     width: 50px;
     vertical-align: middle;
     float:left;
@@ -47,7 +46,6 @@ h1.background-dark {
     height: 25px;
     background-size: 25px 25px;
     background-repeat: no-repeat;
-    display: inline-block;
     width: 25px;
     vertical-align: middle;
     float:left;
@@ -112,15 +110,9 @@ h1.background-dark {
         padding-top: 1.5rem !important;
   }
 }
-@media (min-width: 992px){
-  .offset-lg-4 {
-    //   margin-left: 66.667%;
-  }
-}
+
 @media (min-width: 992px){
   .col-lg-7 {
       -webkit-box-flex: 0;
-    //   max-width: 58.3333%;
-    //   flex: 0 0 58.3333%;
   }
 }

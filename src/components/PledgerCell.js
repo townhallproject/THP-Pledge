@@ -21,8 +21,7 @@ class PledgerCell extends React.Component {
 
     if (!item.displayName) {
       return null;
-    } 
-    console.log(item.missingMember)
+    };
 
     const title = item.incumbent ? (
       <React.Fragment>{item.role}. {item.displayName}* <span className={item.party}>({item.party})</span>

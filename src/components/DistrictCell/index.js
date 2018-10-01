@@ -10,8 +10,8 @@ require('style-loader!css-loader!antd/es/list/style/index.css');
 /* eslint-enable */
 
 const gridStyle = {
-  maxWidth: '310px',
   borderColor: DYJD_COLOR,
+  maxWidth: '310px',
 };
 
 const getCardOrder = (districtOrStateWide) => {
