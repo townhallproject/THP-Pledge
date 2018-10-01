@@ -24,7 +24,7 @@ class MapView extends React.Component {
     super(props);
     this.addPopups = this.addPopups.bind(this);
     this.addClickListener = this.addClickListener.bind(this);
-    this.setStateStyle = this.setStateStyle.bind(this);
+    // this.setStateStyle = this.setStateStyle.bind(this);
     this.colorDistrictsByPledgersAndDJYD = this.colorDistrictsByPledgersAndDJYD.bind(this);
     this.showStateTooltip = this.showStateTooltip.bind(this);
     this.showDistrictTooltip = this.showDistrictTooltip.bind(this);
@@ -90,12 +90,8 @@ class MapView extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     // changing between coloring by state and coloring by district
-    const mapStyle = {
-      district: this.setDistrictLayerStyle,
-      state: this.setStateStyle,
-    };
     if (prevState.filterStyle !== this.state.filterStyle || prevProps.selectedState !== this.props.selectedState) {
-      mapStyle[this.state.filterStyle]();
+      this.setDistrictLayerStyle();
       // clearing any previous popups
       this.popup.remove();
     }
@@ -112,7 +108,6 @@ class MapView extends React.Component {
 
     this.colorDistrictsByPledgersAndDJYD();
 
-    this.hideLayer('states-fill');
     this.hideLayer('dyj-district-level-color-fill');
     if (map.getLayer('districts-fill')) {
       this.showLayer('districts-fill');
@@ -120,22 +115,7 @@ class MapView extends React.Component {
   }
 
   setInitialStyles() {
-    this.setStateStyle();
-  }
-
-  setStateStyle() {
-    const {
-      map,
-    } = this;
-    if (map.getLayer('states-fill')) {
-      this.showLayer('states-fill');
-      this.showLayer('dyj-district-level-color-fill');
-    }
-    this.stateChloroplethFill();
-
-    if (map.getLayer('districts-fill')) {
-      this.hideLayer('districts-fill');
-    }
+    this.setDistrictLayerStyle();
   }
 
   toggleStateMask(state) {
