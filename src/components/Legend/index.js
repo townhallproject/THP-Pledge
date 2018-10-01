@@ -13,7 +13,7 @@ export default class Legend extends React.Component {
           </li>
           <li className="map-legend-li hide-if-no-webgl">
             <dt className="statewide-pledger" />
-            <dd>Governor/US Senate <strong>Town Hall Pledge</strong></dd>
+            <dd>Governor/U.S. Senate <strong>Town Hall Pledge</strong></dd>
           </li>
           <li className="map-legend-li hide-if-no-webgl">
             <dt className="district-dyjd" />
