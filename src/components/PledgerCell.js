@@ -21,13 +21,17 @@ class PledgerCell extends React.Component {
 
     if (!item.displayName) {
       return null;
-    }
+    } 
+    console.log(item.missingMember)
 
     const title = item.incumbent ? (
-      <React.Fragment>{item.role}. {item.displayName}* <span className={item.party}>({item.party})</span></React.Fragment>) :
+      <React.Fragment>{item.role}. {item.displayName}* <span className={item.party}>({item.party})</span>
+        {item.missingMember ? <span className="missing-member-icon" /> : null}
+      </React.Fragment>) :
       (<React.Fragment>{item.displayName} <span className={item.party}>({item.party})</span></React.Fragment>);
 
     const description = item.pledged ? (<Icon type="check-circle" />) : (<Icon type="question-circle-o" />);
+    
     return (
       <React.Fragment>
         <List.Item.Meta

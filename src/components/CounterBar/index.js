@@ -12,8 +12,16 @@ import './style.scss';
 const CounterBar = (props) => {
   const totalDReps = (totalIncumbentsForParty(props.allPledgers, 'D', true));
   const totalDCandidates = (totalIncumbentsForParty(props.allPledgers, 'D', false));
-  const totalIReps = (totalIncumbentsForParty(props.allPledgers, 'I', true));
-  const totalICandidates = (totalIncumbentsForParty(props.allPledgers, 'I', false));
+  const totalIReps = (
+    totalIncumbentsForParty(props.allPledgers, 'I', true) +
+    totalIncumbentsForParty(props.allPledgers, 'G', true) + 
+    totalIncumbentsForParty(props.allPledgers, 'L', true)
+  );
+  const totalICandidates = (
+    totalIncumbentsForParty(props.allPledgers, 'I', false) +
+    totalIncumbentsForParty(props.allPledgers, 'G', false) +
+    totalIncumbentsForParty(props.allPledgers, 'L', false)
+  );
   const totalRCandidates = (totalIncumbentsForParty(props.allPledgers, 'R', false));
   const totalRReps = (totalIncumbentsForParty(props.allPledgers, 'R', true));
 
@@ -35,10 +43,10 @@ const CounterBar = (props) => {
         <Popover content="Pledged Democratic challengers" >
           <div style={{ flexBasis: `${dCandidatePercent}%` }} className="democrat-candidate" title="Democratic Candidates">{totalDCandidates}</div>
         </Popover>
-        <Popover content="Pledged Independent incumbents">
+        <Popover content="Pledged Independent and 3rd Party incumbents">
           <div style={{ flexBasis: `${iRepsPercent}%` }} className="independent" title="Independent Representatives">{totalIReps}</div>
         </Popover>
-        <Popover content="Pledged Independent challengers">
+        <Popover content="Pledged Independent and 3rd Party challengers">
           <div style={{ flexBasis: `${iCandidatePercent}%` }} className="independent-candidate" title="Independent Candidates">{totalICandidates}</div>
         </Popover>
         <Popover content="Pledged Republican challengers" placement="topRight">

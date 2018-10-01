@@ -1,0 +1,59 @@
+@import '../../style/modules/colors';
+
+.map-legend {
+    left: 0;
+    bottom: 0;
+    z-index: 90;
+    padding: 0.5rem 1.5rem 0.5rem;
+    background-color: rgba(255, 255, 255, 0.75);
+    -webkit-transition: 0.2s all;
+    -o-transition: 0.2s all;
+    transition: 0.2s all;
+}
+
+.map-legend {
+    dt, dd {
+        display: inline-block;
+    }
+    dd {
+        display: inline-block;
+    }
+    dt {
+        margin-right: 0.5rem;
+        vertical-align:text-bottom;
+    }
+    li {
+        margin-right: 1.5rem;
+        display: inline-block;
+    }
+    .list-inline {
+        list-style: none;
+        margin-bottom: 0px;
+        display: inline-block;
+        padding-left: 0; 
+    }
+    .statewide-dyjd{
+        border: 1px solid $do-your-job-yellow;
+        width: 15px;
+        height: 15px;
+        background-color: none;
+    }
+    .statewide-pledger {
+        border: 1px solid $pledged-purple;
+        width: 15px;
+        height: 15px;
+        background-color: none;
+    }
+    .district-dyjd {
+        border: 1px solid $do-your-job-yellow;
+        width: 15px;
+        height: 15px;
+        background-color: $do-your-job-yellow;
+    }
+    .district-pledger {
+        border: 1px solid $light-purple;
+        width: 15px;
+        height: 15px;
+        background-color: $light-purple;
+    }
+}

@@ -24,6 +24,7 @@ import SearchBar from '../SearchBar';
 import Table from '../../components/Table';
 
 import './style.scss';
+import Legend from '../../components/Legend';
 
 class pledgerDashboard extends React.Component {
   constructor(props) {
@@ -97,6 +98,7 @@ class pledgerDashboard extends React.Component {
           items={pledgersByDistrict}
           mapType="pledger"
         />
+        <Legend />
         {this.renderMap()}
         <CounterBar
           allPledgers={allPledgers}

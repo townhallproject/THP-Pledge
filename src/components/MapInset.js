@@ -34,7 +34,7 @@ class MapInset extends React.Component {
     const {
       mbMap,
     } = this;
-    mbMap.stateChloroplethFill(items);
+    mbMap.stateOutline(items);
   }
 
   handleReset() {
@@ -50,7 +50,7 @@ class MapInset extends React.Component {
     const {
       mbMap,
     } = this;
-    mbMap.colorStatesByPledgerAndDJYD(allDoYourJobDistricts, items);
+    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items);
   }
 
   addClickListener() {

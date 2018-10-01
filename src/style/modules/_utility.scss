@@ -32,6 +32,16 @@ h1.background-dark {
     width: 80px;
     vertical-align: middle;
 }
+.missing-member-icon {
+    background-image: url('../../../src/assets/images/missing-member-logo.svg');
+    height: 50px;
+    background-size: 50px 50px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 50px;
+    vertical-align: middle;
+    float:left;
+}
 .do-your-job-icon-small {
     background-image: url('../../../src/assets/images/do-your-job-logo.svg');
     height: 25px;
@@ -40,6 +50,7 @@ h1.background-dark {
     display: inline-block;
     width: 25px;
     vertical-align: middle;
+    float:left;
 }
 // bootstrap styles
 .container-fluid {
