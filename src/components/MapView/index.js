@@ -193,7 +193,7 @@ class MapView extends React.Component {
       tooltip += '<div><em>Click for district details</em></div>';
     } else {
       this.setState({ popoverColor: 'popover-no-data' });
-      tooltip += '<div><em>No one has taken the pledge</em></div>';
+      tooltip += '<div><em>No current candidates have taken the pledge</em></div>';
     }
     return tooltip;
   }

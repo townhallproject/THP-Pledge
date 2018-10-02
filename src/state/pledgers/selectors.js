@@ -18,7 +18,7 @@ export const getFilteredPledgers = createSelector([getAllPledgers, getFilterBy],
   if (!allPledgers) {
     return null;
   }
-
+  console.log(mapValues(allPledgers, pledgersInState => filter(pledgersInState, filterBy)));
   return mapValues(allPledgers, pledgersInState => filter(pledgersInState, filterBy));
 });
 
