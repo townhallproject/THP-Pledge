@@ -53,7 +53,6 @@ class DistrictCell extends React.Component {
       // sen
       isDoYourJobDistrict = find(
         doYourJobDistricts, (ele) => {
-          console.log(ele.key, district)
           const dyjdStateRank = ele.key.split('-')[1];
           const thiDistrictStateRank = district.split(' ')[1];
           // console.log(ele.district.slice(0, 3), district)
