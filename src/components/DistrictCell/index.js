@@ -44,12 +44,20 @@ class DistrictCell extends React.Component {
     } = this.props;
     let isDoYourJobDistrict;
     if (doYourJobDistricts.length > 0 && !isNaN(Number(district))) {
+      // rep 
       isDoYourJobDistrict = find(doYourJobDistricts, (ele) => {
         const testDistrict = Number(ele.district) === 0 ? 1 : Number(ele.district);
         return testDistrict === Number(district);
       });
     } else if (doYourJobDistricts.length > 0) {
-      isDoYourJobDistrict = find(doYourJobDistricts, ele => (typeof ele.district === 'string' && ele.district.slice(0, 3) === district));
+      // sen
+      isDoYourJobDistrict = find(
+        doYourJobDistricts, (ele) => {
+          const dyjdStateRank = ele.key.split('-')[1];
+          const thiDistrictStateRank = district.split(' ')[1];
+          // console.log(ele.district.slice(0, 3), district)
+          return typeof ele.district === 'string' && dyjdStateRank === thiDistrictStateRank;
+        });
     }
     return isDoYourJobDistrict;
   }
