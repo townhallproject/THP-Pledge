@@ -24,7 +24,7 @@ class PledgerCell extends React.Component {
     };
 
     const title = item.incumbent ? (
-      <React.Fragment>{item.role}. {item.displayName}* <span className={item.party}>({item.party})</span>
+      <React.Fragment>{item.role.split(' ')[0]}. {item.displayName}* <span className={item.party}>({item.party})</span>
         {item.missingMember ? <span className="missing-member-icon" /> : null}
       </React.Fragment>) :
       (<React.Fragment>{item.displayName} <span className={item.party}>({item.party})</span></React.Fragment>);
