@@ -1,4 +1,8 @@
-import { filter, mapKeys } from 'lodash';
+import {
+  filter,
+  mapKeys,
+  isEmpty,
+} from 'lodash';
 import { DYJD_COLOR, PLEDGED_COLOR_LIGHT, PLEDGED_COLOR_DARK } from '../../components/constants';
 import { fips, numOfDistricts } from '../../data/dictionaries';
 import { zeroPadding } from '../index';
@@ -145,7 +149,7 @@ export default class MbMap {
     this.stateOutline(items);
     this.colorByDYJ(allDoYourJobDistricts, selectedState);
     Object.keys(items).forEach((state) => {
-      if (!items[state]) {
+      if (!items[state] || isEmpty(items[state])) {
         return;
       }
       Object.keys(items[state]).forEach((district) => {

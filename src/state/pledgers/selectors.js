@@ -1,5 +1,6 @@
 import {
   mapKeys,
+  isMatch,
   reduce,
   mapValues,
   filter,
@@ -18,8 +19,7 @@ export const getFilteredPledgers = createSelector([getAllPledgers, getFilterBy],
   if (!allPledgers) {
     return null;
   }
-  console.log(mapValues(allPledgers, pledgersInState => filter(pledgersInState, filterBy)));
-  return mapValues(allPledgers, pledgersInState => filter(pledgersInState, filterBy));
+  return mapValues(allPledgers);
 });
 
 export const allTotalPledged = createSelector([getAllPledgers], (allPledgers) => {
@@ -46,9 +46,10 @@ export const allPledgersOnBallot = createSelector([getAllPledgers], (allPledgers
 
 export const groupByStateAndDistrict = createSelector(
   [
+    getFilterBy,
     getFilteredPledgers,
   ],
-  (allPledgers) => {
+  (filterObj, allPledgers) => {
     if (!allPledgers) {
       return null;
     }
@@ -57,12 +58,16 @@ export const groupByStateAndDistrict = createSelector(
         if (!acc[cur.district]) {
           acc[cur.district] = [];
         }
-        acc[cur.district].push(cur);
+        if (!filterObj || isMatch(cur, filterObj)) {
+          acc[cur.district].push(cur);
+        }
       } else {
         if (!acc[cur.role]) {
           acc[cur.role] = [];
         }
-        acc[cur.role].push(cur);
+        if (!filterObj || isMatch(cur, filterObj)) {
+          acc[cur.role].push(cur);
+        }
       }
       return acc;
     }, {}));
