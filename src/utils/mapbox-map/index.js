@@ -3,7 +3,12 @@ import {
   mapKeys,
   isEmpty,
 } from 'lodash';
-import { DYJD_COLOR, PLEDGED_COLOR_LIGHT, PLEDGED_COLOR_DARK } from '../../components/constants';
+import { 
+  DYJD_COLOR, 
+  PLEDGED_COLOR_LIGHT, 
+  PLEDGED_COLOR_DARK,
+  MISSING_MEMBER_COLOR,
+} from '../../components/constants';
 import { fips, numOfDistricts } from '../../data/dictionaries';
 import { zeroPadding } from '../index';
 
@@ -154,14 +159,18 @@ export default class MbMap {
       }
       Object.keys(items[state]).forEach((district) => {
         let count = 0;
+        let missingMember = 0;
         const districtId = zeroPadding(district);
         const fipsId = fips[state];
         const geoid = fipsId + districtId;
-        count += filter((items[state][district]), 'pledged').length;
+        count += filter((items[state][district]), { pledged: true }).length;
+        missingMember += filter((items[state][district]), { missingMember: true }).length;
+
         mbMap.setFeatureState(
           Number(geoid),
           'districts', {
             pledged: count > 0,
+            missingMember: missingMember > 0,
           },
         );
       });
@@ -173,8 +182,14 @@ export default class MbMap {
     this.addStatesFillLayer();
     Object.keys(items).forEach((state) => {
       let count = 0;
-
+      let missingMember = 0;
       Object.keys(items[state]).forEach((district) => {
+        missingMember += filter(
+          (items[state][district]),
+          ele => ele.missingMember === true &&
+          ele.status === 'Nominee' &&
+          MbMap.isStateWide(district),
+        ).length;
         count += filter(
           (items[state][district]),
           ele => ele.pledged === true &&
@@ -183,11 +198,10 @@ export default class MbMap {
         ).length;
       });
 
-
       mbMap.setFeatureState(
         Number(fips[state]),
         'states',
-        { statePledged: count > 0 },
+        { statePledged: count > 0, missingMember: missingMember > 0 },
       );
     });
   }
@@ -199,6 +213,20 @@ export default class MbMap {
     if (!this.map.getSource('states')) {
       this.addSources();
     }
+    this.map.addLayer({
+      id: 'states-missingmember-line',
+      type: 'line',
+      source: 'states',
+      paint: {
+        'line-color': MISSING_MEMBER_COLOR,
+        'line-width': 2,
+        'line-opacity': ['case',
+          ['boolean', ['feature-state', 'missingMember'], true],
+          0.8,
+          0,
+        ],
+      },
+    }, 'district_interactive');
     this.map.addLayer({
       id: 'states-outline-line',
       type: 'line',
@@ -222,6 +250,29 @@ export default class MbMap {
     if (!this.map.getSource('districts')) {
       this.addSources();
     }
+    this.map.addLayer({
+      id: 'district-missingmember-line',
+      type: 'fill',
+      source: 'districts',
+      paint: {
+        'fill-color': ['case',
+          ['boolean', ['feature-state', 'missingMember'], true],
+          MISSING_MEMBER_COLOR,
+          PLEDGED_COLOR_LIGHT,
+        ],
+        'fill-opacity': ['case',
+          ['boolean', ['feature-state', 'missingMember'], true],
+          0.4,
+          0,
+        ],
+        'fill-outline-color': ['case',
+          ['boolean', ['feature-state', 'doYourJobDistrict'], false],
+
+          MISSING_MEMBER_COLOR,
+          '#6e6e6e',
+        ],
+      },
+    }, 'district_high_number');
 
     this.map.addLayer({
       id: 'districts-fill',

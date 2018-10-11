@@ -173,7 +173,7 @@ class MapView extends React.Component {
     const name = stateAbrvToName[state];
     const itemsInState = items[state];
     let tooltip = `<h4>${name}</h4>`;
-    if (itemsInState && totalPledgedInState(itemsInState)) {
+    if (itemsInState ) {
       this.setState({ popoverColor: 'popover-has-data' });
       if (itemsInState.Gov) {
         tooltip += '<h4>Governor\'s race</h4>';
