@@ -3,9 +3,9 @@ import {
   mapKeys,
   isEmpty,
 } from 'lodash';
-import { 
-  DYJD_COLOR, 
-  PLEDGED_COLOR_LIGHT, 
+import {
+  DYJD_COLOR,
+  PLEDGED_COLOR_LIGHT,
   PLEDGED_COLOR_DARK,
   MISSING_MEMBER_COLOR,
 } from '../../components/constants';

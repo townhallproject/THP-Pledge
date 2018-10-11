@@ -30,7 +30,7 @@ class PledgerCell extends React.Component {
       (<React.Fragment>{item.displayName} <span className={item.party}>({item.party})</span></React.Fragment>);
 
     const description = item.pledged ? (<Icon type="check-circle" />) : (<Icon type="question-circle-o" />);
-    
+   
     return (
       <React.Fragment>
         <List.Item.Meta
