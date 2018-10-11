@@ -1,7 +1,4 @@
-import {
-  uniqBy,
-  mapValues,
-} from 'lodash';
+import { uniqBy } from 'lodash';
 
 const initialState = {
   districts: [],
@@ -47,12 +44,10 @@ const filtersReducer = (state = initialState, { type, payload }) => {
         },
       };
     case 'REMOVE_FILTER_BY':
-      const newState = delete state.filterBy[payload];
       return {
         ...state,
         filterBy: {
-          },
-      
+        },
       };
     case 'SET_INITIAL_FILTERS':
       return {

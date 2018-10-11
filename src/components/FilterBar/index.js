@@ -3,15 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Tag,
+  Switch,
 } from 'antd';
-
-const {
-  CheckableTag
-} = Tag;
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/popover/style/index.css');
-// import './style.scss';
+require('style-loader!css-loader!antd/es/switch/style/index.css');
+import './style.scss';
 /* eslint-enable */
 
 const FilterBar = (props) => {
@@ -22,20 +20,25 @@ const FilterBar = (props) => {
   } = props;
 
   function changeNomineeToggle(value) {
+    console.log(value);
     if (value) {
       return addFilterBy({
-        status: 'Nominee'
-      })
+        status: 'Nominee',
+      });
     }
     return removeFilterBy('status');
-  };
+  }
 
   return (
-    <div className="container-fluid">
-        <CheckableTag 
-            checked={filterBy.status === 'Nominee'} 
-            onChange={changeNomineeToggle}>Nominees Only
-        </CheckableTag>
+    <div className="container-fluid filter-bar">
+        Show:
+      <Switch
+          onChange={changeNomineeToggle}
+          defaultChecked
+          checkedChildren="Nominees only"
+          unCheckedChildren="All candidates"
+        />
+
     </div>
   );
 };
