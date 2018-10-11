@@ -107,15 +107,15 @@ class pledgerDashboard extends React.Component {
           items={pledgersByDistrict}
           mapType="pledger"
         />
-        <Legend />
-        {this.renderMap()}
-        <CounterBar
-          allPledgers={allPledgers}
-        />
-        <FilterBar
+        <Legend 
           addFilterBy={addFilterBy}
           filterBy={filterBy}
           removeFilterBy={removeFilterBy}
+        />
+        {this.renderMap()}
+     
+        <CounterBar
+          allPledgers={allPledgers}
         />
         <div className="footer" />
       </div>
