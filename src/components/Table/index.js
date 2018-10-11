@@ -24,10 +24,6 @@ class Table extends React.Component {
     } = this.props;
     return Object.keys(items)
       .map((state) => {
-        if (!totalPledgedInState(items[state])) {
-          return null;
-        }
-
         const doYourJobDistricts = filter(allDoYourJobDistricts, ele => (ele.state === state));
 
         return (
