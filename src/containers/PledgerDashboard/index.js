@@ -9,9 +9,14 @@ import {
   getPledgersByUsState,
 } from '../../state/pledgers/selectors';
 
+
 import { startSetPledgers } from '../../state/pledgers/actions';
 
-import { getUsState, getDistricts } from '../../state/selections/selectors';
+import {
+  getUsState,
+  getDistricts,
+  getFilterBy,
+} from '../../state/selections/selectors';
 import * as selectionActions from '../../state/selections/actions';
 import { getDoYourJobDistricts } from '../../state/do-your-job-district/selectors';
 
@@ -25,6 +30,7 @@ import Table from '../../components/Table';
 
 import './style.scss';
 import Legend from '../../components/Legend';
+import FilterBar from '../../components/FilterBar';
 
 class pledgerDashboard extends React.Component {
   constructor(props) {
@@ -75,9 +81,12 @@ class pledgerDashboard extends React.Component {
 
   render() {
     const {
+      addFilterBy,
       allDoYourJobDistricts,
       pledgersByDistrict,
       allPledgers,
+      filterBy,
+      removeFilterBy,
     } = this.props;
 
     if (this.state.init) {
@@ -103,6 +112,11 @@ class pledgerDashboard extends React.Component {
         <CounterBar
           allPledgers={allPledgers}
         />
+        <FilterBar
+          addFilterBy={addFilterBy}
+          filterBy={filterBy}
+          removeFilterBy={removeFilterBy}
+        />
         <div className="footer" />
       </div>
     );
@@ -112,6 +126,7 @@ class pledgerDashboard extends React.Component {
 const mapStateToProps = state => ({
   allDoYourJobDistricts: getDoYourJobDistricts(state),
   allPledgers: getAllPledgers(state),
+  filterBy: getFilterBy(state),
   pledgersByDistrict: getPledgersByDistrict(state),
   pledgersByState: getPledgersByUsState(state),
   selectedDistricts: getDistricts(state),
@@ -119,7 +134,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  addFilterBy: filter => dispatch(selectionActions.addFilterBy(filter)),
   getInitialPledgers: () => dispatch(startSetPledgers()),
+  removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter)),
   resetSelections: () => dispatch(selectionActions.resetSelections()),
   searchByDistrict: val => dispatch(selectionActions.setDistrict(val)),
   setFilters: filters => dispatch(selectionActions.setFilters(filters)),

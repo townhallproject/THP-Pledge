@@ -39,7 +39,6 @@ const filtersReducer = (state = initialState, { type, payload }) => {
         filters: payload,
       };
     case 'ADD_FILTER_BY':
-      console.log('add', payload);
       return {
         ...state,
         filterBy: {
@@ -48,13 +47,10 @@ const filtersReducer = (state = initialState, { type, payload }) => {
         },
       };
     case 'REMOVE_FILTER_BY':
-      console.log('remove', payload);
       const newState = delete state.filterBy[payload];
-      console.log(newState)
       return {
         ...state,
         filterBy: {
-          ...newState,
           },
       
       };

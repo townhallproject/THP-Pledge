@@ -59,6 +59,7 @@ const CounterBar = (props) => {
     </div>
   );
 };
+
 CounterBar.propTypes = {
   allPledgers: PropTypes.shape({}).isRequired,
 };

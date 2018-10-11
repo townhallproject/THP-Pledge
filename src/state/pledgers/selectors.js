@@ -15,7 +15,7 @@ import {
 
 export const getAllPledgers = state => state.pledgers.allPledgers;
 
-export const getFilteredPledgers = createSelector([getAllPledgers, getFilterBy], (allPledgers, filterBy) => {
+export const getFilteredPledgers = createSelector([getAllPledgers], (allPledgers) => {
   if (!allPledgers) {
     return null;
   }

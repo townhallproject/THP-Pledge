@@ -13,7 +13,6 @@ import {
 } from 'antd';
 import states from '../../data/states';
 import * as selectionActions from '../../state/selections/actions';
-import { getFilterBy } from '../../state/selections/selectors';
 import {
   allTotalPledged,
   allPledgersOnBallot,
@@ -30,7 +29,6 @@ require('style-loader!css-loader!antd/es/tag/style/index.css');
 
 import './style.scss';
 /* eslint-enable */
-const { CheckableTag } = Tag;
 
 class SearchBar extends React.Component {
   static isZipCode(query) {
@@ -51,7 +49,6 @@ class SearchBar extends React.Component {
     this.onTextChange = this.onTextChange.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
     this.renderFilterBar = this.renderFilterBar.bind(this);
-    this.changeNomineeToggle = this.changeNomineeToggle.bind(this);
   }
 
   onTextChange(e) {
@@ -89,20 +86,6 @@ class SearchBar extends React.Component {
     return resetSelections();
   }
 
-  changeNomineeToggle(value, id) {
-    console.log(value, id);
-    const {
-      addFilterBy,
-      removeFilterBy
-    } = this.props;
-    if (value) {
-      return addFilterBy({
-        status: 'Nominee'
-      })
-    } 
-    return removeFilterBy('status');
-  };
-
   renderFilterBar() {
     const {
       issues,
@@ -135,7 +118,6 @@ class SearchBar extends React.Component {
         <SearchInput
           submitHandler={this.searchHandler}
         />
-        <CheckableTag checked={filterBy.status === 'Nominee'} onChange={this.changeNomineeToggle}>Nominees Only</CheckableTag>
       </Affix>
     );
   }
@@ -145,15 +127,12 @@ const mapStateToProps = state => ({
   totalPledged: allTotalPledged(state),
   totalPledgedOnBallot: allPledgersOnBallot(state),
   userSelections: state.selections,
-  filterBy: getFilterBy(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   resetSelections: () => dispatch(selectionActions.resetSelections()),
   searchByZip: zipcode => dispatch(selectionActions.getDistrictFromZip(zipcode)),
   setDistrict: district => dispatch(selectionActions.setDistrict(district)),
-  addFilterBy: filter => dispatch(selectionActions.addFilterBy(filter)),
-  removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter))
 });
 
 SearchBar.propTypes = {
