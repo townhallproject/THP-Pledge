@@ -109,7 +109,8 @@ export const getPledgersByDistrict = createSelector(
       return { [usState]: null };
     }
     const toReturn = reduce(districts, (acc, cur) => {
-      acc[cur] = pledgersInState[usState][cur];
+      const district = Number(cur);
+      acc[district] = pledgersInState[usState][district];
       return acc;
     }, {});
     return { [usState]: toReturn };
