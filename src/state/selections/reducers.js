@@ -1,4 +1,7 @@
-import { uniqBy } from 'lodash';
+import {
+  uniqBy,
+  mapValues,
+} from 'lodash';
 
 const initialState = {
   districts: [],
