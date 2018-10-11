@@ -47,11 +47,10 @@ export const getDistrictFromZip = payload => (dispatch) => {
     .then((res) => {
       const districts = values(res.body);
       const toUpdate = reduce(districts, (acc, cur) => {
-        acc.state = cur.abr;
-        acc.districts.push(cur.dis);
+        acc.usState = cur.abr;
         return acc;
-      }, { districts: [] });
-      dispatch(setDistrict(toUpdate));
+      }, {});
+      dispatch(setUsState(toUpdate));
     })
     .catch();
 };

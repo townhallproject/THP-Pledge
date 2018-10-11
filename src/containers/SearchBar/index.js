@@ -50,7 +50,6 @@ class SearchBar extends React.Component {
     };
     this.onTextChange = this.onTextChange.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
-    this.renderFilterBar = this.renderFilterBar.bind(this);
     this.changeNomineeToggle = this.changeNomineeToggle.bind(this);
   }
 
@@ -93,31 +92,14 @@ class SearchBar extends React.Component {
     console.log(value, id);
     const {
       addFilterBy,
-      removeFilterBy
+      removeFilterBy,
     } = this.props;
     if (value) {
       return addFilterBy({
-        status: 'Nominee'
-      })
-    } 
+        status: 'Nominee',
+      });
+    }
     return removeFilterBy('status');
-  };
-
-  renderFilterBar() {
-    const {
-      issues,
-      onFilterChanged,
-      selectedFilters,
-    } = this.props;
-    return (
-      <div className="input-group-filters">
-        <StatusFilterTags
-          issues={issues}
-          onFilterChanged={onFilterChanged}
-          selectedFilters={selectedFilters}
-        />
-      </div>
-    );
   }
 
   render() {
@@ -150,7 +132,7 @@ const mapDispatchToProps = dispatch => ({
   searchByZip: zipcode => dispatch(selectionActions.getDistrictFromZip(zipcode)),
   setDistrict: district => dispatch(selectionActions.setDistrict(district)),
   addFilterBy: filter => dispatch(selectionActions.addFilterBy(filter)),
-  removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter))
+  removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter)),
 });
 
 SearchBar.propTypes = {
