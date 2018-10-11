@@ -128,7 +128,7 @@ class SearchBar extends React.Component {
 
     return (
       <Affix className="search-bar">
-        <h2>{totalPledgedOnBallot || (<Icon type="loading" />)} candidates currently on the ballot have taken the Town Hall Pledge <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>
+        <h2>{totalPledgedOnBallot || (<Icon type="loading" />)} general election candidates have taken the Town Hall Pledge <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>
         <p>Find candidates in your district:</p>
         <SearchInput
           submitHandler={this.searchHandler}
