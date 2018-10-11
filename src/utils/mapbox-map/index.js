@@ -262,12 +262,11 @@ export default class MbMap {
         ],
         'fill-opacity': ['case',
           ['boolean', ['feature-state', 'missingMember'], true],
-          0.4,
+          0.2,
           0,
         ],
         'fill-outline-color': ['case',
           ['boolean', ['feature-state', 'doYourJobDistrict'], false],
-
           MISSING_MEMBER_COLOR,
           '#6e6e6e',
         ],
