@@ -124,9 +124,7 @@ class SearchBar extends React.Component {
     const {
       totalPledged,
       totalPledgedOnBallot,
-      filterBy,
     } = this.props;
-
 
     return (
       <Affix className="search-bar">
@@ -135,7 +133,6 @@ class SearchBar extends React.Component {
         <SearchInput
           submitHandler={this.searchHandler}
         />
-        <CheckableTag checked={filterBy.status === 'Nominee'} onChange={this.changeNomineeToggle}>Nominees Only</CheckableTag>
       </Affix>
     );
   }
