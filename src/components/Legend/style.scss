@@ -12,6 +12,7 @@
 }
 
 .map-legend {
+    display: flex;
     dt, dd {
         display: inline-block;
     }
@@ -30,7 +31,8 @@
         list-style: none;
         margin-bottom: 0px;
         display: inline-block;
-        padding-left: 0; 
+        padding-left: 0;
+        flex: 10;
     }
     .statewide-dyjd{
         border: 1px solid $do-your-job-yellow;
@@ -55,5 +57,17 @@
         width: 15px;
         height: 15px;
         background-color: $light-purple;
+    }
+    .missing-member-senate {
+         border: 1px solid $missing-member-senate;
+         width: 15px;
+         height: 15px;
+         background-color: none;
+    }
+    .missing-member-district {
+        border: 1px solid $missing-member-district;
+        width: 15px;
+        height: 15px;
+        background-color: $missing-member-district;
     }
 }

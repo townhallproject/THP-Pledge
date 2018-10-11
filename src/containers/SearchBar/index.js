@@ -1,11 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { find } from 'lodash';
-import { Icon, Affix } from 'antd';
+import {
+  find,
+  map,
+  mapValues,
+} from 'lodash';
+import {
+  Icon,
+  Affix,
+  Tag,
+} from 'antd';
 import states from '../../data/states';
 import * as selectionActions from '../../state/selections/actions';
-import { allTotalPledged } from '../../state/pledgers/selectors';
+import { getFilterBy } from '../../state/selections/selectors';
+import {
+  allTotalPledged,
+  allPledgersOnBallot,
+} from '../../state/pledgers/selectors';
 
 import SearchInput from '../../components/SearchInput';
 import StatusFilterTags from '../../components/StatusFilterTags';
@@ -14,8 +26,11 @@ import StatusFilterTags from '../../components/StatusFilterTags';
 require('style-loader!css-loader!antd/es/style/index.css');
 require('style-loader!css-loader!antd/es/input/style/index.css');
 require('style-loader!css-loader!antd/es/button/style/index.css');
+require('style-loader!css-loader!antd/es/tag/style/index.css');
+
 import './style.scss';
 /* eslint-enable */
+const { CheckableTag } = Tag;
 
 class SearchBar extends React.Component {
   static isZipCode(query) {
@@ -35,7 +50,7 @@ class SearchBar extends React.Component {
     };
     this.onTextChange = this.onTextChange.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
-    this.renderFilterBar = this.renderFilterBar.bind(this);
+    this.changeNomineeToggle = this.changeNomineeToggle.bind(this);
   }
 
   onTextChange(e) {
@@ -73,29 +88,29 @@ class SearchBar extends React.Component {
     return resetSelections();
   }
 
-  renderFilterBar() {
+  changeNomineeToggle(value, id) {
+    console.log(value, id);
     const {
-      issues,
-      onFilterChanged,
-      selectedFilters,
+      addFilterBy,
+      removeFilterBy,
     } = this.props;
-    return (
-      <div className="input-group-filters">
-        <StatusFilterTags
-          issues={issues}
-          onFilterChanged={onFilterChanged}
-          selectedFilters={selectedFilters}
-        />
-      </div>
-    );
+    if (value) {
+      return addFilterBy({
+        status: 'Nominee',
+      });
+    }
+    return removeFilterBy('status');
   }
 
   render() {
-    const { totalPledged } = this.props;
+    const {
+      totalPledged,
+      totalPledgedOnBallot,
+    } = this.props;
 
     return (
       <Affix className="search-bar">
-        <h2>{totalPledged || (<Icon type="loading" />)} candidates have taken the Town Hall Pledge</h2>
+        <h2>{totalPledgedOnBallot || (<Icon type="loading" />)} general election candidates have taken the Town Hall Pledge <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>
         <p>Find candidates in your district:</p>
         <SearchInput
           submitHandler={this.searchHandler}
@@ -107,13 +122,17 @@ class SearchBar extends React.Component {
 
 const mapStateToProps = state => ({
   totalPledged: allTotalPledged(state),
+  totalPledgedOnBallot: allPledgersOnBallot(state),
   userSelections: state.selections,
+  filterBy: getFilterBy(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   resetSelections: () => dispatch(selectionActions.resetSelections()),
   searchByZip: zipcode => dispatch(selectionActions.getDistrictFromZip(zipcode)),
   setDistrict: district => dispatch(selectionActions.setDistrict(district)),
+  addFilterBy: filter => dispatch(selectionActions.addFilterBy(filter)),
+  removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter)),
 });
 
 SearchBar.propTypes = {
@@ -125,6 +144,7 @@ SearchBar.propTypes = {
   setDistrict: PropTypes.func.isRequired,
   setTextFilter: PropTypes.func,
   totalPledged: PropTypes.number,
+  totalPledgedOnBallot: PropTypes.number,
 };
 
 SearchBar.defaultProps = {
@@ -133,6 +153,7 @@ SearchBar.defaultProps = {
   selectedFilters: [],
   setTextFilter: () => {},
   totalPledged: NaN,
+  totalPledgedOnBallot: NaN,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

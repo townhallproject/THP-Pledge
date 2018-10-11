@@ -90,7 +90,10 @@ class MapView extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     // changing between coloring by state and coloring by district
-    if (prevState.filterStyle !== this.state.filterStyle || prevProps.selectedState !== this.props.selectedState) {
+    if (prevState.filterStyle !== this.state.filterStyle || 
+      prevProps.selectedState !== this.props.selectedState ||
+      prevProps.items !== this.props.items
+      ) {
       this.setDistrictLayerStyle();
       // clearing any previous popups
       this.popup.remove();
@@ -170,7 +173,7 @@ class MapView extends React.Component {
     const name = stateAbrvToName[state];
     const itemsInState = items[state];
     let tooltip = `<h4>${name}</h4>`;
-    if (itemsInState && totalPledgedInState(itemsInState)) {
+    if (itemsInState ) {
       this.setState({ popoverColor: 'popover-has-data' });
       if (itemsInState.Gov) {
         tooltip += '<h4>Governor\'s race</h4>';
@@ -193,7 +196,7 @@ class MapView extends React.Component {
       tooltip += '<div><em>Click for district details</em></div>';
     } else {
       this.setState({ popoverColor: 'popover-no-data' });
-      tooltip += '<div><em>No one has taken the pledge</em></div>';
+      tooltip += '<div><em>No current candidates have taken the pledge</em></div>';
     }
     return tooltip;
   }

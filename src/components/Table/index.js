@@ -1,18 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'antd';
+import {
+  Card,
+  Badge,
+} from 'antd';
 import {
   mapKeys,
   filter,
 } from 'lodash';
 
+import { PLEDGED_COLOR_DARK } from '../constants';
 import DistrictCell from '../DistrictCell';
 import { stateAbrvToName } from '../../data/dictionaries';
 import { totalPledgedInState } from '../../utils';
-
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/card/style/index.css');
 require('style-loader!css-loader!antd/es/list/style/index.css');
+require('style-loader!css-loader!antd/es/badge/style/index.css');
 import './style.scss';
 /* eslint-enable */
 
@@ -24,10 +28,6 @@ class Table extends React.Component {
     } = this.props;
     return Object.keys(items)
       .map((state) => {
-        if (!totalPledgedInState(items[state])) {
-          return null;
-        }
-
         const doYourJobDistricts = filter(allDoYourJobDistricts, ele => (ele.state === state));
 
         return (
@@ -35,7 +35,12 @@ class Table extends React.Component {
             <Card
               key={state}
               extra={items[state] ? (
-                <React.Fragment>Total pledged candidates: {items[state] ? totalPledgedInState(items[state]) : 0}
+                
+                <React.Fragment>
+                  <span>
+                  Total pledged candidates:
+                  </span>
+                 <Badge count={items[state] ? totalPledgedInState(items[state]) : 0} style={{ backgroundColor: PLEDGED_COLOR_DARK }} />
                   <div className="card-footer">* Incumbent
                   </div>
                 </React.Fragment>) : null}
