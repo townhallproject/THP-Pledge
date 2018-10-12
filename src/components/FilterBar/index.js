@@ -20,7 +20,6 @@ const FilterBar = (props) => {
   } = props;
 
   function changeNomineeToggle(value) {
-    console.log(value);
     if (value) {
       return addFilterBy({
         status: 'Nominee',

@@ -89,7 +89,6 @@ class SearchBar extends React.Component {
   }
 
   changeNomineeToggle(value, id) {
-    console.log(value, id);
     const {
       addFilterBy,
       removeFilterBy,
@@ -131,8 +130,6 @@ const mapDispatchToProps = dispatch => ({
   resetSelections: () => dispatch(selectionActions.resetSelections()),
   searchByZip: zipcode => dispatch(selectionActions.getDistrictFromZip(zipcode)),
   setDistrict: district => dispatch(selectionActions.setDistrict(district)),
-  addFilterBy: filter => dispatch(selectionActions.addFilterBy(filter)),
-  removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter)),
 });
 
 SearchBar.propTypes = {

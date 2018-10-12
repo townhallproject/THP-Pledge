@@ -138,6 +138,8 @@ const mapDispatchToProps = dispatch => ({
   getInitialPledgers: () => dispatch(startSetPledgers()),
   removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter)),
   resetSelections: () => dispatch(selectionActions.resetSelections()),
+  addFilterBy: filter => dispatch(selectionActions.addFilterBy(filter)),
+  removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter)),
   searchByDistrict: val => dispatch(selectionActions.setDistrict(val)),
   setFilters: filters => dispatch(selectionActions.setFilters(filters)),
   setInitialFilters: pledgers => dispatch(selectionActions.setInitialFilters(pledgers)),
