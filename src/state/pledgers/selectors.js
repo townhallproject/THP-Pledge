@@ -1,6 +1,7 @@
 import {
   isMatch,
-  mapKeys,
+  includes,
+  forEach,
   reduce,
   mapValues,
   filter,
@@ -54,18 +55,24 @@ export const groupByStateAndDistrict = createSelector(
       return null;
     }
     return mapValues(allPledgers, allPledgersInState => reduce(allPledgersInState, (acc, cur) => {
+      let include = true;
+      forEach(filterObj, (value, key) => {
+        if (!includes(value, cur[key])) {
+          include = false;
+        }
+      });
       if (cur.district) {
         if (!acc[cur.district]) {
           acc[cur.district] = [];
         }
-        if (!filterObj || isMatch(cur, filterObj)) {
+        if (include) {
           acc[cur.district].push(cur);
         }
       } else {
         if (!acc[cur.role]) {
           acc[cur.role] = [];
         }
-        if (!filterObj || isMatch(cur, filterObj)) {
+        if (include) {
           acc[cur.role].push(cur);
         }
       }

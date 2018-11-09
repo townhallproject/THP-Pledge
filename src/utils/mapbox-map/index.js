@@ -2,15 +2,20 @@ import {
   filter,
   mapKeys,
   isEmpty,
+  includes,
 } from 'lodash';
 import {
   DYJD_COLOR,
   PLEDGED_COLOR_LIGHT,
   PLEDGED_COLOR_DARK,
   MISSING_MEMBER_COLOR,
+  STATUS_WON,
+  STATUS_NOMINEE,
 } from '../../components/constants';
 import { fips, numOfDistricts } from '../../data/dictionaries';
 import { zeroPadding } from '../index';
+
+const includeStatuses = [STATUS_WON, STATUS_NOMINEE];
 
 export default class MbMap {
   static isStateWide(district) {
@@ -187,13 +192,13 @@ export default class MbMap {
         missingMember += filter(
           (items[state][district]),
           ele => ele.missingMember === true &&
-          ele.status === 'Nominee' &&
+          includes(includeStatuses, ele.status) &&
           MbMap.isStateWide(district),
         ).length;
         count += filter(
           (items[state][district]),
           ele => ele.pledged === true &&
-           ele.status === 'Nominee' &&
+           includes(includeStatuses, ele.status) &&
            MbMap.isStateWide(district),
         ).length;
       });

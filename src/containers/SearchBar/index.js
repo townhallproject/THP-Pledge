@@ -95,7 +95,7 @@ class SearchBar extends React.Component {
     } = this.props;
     if (value) {
       return addFilterBy({
-        status: 'Nominee',
+        status: 'Winner',
       });
     }
     return removeFilterBy('status');

@@ -29,9 +29,10 @@ const getPeopleOrder = (pledger) => {
     return 0;
   }
   const statusOrder = {
-    'Active Primary Candidate': 2,
-    'Lost Primary': 3,
-    Nominee: 1,
+    'Active Primary Candidate': 3,
+    'Lost Primary': 4,
+    Nominee: 2,
+    Won: 1,
   };
 
   return statusOrder[pledger.status];

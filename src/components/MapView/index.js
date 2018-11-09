@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { filter } from 'lodash';
+import {
+  filter,
+  includes,
+} from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
 import { stateAbrvToName } from '../../data/dictionaries';
 
@@ -9,6 +12,7 @@ import {
   totalPledgedInState,
   zeroPadding,
   formatPledger,
+  formatWinner,
 } from '../../utils';
 
 import bboxes from '../../data/bboxes';
@@ -18,6 +22,12 @@ import MapInset from '../../components/MapInset';
 import './popover.scss';
 import './style.scss';
 import MbMap from '../../utils/mapbox-map';
+import {
+  STATUS_WON, 
+  STATUS_NOMINEE,
+} from '../constants';
+
+const includeStatuses = [STATUS_WON, STATUS_NOMINEE];
 
 class MapView extends React.Component {
   constructor(props) {
@@ -178,7 +188,7 @@ class MapView extends React.Component {
       if (itemsInState.Gov) {
         tooltip += '<h4>Governor\'s race</h4>';
         itemsInState.Gov.forEach((item) => {
-          if (item.status === 'Nominee') {
+          if (includes(includeStatuses, item.status)) {
             tooltip += formatPledger(item);
           }
         });
@@ -186,7 +196,7 @@ class MapView extends React.Component {
       if (itemsInState.Sen) {
         tooltip += '<h4>Senate race</h4>';
         itemsInState.Sen.forEach((item) => {
-          if (item.status === 'Nominee') {
+          if (includes(includeStatuses, item.status)) {
             tooltip += formatPledger(item);
           }
         });
@@ -214,12 +224,10 @@ class MapView extends React.Component {
     if (people.length) {
       const incumbent = filter(people, 'incumbent')[0];
       if (incumbent) {
-        tooltip += formatPledger(incumbent);
+        tooltip += `${formatWinner(incumbent)} ${formatPledger(incumbent)}`;
       }
-      const challengers = filter(people, {
-        incumbent: false,
-        status: 'Nominee',
-      });
+      const challengers = filter(people, person => person.incumbent === false && includes(includeStatuses, person.status));
+
       challengers.forEach((item) => {
         tooltip += formatPledger(item);
       });
