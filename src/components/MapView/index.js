@@ -9,7 +9,6 @@ import { stateAbrvToName } from '../../data/dictionaries';
 
 import {
   totalPledgedInDistricts,
-  totalPledgedInState,
   zeroPadding,
   formatPledger,
   formatWinner,
@@ -23,7 +22,7 @@ import './popover.scss';
 import './style.scss';
 import MbMap from '../../utils/mapbox-map';
 import {
-  STATUS_WON, 
+  STATUS_WON,
   STATUS_NOMINEE,
 } from '../constants';
 
@@ -100,10 +99,10 @@ class MapView extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     // changing between coloring by state and coloring by district
-    if (prevState.filterStyle !== this.state.filterStyle || 
+    if (prevState.filterStyle !== this.state.filterStyle ||
       prevProps.selectedState !== this.props.selectedState ||
       prevProps.items !== this.props.items
-      ) {
+    ) {
       this.setDistrictLayerStyle();
       // clearing any previous popups
       this.popup.remove();
@@ -183,7 +182,7 @@ class MapView extends React.Component {
     const name = stateAbrvToName[state];
     const itemsInState = items[state];
     let tooltip = `<h4>${name}</h4>`;
-    if (itemsInState ) {
+    if (itemsInState) {
       this.setState({ popoverColor: 'popover-has-data' });
       if (itemsInState.Gov) {
         tooltip += '<h4>Governor\'s race</h4>';

@@ -1,18 +1,15 @@
-import {
-  uniqBy,
-  mapValues,
-} from 'lodash';
+import { uniqBy } from 'lodash';
 import { STATUS_WON } from '../../components/constants';
 
 const initialState = {
   districts: [],
-  filters: [],
-  usState: '',
-  zipcode: '',
   filterBy: {
     pledged: [true],
     status: [STATUS_WON],
   },
+  filters: [],
+  usState: '',
+  zipcode: '',
 };
 
 const filtersReducer = (state = initialState, { type, payload }) => {

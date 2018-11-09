@@ -19,7 +19,6 @@ const FilterBar = (props) => {
   } = props;
 
   function changeNomineeToggle(value) {
-    console.log(value)
     if (value) {
       return addFilterBy({
         pledged: [true],
@@ -48,6 +47,7 @@ const FilterBar = (props) => {
 
 FilterBar.propTypes = {
   allPledgers: PropTypes.shape({}).isRequired,
+  addFilterBy: PropTypes.func.isRequired,
 };
 
 export default FilterBar;
