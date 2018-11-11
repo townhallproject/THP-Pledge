@@ -24,9 +24,8 @@ import MbMap from '../../utils/mapbox-map';
 import {
   STATUS_WON,
   STATUS_NOMINEE,
+  INCLUDE_STATUS,
 } from '../constants';
-
-const includeStatuses = [STATUS_WON, STATUS_NOMINEE];
 
 class MapView extends React.Component {
   constructor(props) {
@@ -187,7 +186,7 @@ class MapView extends React.Component {
       if (itemsInState.Gov) {
         tooltip += '<h4>Governor\'s race</h4>';
         itemsInState.Gov.forEach((item) => {
-          if (includes(includeStatuses, item.status)) {
+          if (includes(INCLUDE_STATUS, item.status)) {
             tooltip += formatPledger(item);
           }
         });
@@ -195,7 +194,7 @@ class MapView extends React.Component {
       if (itemsInState.Sen) {
         tooltip += '<h4>Senate race</h4>';
         itemsInState.Sen.forEach((item) => {
-          if (includes(includeStatuses, item.status)) {
+          if (includes(INCLUDE_STATUS, item.status)) {
             tooltip += formatPledger(item);
           }
         });
@@ -225,7 +224,7 @@ class MapView extends React.Component {
       if (incumbent) {
         tooltip += `${formatWinner(incumbent)} ${formatPledger(incumbent)}`;
       }
-      const challengers = filter(people, person => person.incumbent === false && includes(includeStatuses, person.status));
+      const challengers = filter(people, person => person.incumbent === false && includes(INCLUDE_STATUS, person.status));
 
       challengers.forEach((item) => {
         tooltip += formatPledger(item);

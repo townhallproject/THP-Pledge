@@ -10,12 +10,16 @@ import {
 require('style-loader!css-loader!antd/es/popover/style/index.css');
 require('style-loader!css-loader!antd/es/switch/style/index.css');
 import './style.scss';
-import { STATUS_WON, STATUS_NOMINEE } from '../constants';
+import { 
+  STATUS_WON, 
+  STATUS_NOMINEE,
+  INCLUDE_STATUS,
+} from '../constants';
 /* eslint-enable */
 
 const FilterBar = (props) => {
   const {
-    addFilterBy,
+    addFilterBy, 
   } = props;
 
   function changeNomineeToggle(value) {
@@ -27,7 +31,7 @@ const FilterBar = (props) => {
     }
     return addFilterBy({
       pledged: [true, false],
-      status: [STATUS_WON, STATUS_NOMINEE],
+      status: INCLUDE_STATUS,
     });
   }
 
