@@ -186,7 +186,7 @@ class MapView extends React.Component {
     let tooltip = `<h4>${name}</h4>`;
     if (itemsInState) {
       this.setState({ popoverColor: 'popover-has-data' });
-      if (itemsInState.Gov) {
+      if (itemsInState.Gov && itemsInState.Gov.length > 0) {
         tooltip += '<h4>Governor\'s race</h4>';
         itemsInState.Gov.forEach((item) => {
           if (includes(INCLUDE_STATUS, item.status)) {
@@ -194,7 +194,7 @@ class MapView extends React.Component {
           }
         });
       }
-      if (itemsInState.Sen) {
+      if (itemsInState.Sen && itemsInState.Sen.length > 0) {
         tooltip += '<h4>Senate race</h4>';
         itemsInState.Sen.forEach((item) => {
           if (includes(INCLUDE_STATUS, item.status)) {
