@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { difference } from 'lodash';
 
 import {
   getAllPledgers,
@@ -31,6 +32,7 @@ import Table from '../../components/Table';
 import './style.scss';
 import Legend from '../../components/Legend';
 import FilterBar from '../../components/FilterBar';
+import { STATUS_WON } from '../../components/constants';
 
 class pledgerDashboard extends React.Component {
   constructor(props) {
@@ -56,6 +58,7 @@ class pledgerDashboard extends React.Component {
   renderMap() {
     const {
       allDoYourJobDistricts,
+      filterBy,
       pledgersByState,
       resetSelections,
       searchByDistrict,
@@ -72,6 +75,9 @@ class pledgerDashboard extends React.Component {
       allDoYourJobDistricts={allDoYourJobDistricts}
       items={pledgersByState}
       selectedState={selectedState}
+      winnersOnly={
+        difference(filterBy.status, [STATUS_WON]).length === 0
+      }
       setUsState={setUsState}
       districts={selectedDistricts}
       resetSelections={resetSelections}
@@ -107,7 +113,7 @@ class pledgerDashboard extends React.Component {
           items={pledgersByDistrict}
           mapType="pledger"
         />
-        <Legend 
+        <Legend
           addFilterBy={addFilterBy}
           filterBy={filterBy}
           removeFilterBy={removeFilterBy}
@@ -151,6 +157,7 @@ pledgerDashboard.propTypes = {
   allPledgers: PropTypes.shape({}),
   getInitialPledgers: PropTypes.func.isRequired,
   pledgersByDistrict: PropTypes.shape({}),
+  filterBy: PropTypes.shape({}).isRequired,
   pledgersByState: PropTypes.shape({}),
   resetSelections: PropTypes.func.isRequired,
   searchByDistrict: PropTypes.func.isRequired,

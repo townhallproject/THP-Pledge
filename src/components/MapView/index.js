@@ -43,7 +43,7 @@ class MapView extends React.Component {
     this.highlightDistrict = this.highlightDistrict.bind(this);
     this.districtSelect = this.districtSelect.bind(this);
     this.removeHighlights = this.removeHighlights.bind(this);
-    this.stateChloroplethFill = this.stateChloroplethFill.bind(this);
+    // this.stateChloroplethFill = this.stateChloroplethFill.bind(this);
     this.setInitialStyles = this.setInitialStyles.bind(this);
     this.setDistrictLayerStyle = this.setDistrictLayerStyle.bind(this);
     this.onLoad = this.onLoad.bind(this);
@@ -116,8 +116,10 @@ class MapView extends React.Component {
     const {
       map,
     } = this;
-
-    this.colorDistrictsByPledgersAndDJYD();
+    const {
+      winnersOnly,
+    } = this.props;
+    this.colorDistrictsByPledgersAndDJYD(winnersOnly);
 
     this.hideLayer('dyj-district-level-color-fill');
     if (map.getLayer('districts-fill')) {
@@ -143,11 +145,12 @@ class MapView extends React.Component {
       items,
       selectedState,
       allDoYourJobDistricts,
+      winnersOnly,
     } = this.props;
     const {
       mbMap,
     } = this;
-    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState);
+    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState, winnersOnly);
   }
 
   toggleFilters(layer, filterSettings) {
@@ -389,17 +392,6 @@ class MapView extends React.Component {
     this.toggleFilters('selected-border', filterSettings);
   }
 
-  stateChloroplethFill() {
-    const {
-      items,
-      allDoYourJobDistricts,
-    } = this.props;
-    const {
-      mbMap,
-    } = this;
-    mbMap.colorStatesByPledgerAndDJYD(allDoYourJobDistricts, items);
-  }
-
   render() {
     const {
       allDoYourJobDistricts,
@@ -422,6 +414,7 @@ class MapView extends React.Component {
               resetSelections={resetSelections}
               searchByDistrict={searchByDistrict}
               allDoYourJobDistricts={allDoYourJobDistricts}
+              winnersOnly={this.props.winnersOnly}
               setUsState={setUsState}
               mapId="map-overlay-alaska"
               bounds={[[-170.15625, 51.72702815704774], [-127.61718749999999, 71.85622888185527]]}
@@ -435,6 +428,7 @@ class MapView extends React.Component {
               allDoYourJobDistricts={allDoYourJobDistricts}
               searchByDistrict={searchByDistrict}
               setUsState={setUsState}
+              winnersOnly={this.props.winnersOnly}
               mapId="map-overlay-hawaii"
               bounds={[
                 [-161.03759765625, 18.542116654448996],
