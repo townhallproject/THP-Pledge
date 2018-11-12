@@ -56,7 +56,6 @@ class DistrictCell extends React.Component {
         doYourJobDistricts, (ele) => {
           const dyjdStateRank = ele.key.split('-')[1];
           const thiDistrictStateRank = district.split(' ')[1];
-          // console.log(ele.district.slice(0, 3), district)
           return typeof ele.district === 'string' && dyjdStateRank === thiDistrictStateRank;
         });
     }
@@ -80,9 +79,11 @@ class DistrictCell extends React.Component {
               No Pledgers
             </Card>);
         }
+        if (items[district].length === 0) {
+          return null;
+        }
         const title = `${(Number(district) ? `${stateName}-${district}` : getTitle(district))}`;
         const isDoYourJob = !!this.isDoYourJob(district);
-
         return (
           <Card
             style={gridStyle}

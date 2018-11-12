@@ -125,7 +125,7 @@ export default class MbMap {
     });
   }
 
-  colorByDYJ(allDoYourJobDistricts, selectedState) {
+  colorByDYJ(allDoYourJobDistricts, selectedState, winnersOnly) {
     const mbMap = this;
     this.addStateAndDistrictDYJDLayers();
     this.addDYJDistrictFillLayer();
@@ -136,6 +136,9 @@ export default class MbMap {
       const state = code.split('-')[0];
       const districtNo = code.split('-')[1];
       if (selectedState && state !== selectedState) {
+        return;
+      }
+      if (winnersOnly && !allDoYourJobDistricts[code].winner) {
         return;
       }
       if (isNaN(Number(districtNo))) {
@@ -154,28 +157,26 @@ export default class MbMap {
     this.colorByDYJ(allDoYourJobDistricts);
   }
 
-  colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState) {
+  colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState, winnersOnly) {
     const mbMap = this;
     this.stateOutline(items);
-    this.colorByDYJ(allDoYourJobDistricts, selectedState);
+    this.colorByDYJ(allDoYourJobDistricts, selectedState, winnersOnly);
     Object.keys(items).forEach((state) => {
       if (!items[state] || isEmpty(items[state])) {
         return;
       }
       Object.keys(items[state]).forEach((district) => {
-        let count = 0;
-        let missingMember = 0;
         const districtId = zeroPadding(district);
         const fipsId = fips[state];
         const geoid = fipsId + districtId;
-        count += filter((items[state][district]), { pledged: true }).length;
-        missingMember += filter((items[state][district]), { missingMember: true }).length;
-
+        const pledged = filter((items[state][district]), { pledged: true }).length;
+        const missingMember = filter((items[state][district]), { missingMember: true }).length;
+ 
         mbMap.setFeatureState(
           Number(geoid),
           'districts', {
-            pledged: count > 0,
             missingMember: missingMember > 0,
+            pledged: pledged > 0,
           },
         );
       });
@@ -295,7 +296,6 @@ export default class MbMap {
         ],
         'fill-outline-color': ['case',
           ['boolean', ['feature-state', 'doYourJobDistrict'], true],
-
           PLEDGED_COLOR_DARK,
           '#6e6e6e',
         ],

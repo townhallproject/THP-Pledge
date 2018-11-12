@@ -29,18 +29,17 @@ class Table extends React.Component {
     return Object.keys(items)
       .map((state) => {
         const doYourJobDistricts = filter(allDoYourJobDistricts, ele => (ele.state === state));
-
         return (
           <React.Fragment>
             <Card
               key={state}
-              extra={items[state] ? (
-                
+              extra={items[state] && totalPledgedInState(items[state]) > 0 ? (
+
                 <React.Fragment>
                   <span>
-                  Total pledged candidates:
+                  Total pledged:
                   </span>
-                 <Badge count={items[state] ? totalPledgedInState(items[state]) : 0} style={{ backgroundColor: PLEDGED_COLOR_DARK }} />
+                  <Badge count={totalPledgedInState(items[state]) ? totalPledgedInState(items[state]) : 0} style={{ backgroundColor: PLEDGED_COLOR_DARK }} />
                   <div className="card-footer">* Incumbent
                   </div>
                 </React.Fragment>) : null}
@@ -57,12 +56,13 @@ class Table extends React.Component {
                 xxl: 3,
               }}
             >
-              <DistrictCell
-                key={`${state}-cell`}
-                stateName={state}
-                items={items[state]}
-                doYourJobDistricts={doYourJobDistricts}
-              />
+              {totalPledgedInState(items[state]) === 0 ? (
+                <span>No winning candidates took the pledge in this state</span>) : (<DistrictCell
+                  key={`${state}-cell`}
+                  stateName={state}
+                  items={items[state]}
+                  doYourJobDistricts={doYourJobDistricts}
+                />)}
             </Card>
           </React.Fragment>
         );
@@ -71,6 +71,7 @@ class Table extends React.Component {
 }
 
 Table.propTypes = {
+  allDoYourJobDistricts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   items: PropTypes.shape({}).isRequired,
 };
 

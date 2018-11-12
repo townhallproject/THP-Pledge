@@ -19,6 +19,19 @@ class MapInset extends React.Component {
     this.initializeMap();
   }
 
+  componentWillReceiveProps(newProps) {
+    const {
+      allDoYourJobDistricts,
+      winnersOnly,
+    } = this.props;
+    const {
+      mbMap,
+    } = this;
+    if (newProps.winnersOnly !== winnersOnly) {
+      mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, newProps.items, null, newProps.winnersOnly);
+    }
+  }
+
   componentDidUpdate() {
     this.map.resize();
   }
@@ -46,11 +59,12 @@ class MapInset extends React.Component {
     const {
       items,
       allDoYourJobDistricts,
+      winnersOnly,
     } = this.props;
     const {
       mbMap,
     } = this;
-    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items);
+    mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, null, winnersOnly);
   }
 
   addClickListener() {
@@ -121,11 +135,13 @@ MapInset.propTypes = {
   selectedState: PropTypes.string,
   setUsState: PropTypes.func.isRequired,
   stateName: PropTypes.string.isRequired,
+  winnersOnly: PropTypes.bool,
 };
 
 MapInset.defaultProps = {
   items: [],
   selectedState: '',
+  winnersOnly: true,
 };
 
 export default MapInset;

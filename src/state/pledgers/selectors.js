@@ -12,6 +12,7 @@ import {
   getDistricts,
   getFilterBy,
 } from '../selections/selectors';
+import { INCLUDE_STATUS } from '../../components/constants';
 
 export const getAllPledgers = state => state.pledgers.allPledgers;
 
@@ -39,7 +40,7 @@ export const allPledgersOnBallot = createSelector([getAllPledgers], (allPledgers
   }
 
   return reduce(allPledgers, (acc, pledgersInState) => {
-    acc += filter(pledgersInState, { pledged: true, status: 'Nominee' }).length;
+    acc += filter(pledgersInState, person => person.pledged && includes(INCLUDE_STATUS, person.status)).length;
     return acc;
   }, 0);
 });
