@@ -37,13 +37,13 @@ const FilterBar = (props) => {
 
   return (
     <div className="container-fluid filter-bar">
-        Show:
+        Showing:
       <Switch
-          onChange={changeNomineeToggle}
-          defaultChecked
-          checkedChildren="Pledged winners"
-          unCheckedChildren="All nominees"
-        />
+        onChange={changeNomineeToggle}
+        defaultChecked
+        checkedChildren="Pledged winners"
+        unCheckedChildren="All nominees"
+      />
 
     </div>
   );
