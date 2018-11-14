@@ -35,8 +35,18 @@ class PledgerCell extends React.Component {
       return null;
     }
 
+    const stateTitleMap = (district) => {
+
+      const titleMap = {
+        SD: 'State Sen',
+        HD: 'State Rep',
+      };
+      return titleMap[district.split('-')[0]] || null;
+    };
+    
+
     const title = item.incumbent ? (
-      <React.Fragment>{item.role.split(' ')[0]}. {item.displayName}* <span className={item.party}>({item.party})</span>
+      <React.Fragment>{item.level === 'federal' ? item.role.split(' ')[0] + '.' : stateTitleMap(item.role) + '.'} {item.displayName}* <span className={item.party}>({item.party})</span>
       </React.Fragment>) :
       (<React.Fragment>{item.displayName} <span className={item.party}>({item.party})</span></React.Fragment>);
 
