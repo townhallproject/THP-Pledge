@@ -40,28 +40,15 @@ class Header extends React.Component {
     const src = width > 992 ? 'images/pledgeHeader.jpg' : 'images/pledgeHeader@0,5x.jpg';
     return (
       <div className="header-container">
-        <div className="text-container do-your-job-banner">
-          <h1>Accessibility is on the ballot</h1>
-          <p>
-              <strong style={{ color: DYJD_COLOR }}>{allDoYourJobDistricts ? `${allDoYourJobDistricts} ` : (<Icon type="loading" />)} 
-              DO YOUR JOB DISTRICTS </strong>
-              are currently held by incumbent
-              <strong syle={{ color: 'red' }}> <a href="https://townhallproject.com/#missing-members" target="_blank" rel="noopener noreferrer">Missing Members </a></strong> who have not held a single open town hall meeting this entire Congressional session running against a challenger who has taken the
-              <strong style={{ color: PLEDGED_COLOR }}> TOWN HALL PLEDGE</strong>.
-            </p>
-          <p><span className="do-your-job-icon"></span>It’s time to <strong style={{ color: DYJD_COLOR }}>Do Your Job... </strong>or let someone else do it for you.
-          <DYJDModal />
-         </p>
-        </div>
+
         <div className="header-pledge--CTA">
           <img src={src} alt="banner collage" />
           <div className="spacer" />
           <div className="background-light text-container">
 
-            <h2>Take the Town Hall Pledge</h2>
-            <p>We are asking every single candidate for public office this year to take the <strong>#TownHallPledge</strong> to their constituents to hold a minimum of four town hall meetings per year in office.
-            </p>
-            <p>Ask candidates in your community to take the Pledge today!</p>
+            <h2>The Town Hall Pledge</h2>
+            <p>In 2018 we asked every single candidate for public office to take the <strong>#TownHallPledge</strong> to their constituents to hold a minimum of four town hall meetings per year in office.</p>
+            <p>It's never too late to make this common-sense commitment to listen to the people. Ask lawmakers in your community to take the Pledge today!</p>
             <Button onClick={this.toggleInfo} className="text-right pt-2">Download the pledge</Button>
           </div>
         </div>

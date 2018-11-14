@@ -3,13 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   find,
-  map,
-  mapValues,
 } from 'lodash';
 import {
   Icon,
   Affix,
-  Tag,
 } from 'antd';
 import states from '../../data/states';
 import * as selectionActions from '../../state/selections/actions';
@@ -20,7 +17,6 @@ import {
 } from '../../state/pledgers/selectors';
 
 import SearchInput from '../../components/SearchInput';
-import StatusFilterTags from '../../components/StatusFilterTags';
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/style/index.css');
@@ -30,7 +26,6 @@ require('style-loader!css-loader!antd/es/tag/style/index.css');
 
 import './style.scss';
 /* eslint-enable */
-const { CheckableTag } = Tag;
 
 class SearchBar extends React.Component {
   static isZipCode(query) {
@@ -88,7 +83,7 @@ class SearchBar extends React.Component {
     return resetSelections();
   }
 
-  changeNomineeToggle(value, id) {
+  changeNomineeToggle(value) {
     const {
       addFilterBy,
       removeFilterBy,
@@ -105,11 +100,12 @@ class SearchBar extends React.Component {
     const {
       totalPledged,
       totalPledgedOnBallot,
+      filterBy,
     } = this.props;
-
+    const copyMap = filterBy.status.length === 1 ? 'candidates took the Pledge and won!' : 'general election candidates have taken the Town Hall Pledge'
     return (
       <Affix className="search-bar">
-        <h2>{totalPledgedOnBallot || (<Icon type="loading" />)} general election candidates have taken the Town Hall Pledge <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>
+        <h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {copyMap} <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>
         <p>Find candidates in your district:</p>
         <SearchInput
           submitHandler={this.searchHandler}
@@ -120,10 +116,10 @@ class SearchBar extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  filterBy: getFilterBy(state),
   totalPledged: allTotalPledged(state),
   totalPledgedOnBallot: allPledgersOnBallot(state),
   userSelections: state.selections,
-  filterBy: getFilterBy(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -133,11 +129,9 @@ const mapDispatchToProps = dispatch => ({
 });
 
 SearchBar.propTypes = {
-  issues: PropTypes.arrayOf(PropTypes.string),
-  onFilterChanged: PropTypes.func,
+  filterBy: PropTypes.shape({}).isRequired,
   resetSelections: PropTypes.func.isRequired,
   searchByZip: PropTypes.func.isRequired,
-  selectedFilters: PropTypes.arrayOf(PropTypes.string),
   setDistrict: PropTypes.func.isRequired,
   setTextFilter: PropTypes.func,
   totalPledged: PropTypes.number,
@@ -145,9 +139,6 @@ SearchBar.propTypes = {
 };
 
 SearchBar.defaultProps = {
-  issues: [],
-  onFilterChanged: () => {},
-  selectedFilters: [],
   setTextFilter: () => {},
   totalPledged: NaN,
   totalPledgedOnBallot: NaN,

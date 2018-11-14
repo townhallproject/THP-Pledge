@@ -34,13 +34,12 @@ export const allTotalPledged = createSelector([getAllPledgers], (allPledgers) =>
   }, 0);
 });
 
-export const allPledgersOnBallot = createSelector([getAllPledgers], (allPledgers) => {
+export const allPledgersOnBallot = createSelector([getAllPledgers, getFilterBy], (allPledgers, filterObj) => {
   if (!allPledgers) {
     return null;
   }
-
   return reduce(allPledgers, (acc, pledgersInState) => {
-    acc += filter(pledgersInState, person => person.pledged && includes(INCLUDE_STATUS, person.status)).length;
+    acc += filter(pledgersInState, person => person.pledged && includes(filterObj.status, person.status)).length;
     return acc;
   }, 0);
 });
