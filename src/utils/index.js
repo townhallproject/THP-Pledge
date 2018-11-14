@@ -31,11 +31,12 @@ export const zeroPadding = (district) => {
   const districtString = district.toString();
   return zeros.substring(0, zeros.length - districtString.length) + districtString;
 };
-export const formatWinner = person => person.status === STATUS_WON ? '<span><i class="anticon anticon-check"></i></span>' : '';
+export const formatWinner = person => (
+  person.status === STATUS_WON ? '<span><i class="anticon anticon-check"></i></span>' : '');
 
 export const formatPledger = (item) => {
   const title = item.incumbent ? `${formatWinner(item)} ${item.role}. ${item.displayName}* <span class=${item.party}>(${item.party}) </span> ${item.pledged ? 'PLEDGED' : ''} ${item.missingMember ? '<strong style="color:red;">MISSING</strong>' : ''}` :
-    `${item.displayName} <span class=${item.party}>(${item.party})</span> ${item.pledged ? '<strong>PLEDGED</strong>' : ''}`;
+    `${formatWinner(item)} ${item.displayName} <span class=${item.party}>(${item.party})</span> ${item.pledged ? '<strong>PLEDGED</strong>' : ''}`;
   return `<div style="color:${item.pledged ? `${PLEDGED_COLOR};` : 'none;'}">${title}</div>`;
 };
 

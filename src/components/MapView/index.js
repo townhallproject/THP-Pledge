@@ -20,11 +20,7 @@ import MapInset from '../../components/MapInset';
 import './popover.scss';
 import './style.scss';
 import MbMap from '../../utils/mapbox-map';
-import {
-  STATUS_WON,
-  STATUS_NOMINEE,
-  INCLUDE_STATUS,
-} from '../constants';
+import { INCLUDE_STATUS } from '../constants';
 
 class MapView extends React.Component {
   constructor(props) {
@@ -182,7 +178,7 @@ class MapView extends React.Component {
     const { items } = this.props;
     const name = stateAbrvToName[state];
     const itemsInState = items[state];
-    let tooltip = `<h4>${name}</h4>`;
+    let tooltip = '';
     if (itemsInState) {
       this.setState({ popoverColor: 'popover-has-data' });
       if (itemsInState.Gov && itemsInState.Gov.length > 0) {
@@ -202,7 +198,7 @@ class MapView extends React.Component {
         });
       }
       const totalDistricts = totalPledgedInDistricts(itemsInState);
-      tooltip += `<h4>U.S. House pledge takers: <strong>${totalDistricts}</strong></h4>`;
+      tooltip += `<h4>Total ${name} U.S.House pledge takers: <strong>${totalDistricts}</strong></h4>`;
       tooltip += '<div><em>Click for district details</em></div>';
     } else {
       this.setState({ popoverColor: 'popover-no-data' });
@@ -234,6 +230,7 @@ class MapView extends React.Component {
     } else {
       tooltip += '<div>No one in this district has signed the pledge yet.</div>';
     }
+    tooltip += this.showStateTooltip(state);
     return tooltip;
   }
 
@@ -259,15 +256,11 @@ class MapView extends React.Component {
         const { properties } = feature;
         const stateAbr = properties.ABR ? properties.ABR : 'PA';
         const district = properties.DISTRICT ? properties.DISTRICT : properties.GEOID.substring(2);
-        let tooltip;
-        if (map.metadata.level === 'districts') {
-          if (!items[stateAbr]) {
-            return undefined;
-          }
-          tooltip = this.showDistrictTooltip(stateAbr, Number(district));
-        } else {
-          tooltip = this.showStateTooltip(stateAbr);
+        if (!items[stateAbr]) {
+          return undefined;
         }
+        const tooltip = this.showDistrictTooltip(stateAbr, Number(district));
+        
         if (tooltip) {
           return this.popup.setLngLat(e.lngLat)
             .setHTML(tooltip)
