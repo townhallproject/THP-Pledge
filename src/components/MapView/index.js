@@ -11,7 +11,6 @@ import {
   totalPledgedInDistricts,
   zeroPadding,
   formatPledger,
-  formatWinner,
 } from '../../utils';
 
 import bboxes from '../../data/bboxes';
@@ -225,7 +224,7 @@ class MapView extends React.Component {
     if (people.length) {
       const incumbent = filter(people, 'incumbent')[0];
       if (incumbent) {
-        tooltip += `${formatWinner(incumbent)} ${formatPledger(incumbent)}`;
+        tooltip += `${formatPledger(incumbent)}`;
       }
       const challengers = filter(people, person => person.incumbent === false && includes(INCLUDE_STATUS, person.status));
 
