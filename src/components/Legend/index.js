@@ -4,7 +4,11 @@ import './style.scss';
 
 export default class Legend extends React.Component {
   render() {
-    const {addFilterBy, filterBy, removeFilterBy} = this.props;
+    const { 
+      addFilterBy, 
+      filterBy, 
+      removeFilterBy
+    } = this.props;
     return (
       <div className="map-legend">
          <FilterBar
@@ -30,14 +34,18 @@ export default class Legend extends React.Component {
             <dt className="district-pledger" />
             <dd>U.S. House <strong>Town Hall Pledge</strong></dd>
           </li>
-          <li className="map-legend-li hide-if-no-webgl">
-            <dt className="missing-member-senate" />
-            <dd><strong>Missing Member</strong> Senator</dd>
-          </li>
-          <li className="map-legend-li hide-if-no-webgl">
-            <dt className="missing-member-district" />
-            <dd> <strong>Missing member</strong> Rep</dd>
-          </li>
+          {filterBy.status.length > 1 &&
+          <React.Fragment>
+            <li className="map-legend-li hide-if-no-webgl">
+              <dt className="missing-member-senate" />
+              <dd><strong>Missing Member</strong> Senator</dd>
+            </li>
+            <li className="map-legend-li hide-if-no-webgl">
+              <dt className="missing-member-district" />
+              <dd> <strong>Missing member</strong> Rep</dd>
+            </li>
+          </React.Fragment>
+          }
         </ul>
       </div>
     );
