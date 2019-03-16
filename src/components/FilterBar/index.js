@@ -40,7 +40,6 @@ const FilterBar = (props) => {
         Showing:
       <Switch
         onChange={changeNomineeToggle}
-        defaultChecked
         checkedChildren="Pledged winners"
         unCheckedChildren="All nominees"
       />

@@ -67,10 +67,14 @@ export const officeDict = {
   Gov: 'Governor',
   Rep: 'Representative',
   Sen: 'Senator',
+  Mayor: 'Mayor',
 };
 
 export const getTitle = (key) => {
   const lookup = key.split(' ')[0];
+  if (lookup === 'Mayor') {
+    return key;
+  }
   return officeDict[lookup] ? officeDict[lookup] : lookup;
 };
 

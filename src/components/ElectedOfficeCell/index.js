@@ -38,7 +38,7 @@ const getPeopleOrder = (pledger) => {
   return statusOrder[pledger.status];
 };
 
-class DistrictCell extends React.Component {
+class ElectedOfficeCell extends React.Component {
   isDoYourJob(district) {
     const {
       doYourJobDistricts,
@@ -72,18 +72,19 @@ class DistrictCell extends React.Component {
     }
     return Object.keys(items)
       .sort((a, b) => getCardOrder(a) - getCardOrder(b))
-      .map((district) => {
-        if (!items[district]) {
+      .map((electedOffice) => {
+        if (!items[electedOffice]) {
           return (
-            <Card title={`${stateName}-${district}`}>
+            <Card title={`${stateName}-${electedOffice}`}>
               No Pledgers
             </Card>);
         }
-        if (items[district].length === 0) {
+        if (items[electedOffice].length === 0) {
           return null;
         }
-        const title = `${(Number(district) ? `${stateName}-${district}` : getTitle(district))}`;
-        const isDoYourJob = !!this.isDoYourJob(district);
+
+        const title = `${(Number(electedOffice) ? `${stateName}-${electedOffice}` : getTitle(electedOffice, items[electedOffice][0]))}`;
+        const isDoYourJob = !!this.isDoYourJob(electedOffice);
         return (
           <Card
             style={gridStyle}
@@ -95,9 +96,9 @@ class DistrictCell extends React.Component {
             hoverable
           >
             <List
-              id={district}
+              id={electedOffice}
               itemLayout="horizontal"
-              dataSource={items[district].sort((a, b) => getPeopleOrder(a) - getPeopleOrder(b))}
+              dataSource={items[electedOffice].sort((a, b) => getPeopleOrder(a) - getPeopleOrder(b))}
               renderItem={item =>
                 (
                   <List.Item key={item.displayName}>
@@ -114,15 +115,15 @@ class DistrictCell extends React.Component {
   }
 }
 
-DistrictCell.propTypes = {
+ElectedOfficeCell.propTypes = {
   doYourJobDistricts: PropTypes.shape({}),
   items: PropTypes.shape({}),
   stateName: PropTypes.string.isRequired,
 };
 
-DistrictCell.defaultProps = {
+ElectedOfficeCell.defaultProps = {
   doYourJobDistricts: {},
   items: {},
 };
 
-export default DistrictCell;
+export default ElectedOfficeCell;

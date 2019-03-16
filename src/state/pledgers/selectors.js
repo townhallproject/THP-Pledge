@@ -67,6 +67,14 @@ export const groupByStateAndDistrict = createSelector(
         if (include) {
           acc[cur.district].push(cur);
         }
+      } else if (cur.city) {
+        const key = `${cur.role} - ${cur.city}`
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        if (include) {
+          acc[key].push(cur);
+        }
       } else {
         if (!acc[cur.role]) {
           acc[cur.role] = [];
