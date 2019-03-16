@@ -27,7 +27,6 @@ class MapView extends React.Component {
     super(props);
     this.addPopups = this.addPopups.bind(this);
     this.addClickListener = this.addClickListener.bind(this);
-    // this.setStateStyle = this.setStateStyle.bind(this);
     this.colorDistrictsByPledgersAndDJYD = this.colorDistrictsByPledgersAndDJYD.bind(this);
     this.showStateTooltip = this.showStateTooltip.bind(this);
     this.showDistrictTooltip = this.showDistrictTooltip.bind(this);
@@ -60,7 +59,7 @@ class MapView extends React.Component {
     this.map.metadata = { selectedState: nextProps.selectedState };
     if (selectedState) {
       this.toggleStateMask(selectedState);
-      const bbname = selectedState.toUpperCase();
+      let bbname = selectedState.toUpperCase();
       this.map.metadata.level = 'districts';
 
       if (this.state.filterStyle === 'state') {
@@ -72,6 +71,7 @@ class MapView extends React.Component {
         // highlight district
         const districtPadded = zeroPadding(districts[0]);
         const geoID = `${stateFIPS}${districtPadded}`;
+        bbname = `${bbname}${districtPadded}`;
         const selectObj = {
           district: districtPadded,
           geoID,
@@ -198,8 +198,7 @@ class MapView extends React.Component {
         });
       }
       const totalDistricts = totalPledgedInDistricts(itemsInState);
-      tooltip += `<h4>Total ${name} U.S.House pledge takers: <strong>${totalDistricts}</strong></h4>`;
-      tooltip += '<div><em>Click for district details</em></div>';
+      tooltip += `<span>Total ${name} U.S.House pledge takers: <strong>${totalDistricts}</strong></span>`;
     } else {
       this.setState({ popoverColor: 'popover-no-data' });
       tooltip += '<div><em>No current candidates have taken the pledge</em></div>';
