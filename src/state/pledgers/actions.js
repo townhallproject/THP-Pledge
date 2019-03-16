@@ -1,13 +1,14 @@
 import { values, mapValues } from 'lodash';
 import request from 'superagent';
 import { firebaseUrl } from '../constants';
+import { switchElectionYear } from '../selections/actions';
 
 export const setPledgers = pledgers => ({
   pledgers,
   type: 'SET_PLEDGERS',
 });
 
-export const startSetPledgers = (year) => (dispatch) => {
+export const startSetPledgers = year => (dispatch) => {
   const url = `${firebaseUrl}/town_hall_pledges/${year}.json`;
   return request(url).then((result) => {
     const allPledgers = result.body;
@@ -21,6 +22,7 @@ export const startSetPledgers = (year) => (dispatch) => {
         }
         return true;
       }));
+    dispatch(switchElectionYear(year));
     return (dispatch(setPledgers(pledgers)));
   });
 };
