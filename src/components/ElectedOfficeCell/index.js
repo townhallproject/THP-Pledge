@@ -14,14 +14,38 @@ const gridStyle = {
   maxWidth: '310px',
 };
 
-const getCardOrder = (districtOrStateWide) => {
-  if (Number(districtOrStateWide)) {
-    return districtOrStateWide;
+const getCardOrder = (electedOffice) => {
+
+  if (electedOffice.includes("Sen")) {
+    return -3;
   }
-  if (districtOrStateWide.split('-').length > 1) {
-    return 500;
+  if (electedOffice.includes("Gov")) {
+    return -2;
   }
-  return 0;
+  if (electedOffice.includes("Mayor")) {
+    return -1;
+  }
+
+  // Federal District
+  if (Number(electedOffice)) {
+    return electedOffice;
+  }
+
+  // If we end up here, we're processing a State Legislature
+  var stateElectedOffice = electedOffice.split('-')[0];
+  var stateElectedOfficeNumber = electedOffice.split('-')[1];
+  switch(stateElectedOffice) {
+    case "SD":
+      return 500 + stateElectedOfficeNumber;
+    case "HD":
+      return 1000 + stateElectedOfficeNumber;
+    case "LD":
+      return 1500 + stateElectedOfficeNumber;
+    default:
+      return 2000; // we shouldn't end up here
+  }
+  return 2000; // we should never end up here, but if there's a card case we haven't handled
+               // we would rather the card be displayed last in the order
 };
 
 const getPeopleOrder = (pledger) => {
