@@ -1,12 +1,12 @@
 import { uniqBy } from 'lodash';
-import { STATUS_WON } from '../../components/constants';
+import { STATUS_WON, STATUS_NOMINEE, STATUS_ACTIVE } from '../../components/constants';
 
 const initialState = {
   currentElectionYear: '2019',
   districts: [],
   filterBy: {
-    pledged: [true],
-    status: [STATUS_WON],
+    pledged: [true, false],
+    status: [STATUS_WON, STATUS_NOMINEE, STATUS_ACTIVE],
   },
   filters: [],
   usState: '',
