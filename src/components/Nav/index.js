@@ -1,5 +1,6 @@
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Icon, Button, Menu, Dropdown } from 'antd';
 
@@ -19,7 +20,6 @@ class Nav extends React.Component {
     this.renderMenu = this.renderMenu.bind(this);
   }
   handleYearSwitch(e) {
-    console.log('click', e.key)
     this.props.startSetPledgers(e.key);
   }
   renderMenu() {
@@ -62,5 +62,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   startSetPledgers: year => dispatch(startSetPledgers(year)),
 });
+
+Nav.propTypes = {
+  electionYear: PropTypes.string.isRequired,
+  startSetPledgers: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Nav);
