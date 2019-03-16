@@ -16,6 +16,11 @@ export const resetSelections = () => ({
   type: 'RESET_SELECTIONS',
 });
 
+export const switchElectionYear = payload => ({
+  payload,
+  type: 'SWITCH_ELECTION_YEAR',
+});
+
 export const setFilters = payload => ({
   payload,
   type: 'SET_FILTERS',
