@@ -2,7 +2,7 @@ import { uniqBy } from 'lodash';
 import { STATUS_WON } from '../../components/constants';
 
 const initialState = {
-  currentElectionYear: '2018',
+  currentElectionYear: '2019',
   districts: [],
   filterBy: {
     pledged: [true],
@@ -18,7 +18,7 @@ const filtersReducer = (state = initialState, { type, payload }) => {
     case 'SWITCH_ELECTION_YEAR':
       return {
         ...state,
-        currentElectionYear: payload
+        currentElectionYear: payload,
       };
     case 'RESET_SELECTIONS':
       return {
