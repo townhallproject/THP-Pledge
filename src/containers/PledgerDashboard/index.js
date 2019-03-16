@@ -17,7 +17,7 @@ import {
   getUsState,
   getDistricts,
   getFilterBy,
-  getElectionYear
+  getElectionYear,
 } from '../../state/selections/selectors';
 import * as selectionActions from '../../state/selections/actions';
 import { getDoYourJobDistricts } from '../../state/do-your-job-district/selectors';
