@@ -3,5 +3,5 @@ Town Hall Project's stand alone site to track which candidates and MoCs have tak
 
 ### Development
 1) npm install
-1) npm run livereload
+1) npm run watch
 
