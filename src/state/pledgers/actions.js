@@ -7,8 +7,8 @@ export const setPledgers = pledgers => ({
   type: 'SET_PLEDGERS',
 });
 
-export const startSetPledgers = () => (dispatch) => {
-  const url = `${firebaseUrl}/town_hall_pledges/2018.json`;
+export const startSetPledgers = (year) => (dispatch) => {
+  const url = `${firebaseUrl}/town_hall_pledges/${year}.json`;
   return request(url).then((result) => {
     const allPledgers = result.body;
     const pledgers = mapValues(allPledgers, pledgersInstate =>

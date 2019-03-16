@@ -2,6 +2,7 @@ import { uniqBy } from 'lodash';
 import { STATUS_WON } from '../../components/constants';
 
 const initialState = {
+  currentElectionYear: '2018',
   districts: [],
   filterBy: {
     pledged: [true],
@@ -14,6 +15,11 @@ const initialState = {
 
 const filtersReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case 'SWITCH_ELECTION_YEAR':
+      return {
+        ...state,
+        currentElectionYear: payload
+      };
     case 'RESET_SELECTIONS':
       return {
         ...state,

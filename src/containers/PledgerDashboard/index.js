@@ -17,6 +17,7 @@ import {
   getUsState,
   getDistricts,
   getFilterBy,
+  getElectionYear
 } from '../../state/selections/selectors';
 import * as selectionActions from '../../state/selections/actions';
 import { getDoYourJobDistricts } from '../../state/do-your-job-district/selectors';
@@ -46,9 +47,9 @@ class pledgerDashboard extends React.Component {
 
   componentDidMount() {
     const {
-      getInitialPledgers,
+      getInitialPledgers, year
     } = this.props;
-    getInitialPledgers()
+    getInitialPledgers(year)
       .then((returned) => {
         this.props.setInitialFilters(returned);
         this.setState({ init: false });
@@ -119,7 +120,7 @@ class pledgerDashboard extends React.Component {
           removeFilterBy={removeFilterBy}
         />
         {this.renderMap()}
-     
+
         <CounterBar
           allPledgers={allPledgers}
         />
@@ -137,11 +138,12 @@ const mapStateToProps = state => ({
   pledgersByState: getPledgersByUsState(state),
   selectedDistricts: getDistricts(state),
   selectedState: getUsState(state),
+  year: getElectionYear(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   addFilterBy: filter => dispatch(selectionActions.addFilterBy(filter)),
-  getInitialPledgers: () => dispatch(startSetPledgers()),
+  getInitialPledgers: (year) => dispatch(startSetPledgers(year)),
   removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter)),
   resetSelections: () => dispatch(selectionActions.resetSelections()),
   addFilterBy: filter => dispatch(selectionActions.addFilterBy(filter)),
