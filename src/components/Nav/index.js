@@ -8,6 +8,8 @@ import { getElectionYear } from '../../state/selections/selectors';
 
 import './style.scss';
 
+import { startSetPledgers } from '../../state/pledgers/actions'
+
 require('style-loader!css-loader!antd/es/dropdown/style/index.css');
 require('style-loader!css-loader!antd/es/menu/style/index.css');
 
