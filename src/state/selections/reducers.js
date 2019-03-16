@@ -2,7 +2,7 @@ import { uniqBy } from 'lodash';
 import { STATUS_WON } from '../../components/constants';
 
 const initialState = {
-  currentElectionYear: '2018',
+  currentElectionYear: '2019',
   districts: [],
   filterBy: {
     pledged: [true],
