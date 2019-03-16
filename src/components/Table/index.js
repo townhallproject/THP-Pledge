@@ -10,7 +10,7 @@ import {
 } from 'lodash';
 
 import { PLEDGED_COLOR_DARK } from '../constants';
-import DistrictCell from '../DistrictCell';
+import ElectedOfficeCell from '../ElectedOfficeCell';
 import { stateAbrvToName } from '../../data/dictionaries';
 import { totalPledgedInState } from '../../utils';
 /* eslint-disable */
@@ -57,7 +57,7 @@ class Table extends React.Component {
               }}
             >
               {totalPledgedInState(items[state]) === 0 ? (
-                <span>No winning candidates took the pledge in this state</span>) : (<DistrictCell
+                <span>No winning candidates took the pledge in this state</span>) : (<ElectedOfficeCell
                   key={`${state}-cell`}
                   stateName={state}
                   items={items[state]}

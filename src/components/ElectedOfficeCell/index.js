@@ -38,7 +38,7 @@ const getPeopleOrder = (pledger) => {
   return statusOrder[pledger.status];
 };
 
-class DistrictCell extends React.Component {
+class ElectedOfficeCell extends React.Component {
   isDoYourJob(district) {
     const {
       doYourJobDistricts,
@@ -114,15 +114,15 @@ class DistrictCell extends React.Component {
   }
 }
 
-DistrictCell.propTypes = {
+ElectedOfficeCell.propTypes = {
   doYourJobDistricts: PropTypes.shape({}),
   items: PropTypes.shape({}),
   stateName: PropTypes.string.isRequired,
 };
 
-DistrictCell.defaultProps = {
+ElectedOfficeCell.defaultProps = {
   doYourJobDistricts: {},
   items: {},
 };
 
-export default DistrictCell;
+export default ElectedOfficeCell;
