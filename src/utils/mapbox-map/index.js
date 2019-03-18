@@ -59,6 +59,10 @@ export default class MbMap {
       data: '../data/districts.geojson',
       type: 'geojson',
     });
+    this.map.addSource('cities', {
+      data: '../data/us_cities.geojson',
+      type: 'geojson',
+    });
   }
 
   setInitalState(type, setInitialStyles, bounds, boundsOpts, clickCallback, selectedState, onLoadCallback) {
@@ -93,11 +97,30 @@ export default class MbMap {
     map.on('click', callback);
   }
 
+  setAllDistrictStatesToFalse() {
+    const thisMap = this;
+    mapKeys(fips, (fip, state) => {
+      thisMap.setFeatureState(Number(fip), 'states', {
+        pledged: false,
+      });
+      for (let step = 0; step <= numOfDistricts[state]; step++) {
+        const districtPadded = zeroPadding(step);
+        const geoID = `${fip}${districtPadded}`;
+        thisMap.setFeatureState(Number(geoID), 'districts', {
+          missingMember: false,
+          pledged: false,
+        });
+      }
+    });
+  }
+
   resetAllStateDYJFlagsToFalse() {
     const thisMap = this;
     mapKeys(fips, (fip, state) => {
       thisMap.setFeatureState(Number(fip), 'states', {
         doYourJobDistrict: false,
+        statePledged: false,
+        missingMember: false,
       });
       for (let step = 0; step <= numOfDistricts[state]; step++) {
         const districtPadded = zeroPadding(step);
@@ -132,6 +155,7 @@ export default class MbMap {
 
     this.resetAllStateDYJFlagsToFalse();
     this.resetDoYourJobDistrictFlagsToFalse(selectedState);
+    this.setAllDistrictStatesToFalse();
     Object.keys(allDoYourJobDistricts).forEach((code) => {
       const state = code.split('-')[0];
       const districtNo = code.split('-')[1];
@@ -348,6 +372,28 @@ export default class MbMap {
       type: 'fill',
     }, 'state border');
   }
+
+  //  addStateAndDistrictDYJDLayers() {
+  //      if (this.map.getLayer('dyj-states-outline')) {
+  //        return;
+  //      }
+  //      if (!this.map.getSource('districts')) {
+  //        this.addSources();
+  //      }
+  //      this.map.addLayer({
+  //        id: 'dyj-states-outline',
+  //        type: 'line',
+  //        source: 'states',
+  //        paint: {
+  //          'line-color': DYJD_COLOR,
+  //          'line-width': 2,
+  //          'line-opacity': ['case',
+  //            ['boolean', ['feature-state', 'doYourJobDistrict'], true],
+  //            1,
+  //            0,
+  //          ],
+  //        },
+  //      });
 
   setFeatureState(featureId, source, state) {
     this.map.setFeatureState({
