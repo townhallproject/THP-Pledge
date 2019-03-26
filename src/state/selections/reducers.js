@@ -1,7 +1,7 @@
 import { uniqBy } from 'lodash';
 import { STATUS_WON, STATUS_NOMINEE, STATUS_ACTIVE } from '../../components/constants';
 
-const initialState = {
+export const initialState = {
   currentElectionYear: '2019',
   districts: [],
   filterBy: {

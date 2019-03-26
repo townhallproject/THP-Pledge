@@ -45,7 +45,10 @@ class Header extends React.Component {
     const src = width > 992 ? 'images/pledgeHeader.jpg' : 'images/pledgeHeader@0,5x.jpg';
     return (
       <div>
-        <Nav startSetPledgers={this.props.startSetPledgers} electionYear={this.props.electionYear} />
+        <Nav
+          startSetPledgers={this.props.startSetPledgers}
+          electionYear={this.props.electionYear}
+        />
         <div className="header-container">
 
           <div className="header-pledge--CTA">

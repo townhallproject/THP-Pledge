@@ -81,17 +81,20 @@ class MapView extends React.Component {
       }
       const stateBB = bboxes[bbname];
       return this.focusMap(stateBB);
+    } else if (!selectedState && this.props.selectedState) {
+      // reset to national view
+      this.toggleStateMask();
+      this.setInitialStyles();
+      this.map.metadata.level = 'state';
+      this.setState({ filterStyle: 'state' });
+      return this.map.fitBounds([[-128.8, 23.6], [-65.4, 50.2]]);
     }
-
-    // reset to national view
-    this.toggleStateMask();
-    this.setInitialStyles();
-    this.map.metadata.level = 'state';
-    this.setState({ filterStyle: 'state' });
-    return this.map.fitBounds([[-128.8, 23.6], [-65.4, 50.2]]);
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const {
+      mbMap,
+    } = this;
     // changing between coloring by state and coloring by district
     if (prevState.filterStyle !== this.state.filterStyle ||
       prevProps.selectedState !== this.props.selectedState ||
@@ -100,6 +103,9 @@ class MapView extends React.Component {
       this.setDistrictLayerStyle();
       // clearing any previous popups
       this.popup.remove();
+    }
+    if (this.props.mayorFeatures.length && !prevProps.mayorFeatures.length) {
+      mbMap.showMayorMarkers(this.props.mayorFeatures);
     }
   }
 
@@ -111,10 +117,7 @@ class MapView extends React.Component {
     const {
       map,
     } = this;
-    const {
-      winnersOnly,
-    } = this.props;
-    this.colorDistrictsByPledgersAndDJYD(winnersOnly);
+    this.colorDistrictsByPledgersAndDJYD();
 
     this.hideLayer('dyj-district-level-color-fill');
     if (map.getLayer('districts-fill')) {
@@ -141,6 +144,7 @@ class MapView extends React.Component {
       selectedState,
       allDoYourJobDistricts,
       winnersOnly,
+      mayorFeatures,
     } = this.props;
     const {
       mbMap,
@@ -206,6 +210,17 @@ class MapView extends React.Component {
     return tooltip;
   }
 
+  showMayorTooltip(properties) {
+    let tooltip = `<h4>${properties.city}, ${properties.state}</h4>`;
+
+    if (properties.numberOfPledgers > 0) {
+      tooltip += `<div>${properties.numberOfPledgers} mayoral candidates have taken the pledge. </div>`;
+    } else {
+      tooltip += '<div>No one in this city has signed the pledge yet.</div>';
+    }
+    return tooltip;
+  }
+
   showDistrictTooltip(state, district) {
     const { items } = this.props;
     let tooltip = `<h4>${state} ${district}</h4>`;
@@ -242,7 +257,7 @@ class MapView extends React.Component {
     const { items } = this.props;
 
     map.on('mousemove', (e) => {
-      const features = map.queryRenderedFeatures(e.point, { layers: [layer, 'district_interactive_pa'] });
+      const features = map.queryRenderedFeatures(e.point, { layers: [layer, 'district_interactive_pa', 'mayor-markers'] });
       // Change the cursor style as a UI indicator.
       map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
@@ -253,13 +268,17 @@ class MapView extends React.Component {
         // NAME:"Maine"
         // STATEFP:"23"
         const { properties } = feature;
-        const stateAbr = properties.ABR ? properties.ABR : 'PA';
-        const district = properties.DISTRICT ? properties.DISTRICT : properties.GEOID.substring(2);
-        if (!items[stateAbr]) {
-          return undefined;
+        let tooltip;
+        if (properties.city) {
+          tooltip = this.showMayorTooltip(properties);
+        } else {
+          const stateAbr = properties.ABR ? properties.ABR : 'PA';
+          const district = properties.DISTRICT ? properties.DISTRICT : properties.GEOID.substring(2);
+          if (!items[stateAbr]) {
+            return undefined;
+          }
+          tooltip = this.showDistrictTooltip(stateAbr, Number(district));
         }
-        const tooltip = this.showDistrictTooltip(stateAbr, Number(district));
-        
         if (tooltip) {
           return this.popup.setLngLat(e.lngLat)
             .setHTML(tooltip)

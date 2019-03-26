@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import states from '../../data/states';
 import * as selectionActions from '../../state/selections/actions';
-import { getFilterBy } from '../../state/selections/selectors';
+import { getFilterBy, getElectionYear } from '../../state/selections/selectors';
 import {
   allTotalPledged,
   allPledgersOnBallot,
@@ -102,7 +102,7 @@ class SearchBar extends React.Component {
       totalPledgedOnBallot,
       filterBy,
     } = this.props;
-    const copyMap = filterBy.status.length === 1 ? 'candidates took the Pledge and won!' : 'general election candidates have taken the Town Hall Pledge'
+    const copyMap = filterBy.status.length === 1 ? 'candidates took the Pledge and won!' : 'candidates have taken the Town Hall Pledge';
     return (
       <Affix className="search-bar">
         <h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {copyMap} <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>

@@ -16,6 +16,8 @@ import { INCLUDE_STATUS } from '../../components/constants';
 
 export const getAllPledgers = state => state.pledgers.allPledgers;
 
+export const getMayorFeatures = state => state.pledgers.mayorFeatures;
+
 export const getFilteredPledgers = createSelector([getAllPledgers], (allPledgers) => {
   if (!allPledgers) {
     return null;

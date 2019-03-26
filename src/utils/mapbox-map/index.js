@@ -59,10 +59,6 @@ export default class MbMap {
       data: '../data/districts.geojson',
       type: 'geojson',
     });
-    this.map.addSource('cities', {
-      data: '../data/us_cities.geojson',
-      type: 'geojson',
-    });
   }
 
   setInitalState(type, setInitialStyles, bounds, boundsOpts, clickCallback, selectedState, onLoadCallback) {
@@ -99,6 +95,7 @@ export default class MbMap {
 
   setAllDistrictStatesToFalse() {
     const thisMap = this;
+
     mapKeys(fips, (fip, state) => {
       thisMap.setFeatureState(Number(fip), 'states', {
         pledged: false,
@@ -152,7 +149,6 @@ export default class MbMap {
     const mbMap = this;
     this.addStateAndDistrictDYJDLayers();
     this.addDYJDistrictFillLayer();
-
     this.resetAllStateDYJFlagsToFalse();
     this.resetDoYourJobDistrictFlagsToFalse(selectedState);
     this.setAllDistrictStatesToFalse();
@@ -181,6 +177,12 @@ export default class MbMap {
     this.colorByDYJ(allDoYourJobDistricts);
   }
 
+  showMayorMarkers(mayorData) {
+    if (mayorData.length) {
+      this.addMayorLayer(mayorData);
+    }
+  }
+
   colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState, winnersOnly) {
     const mbMap = this;
     this.stateOutline(items);
@@ -195,7 +197,7 @@ export default class MbMap {
         const geoid = fipsId + districtId;
         const pledged = filter((items[state][district]), { pledged: true }).length;
         const missingMember = filter((items[state][district]), { missingMember: true }).length;
- 
+
         mbMap.setFeatureState(
           Number(geoid),
           'districts', {
@@ -373,27 +375,30 @@ export default class MbMap {
     }, 'state border');
   }
 
-  //  addStateAndDistrictDYJDLayers() {
-  //      if (this.map.getLayer('dyj-states-outline')) {
-  //        return;
-  //      }
-  //      if (!this.map.getSource('districts')) {
-  //        this.addSources();
-  //      }
-  //      this.map.addLayer({
-  //        id: 'dyj-states-outline',
-  //        type: 'line',
-  //        source: 'states',
-  //        paint: {
-  //          'line-color': DYJD_COLOR,
-  //          'line-width': 2,
-  //          'line-opacity': ['case',
-  //            ['boolean', ['feature-state', 'doYourJobDistrict'], true],
-  //            1,
-  //            0,
-  //          ],
-  //        },
-  //      });
+  addMayorLayer(data) {
+    if (this.map.getLayer('mayor-markers')) {
+      this.map.removeLayer('mayor-markers');
+    }
+    if (!data.length) {
+      return;
+    }
+    this.map.addLayer({
+      id: 'mayor-markers',
+      source: {
+        data: {
+          features: data,
+          type: 'FeatureCollection',
+        },
+        type: 'geojson',
+      },
+      type: 'circle',
+      paint: {
+        'circle-color': PLEDGED_COLOR_LIGHT,
+        'circle-opacity': 1,
+        'circle-stroke-color': PLEDGED_COLOR_DARK,
+      },
+    });
+  }
 
   setFeatureState(featureId, source, state) {
     this.map.setFeatureState({
