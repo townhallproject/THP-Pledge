@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import {
   Icon,
   Button,
@@ -9,9 +8,10 @@ import {
   Divider,
 } from 'antd';
 
+import SubMenu from 'antd/lib/menu/SubMenu';
+
 import './style.scss';
 
-import SubMenu from 'antd/lib/menu/SubMenu';
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/dropdown/style/index.css');
 require('style-loader!css-loader!antd/es/menu/style/index.css');
@@ -31,32 +31,29 @@ class Nav extends React.Component {
 
 
   handleYearSwitch(e) {
-    this.props.startSetPledgers(e.key);
+    this.props.handleYearChange(e.key);
   }
 
   renderMenu() {
     return (
       <MenuItemGroup>
         <Menu.Item key="2018" onClick={this.handleYearSwitch}>2018</Menu.Item>
-        <Menu.Item key="2019" onClick={this.handleYearSwitch}>2019</Menu.Item>
+        {/* <Menu.Item key="2019" onClick={this.handleYearSwitch}>2019</Menu.Item> */}
+        <Menu.Item key="2020" onClick={this.handleYearSwitch}>2020</Menu.Item>
+
       </MenuItemGroup>
     );
   }
 
   renderMenuTitle() {
-
     const {
       electionYear,
     } = this.props;
-    
+    console.log(electionYear);
     return (<React.Fragment>Election Year {electionYear || <Icon type="loading" /> } <Icon type="caret-down" /></React.Fragment>);
   }
 
   render() {
-    const {
-      electionYear,
-      ...props
-    } = this.props;
     return (
       <div
         className="navbar-container"
@@ -109,7 +106,7 @@ class Nav extends React.Component {
 
 Nav.propTypes = {
   electionYear: PropTypes.string.isRequired,
-  startSetPledgers: PropTypes.func.isRequired,
+  handleYearChange: PropTypes.func.isRequired,
 };
 
 export default Nav;

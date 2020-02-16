@@ -105,7 +105,7 @@ class MapView extends React.Component {
       this.popup.remove();
     }
     if (this.props.mayorFeatures.length && !prevProps.mayorFeatures.length) {
-      mbMap.showMayorMarkers(this.props.mayorFeatures);
+      mbMap.updateMayorMarkers(this.props.mayorFeatures);
     }
   }
 
@@ -257,7 +257,7 @@ class MapView extends React.Component {
     const { items } = this.props;
 
     map.on('mousemove', (e) => {
-      const features = map.queryRenderedFeatures(e.point, { layers: [layer, 'district_interactive_pa', 'mayor-markers'] });
+      const features = map.queryRenderedFeatures(e.point, { layers: [layer, 'district_interactive_pa'] });
       // Change the cursor style as a UI indicator.
       map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
@@ -377,7 +377,9 @@ class MapView extends React.Component {
     ];
     this.mbMap.setInitalState('main', this.setInitialStyles, bounds, {}, this.addClickListener(searchByDistrict), selectedState, this.onLoad);
     this.addPopups('district_interactive');
+    this.mbMap.addMayorLayer([]);
   }
+
 
   // Handles the highlight for districts when clicked on.
   highlightDistrict(geoid) {

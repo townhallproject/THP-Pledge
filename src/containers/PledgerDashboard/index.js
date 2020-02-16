@@ -113,6 +113,7 @@ class pledgerDashboard extends React.Component {
           <Table
             allDoYourJobDistricts={allDoYourJobDistricts}
             items={pledgersByDistrict}
+            isCurrentYear={isCurrentYear}
           />
         </div>
         <SearchBar
@@ -176,7 +177,7 @@ pledgerDashboard.propTypes = {
   selectedState: PropTypes.string,
   setInitialFilters: PropTypes.func.isRequired,
   setUsState: PropTypes.func.isRequired,
-  year: PropTypes.string,
+  year: PropTypes.string.isRequired,
 };
 
 pledgerDashboard.defaultProps = {
@@ -185,7 +186,6 @@ pledgerDashboard.defaultProps = {
   pledgersByState: null,
   selectedDistricts: [],
   selectedState: '',
-  year: '2019',
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(pledgerDashboard);

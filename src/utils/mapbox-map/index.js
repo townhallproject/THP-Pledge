@@ -178,6 +178,10 @@ export default class MbMap {
   }
 
   showMayorMarkers(mayorData) {
+    this.addMayorLayer(mayorData);
+  }
+
+  updateMayorMarkers(mayorData) {
     if (mayorData.length) {
       this.addMayorLayer(mayorData);
     }
@@ -376,9 +380,6 @@ export default class MbMap {
   }
 
   addMayorLayer(data) {
-    if (this.map.getLayer('mayor-markers')) {
-      this.map.removeLayer('mayor-markers');
-    }
     if (!data.length) {
       return;
     }

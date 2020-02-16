@@ -1,6 +1,8 @@
 import superagent from 'superagent';
 import { values, reduce } from 'lodash';
 import { firebaseUrl } from '../constants';
+import { startSetDoYourJobDistricts } from '../do-your-job-district/actions';
+import { startSetPledgers } from '../pledgers/actions';
 
 export const setDistrict = payload => ({
   payload,
@@ -16,7 +18,7 @@ export const resetSelections = () => ({
   type: 'RESET_SELECTIONS',
 });
 
-export const switchElectionYear = payload => ({
+export const setElectionYear = payload => ({
   payload,
   type: 'SWITCH_ELECTION_YEAR',
 });
@@ -40,6 +42,14 @@ export const setInitialFilters = payload => ({
   payload,
   type: 'SET_INITIAL_FILTERS',
 });
+
+export const switchElectionYear = payload => (dispatch) => {
+  dispatch(setElectionYear())
+  Promise.all([dispatch(startSetDoYourJobDistricts(payload)), dispatch(startSetPledgers(payload))]).then(() => {
+    console.log('setting election year', payload)
+    dispatch(setElectionYear(payload))
+  });
+};
 
 export const getDistrictFromZip = payload => (dispatch) => {
   if (!payload.query) {

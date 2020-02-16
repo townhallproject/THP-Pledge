@@ -17,6 +17,7 @@ import { getElectionYear } from '../../state/selections/selectors';
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/button/style/index.css');
 import './style.scss';
+import { switchElectionYear } from '../../state/selections/actions';
 /* eslint-enable */
 
 class Header extends React.Component {
@@ -31,8 +32,9 @@ class Header extends React.Component {
   componentDidMount() {
     const {
       getDoYourJobDistricts,
+      electionYear,
     } = this.props;
-    getDoYourJobDistricts();
+    // getDoYourJobDistricts(electionYear);
   }
 
   toggleInfo() {
@@ -46,7 +48,7 @@ class Header extends React.Component {
     return (
       <div>
         <Nav
-          startSetPledgers={this.props.startSetPledgers}
+          handleYearChange={this.props.changeYear}
           electionYear={this.props.electionYear}
         />
         <div className="header-container">
@@ -75,13 +77,15 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getDoYourJobDistricts: () => dispatch(startSetDoYourJobDistricts()),
+  getDoYourJobDistricts: year => dispatch(startSetDoYourJobDistricts(year)),
   startSetPledgers: year => dispatch(startSetPledgers(year)),
+  changeYear: year => dispatch(switchElectionYear(year)),
 });
 
 Header.propTypes = {
   electionYear: PropTypes.string.isRequired,
   startSetPledgers: PropTypes.func.isRequired,
+  getDoYourJobDistricts: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

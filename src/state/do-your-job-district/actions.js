@@ -10,14 +10,13 @@ export const setDoYourJobDistricts = payload => ({
   type: 'SET_DO_YOUR_JOB_DISTRICTS',
 });
 
-export const startSetDoYourJobDistricts = () => (dispatch) => {
-  const url = `${firebaseUrl}/do_your_job_districts.json`;
+export const startSetDoYourJobDistricts = year => (dispatch) => {
+  const url = `${firebaseUrl}/do_your_job_districts/${year}.json`;
   return request(url).then((result) => {
     const allDistricts = mapValues(result.body, (value, key) => {
       value.key = key;
       return value;
     });
-
     return (dispatch(setDoYourJobDistricts(allDistricts)));
   });
 };

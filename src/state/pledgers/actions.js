@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { values, mapValues, filter } from 'lodash';
 import request from 'superagent';
 import { batchActions } from 'redux-batched-actions';
@@ -52,24 +53,27 @@ const makeMayorGeoJson = pledgers => (dispatch) => {
   });
 };
 
+const filterByStatus = ele => (ele.status === 'Lost Primary' && !ele.pledged) || !ele.status;
+
+const filterByPledged = ele => ele.pledged;
+
 export const startSetPledgers = year => (dispatch) => {
   const url = `${firebaseUrl}/town_hall_pledges/${year}.json`;
-  dispatch(switchElectionYear());
   return request(url).then((result) => {
     const allPledgers = result.body;
+
     const pledgers = mapValues(allPledgers, pledgersInstate =>
       values(pledgersInstate).filter((ele) => {
         if (ele.incumbent) {
           return true;
         }
-        if ((ele.status === 'Lost Primary' && !ele.pledged) || (ele.status === 'Active Primary Candidate' && !ele.pledged) || !ele.status) {
-          return false;
+        if (year === moment().year().toString()) {
+          return filterByPledged(ele);
         }
-        return true;
+        return !filterByStatus(ele);
       }));
-    dispatch(makeMayorGeoJson(pledgers));
     return dispatch(batchActions([
-      switchElectionYear(year),
+      makeMayorGeoJson(pledgers),
       setPledgers(pledgers),
     ]));
   });
