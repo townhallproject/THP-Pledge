@@ -56,7 +56,7 @@ class PledgerCell extends React.Component {
       description = (
         <Popover title="Missing Member" content={(
           <React.Fragment>
-            <p><Avatar size="large" src="/images/missing-member-logo.svg"/>  Has not held a single open town hall this Congressional session.</p>
+            <p><Avatar size="large" src="/images/missing-member-logo.svg"/>  Has not held a single open town hall in the Congressional session.</p>
           </React.Fragment>
         )}>
               <Avatar src="/images/missing-member-logo.svg" />
@@ -75,6 +75,7 @@ class PledgerCell extends React.Component {
     return (
       <React.Fragment>
         <List.Item.Meta
+          key={item.displayName}
           bodystyle={{ padding: '5px' }}
           className={pledgerCellClass}
           title={<div>{title}</div>}

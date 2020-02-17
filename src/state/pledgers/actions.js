@@ -67,7 +67,7 @@ export const startSetPledgers = year => (dispatch) => {
         if (ele.incumbent) {
           return true;
         }
-        if (year === moment().year().toString()) {
+        if (year == moment().year()) {
           return filterByPledged(ele);
         }
         return !filterByStatus(ele);

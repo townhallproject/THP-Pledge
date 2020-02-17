@@ -20,6 +20,7 @@ import {
   getDistricts,
   getFilterBy,
   getElectionYear,
+  getFilterToWinners,
 } from '../../state/selections/selectors';
 import * as selectionActions from '../../state/selections/actions';
 import { getDoYourJobDistricts } from '../../state/do-your-job-district/selectors';
@@ -36,7 +37,7 @@ import './style.scss';
 import Legend from '../../components/Legend';
 import { STATUS_WON } from '../../components/constants';
 
-class pledgerDashboard extends React.Component {
+class PledgerDashboard extends React.Component {
   constructor(props) {
     super(props);
     this.renderMap = this.renderMap.bind(this);
@@ -69,6 +70,7 @@ class pledgerDashboard extends React.Component {
       selectedState,
       setUsState,
       selectedDistricts,
+      showOnlyWinners,
     } = this.props;
 
     if (!mapboxgl.supported()) {
@@ -79,9 +81,7 @@ class pledgerDashboard extends React.Component {
       items={pledgersByState}
       mayorFeatures={mayorFeatures || []}
       selectedState={selectedState}
-      winnersOnly={
-        difference(filterBy.status, [STATUS_WON]).length === 0
-      }
+      winnersOnly={showOnlyWinners}
       setUsState={setUsState}
       districts={selectedDistricts}
       resetSelections={resetSelections}
@@ -91,12 +91,13 @@ class pledgerDashboard extends React.Component {
 
   render() {
     const {
-      addFilterBy,
+      toggleFilterToWinners,
       allDoYourJobDistricts,
       pledgersByDistrict,
       allPledgers,
       filterBy,
       removeFilterBy,
+      showOnlyWinners,
       year,
     } = this.props;
     const isCurrentYear = year === moment().year().toString();
@@ -122,10 +123,11 @@ class pledgerDashboard extends React.Component {
         />
         <Legend
           items={pledgersByDistrict}
-          addFilterBy={addFilterBy}
+          toggleFilterToWinners={toggleFilterToWinners}
           filterBy={filterBy}
           removeFilterBy={removeFilterBy}
           isCurrentYear={isCurrentYear}
+          showOnlyWinners={showOnlyWinners}
         />
         {this.renderMap()}
 
@@ -141,29 +143,28 @@ class pledgerDashboard extends React.Component {
 const mapStateToProps = state => ({
   allDoYourJobDistricts: getDoYourJobDistricts(state),
   allPledgers: getAllPledgers(state),
-  mayorFeatures: getMayorFeatures(state),
   filterBy: getFilterBy(state),
+  mayorFeatures: getMayorFeatures(state),
   pledgersByDistrict: getPledgersByDistrict(state),
   pledgersByState: getPledgersByUsState(state),
+  showOnlyWinners: getFilterToWinners(state),
   selectedDistricts: getDistricts(state),
   selectedState: getUsState(state),
   year: getElectionYear(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  addFilterBy: filter => dispatch(selectionActions.addFilterBy(filter)),
   getInitialPledgers: year => dispatch(startSetPledgers(year)),
   removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter)),
   resetSelections: () => dispatch(selectionActions.resetSelections()),
-  addFilterBy: filter => dispatch(selectionActions.addFilterBy(filter)),
-  removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter)),
   searchByDistrict: val => dispatch(selectionActions.setDistrict(val)),
   setFilters: filters => dispatch(selectionActions.setFilters(filters)),
   setInitialFilters: pledgers => dispatch(selectionActions.setInitialFilters(pledgers)),
   setUsState: usState => dispatch(selectionActions.setUsState(usState)),
+  toggleFilterToWinners: filter => dispatch(selectionActions.toggleFilterToWinners(filter)),
 });
 
-pledgerDashboard.propTypes = {
+PledgerDashboard.propTypes = {
   allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   allPledgers: PropTypes.shape({}),
   filterBy: PropTypes.shape({}).isRequired,
@@ -177,10 +178,11 @@ pledgerDashboard.propTypes = {
   selectedState: PropTypes.string,
   setInitialFilters: PropTypes.func.isRequired,
   setUsState: PropTypes.func.isRequired,
+  toggleFilterToWinners: PropTypes.func.isRequired,
   year: PropTypes.string.isRequired,
 };
 
-pledgerDashboard.defaultProps = {
+PledgerDashboard.defaultProps = {
   allPledgers: null,
   pledgersByDistrict: null,
   pledgersByState: null,
@@ -188,4 +190,4 @@ pledgerDashboard.defaultProps = {
   selectedState: '',
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(pledgerDashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(PledgerDashboard);

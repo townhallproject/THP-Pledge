@@ -1,4 +1,6 @@
 import { filter, flatten, values } from 'lodash';
+import moment from 'moment';
+
 import { PLEDGED_COLOR, STATUS_WON } from '../components/constants';
 
 export function takenThePledge(record) {
@@ -40,3 +42,4 @@ export const formatPledger = (item) => {
   return `<div style="color:${item.pledged ? `${PLEDGED_COLOR};` : 'none;'}">${title}</div>`;
 };
 
+export const isCurrentYear = year => year === moment().year().toString();

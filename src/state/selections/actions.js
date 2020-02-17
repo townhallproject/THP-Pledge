@@ -43,11 +43,15 @@ export const setInitialFilters = payload => ({
   type: 'SET_INITIAL_FILTERS',
 });
 
+export const toggleFilterToWinners = payload => ({
+  payload,
+  type: 'TOGGLE_FILTER_TO_WINNERS',
+});
+
 export const switchElectionYear = payload => (dispatch) => {
-  dispatch(setElectionYear())
+  dispatch(setElectionYear());
   Promise.all([dispatch(startSetDoYourJobDistricts(payload)), dispatch(startSetPledgers(payload))]).then(() => {
-    console.log('setting election year', payload)
-    dispatch(setElectionYear(payload))
+    dispatch(setElectionYear(payload));
   });
 };
 

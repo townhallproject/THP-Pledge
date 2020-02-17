@@ -1,16 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  find,
-} from 'lodash';
+import { find } from 'lodash';
 import {
   Icon,
   Affix,
 } from 'antd';
 import states from '../../data/states';
 import * as selectionActions from '../../state/selections/actions';
-import { getFilterBy, getElectionYear } from '../../state/selections/selectors';
+import { getFilterBy, getElectionYear, getFilterToWinners } from '../../state/selections/selectors';
 import {
   allTotalPledged,
   allPledgersOnBallot,
@@ -25,6 +23,7 @@ require('style-loader!css-loader!antd/es/button/style/index.css');
 require('style-loader!css-loader!antd/es/tag/style/index.css');
 
 import './style.scss';
+import { isCurrentYear } from '../../utils';
 /* eslint-enable */
 
 class SearchBar extends React.Component {
@@ -45,7 +44,6 @@ class SearchBar extends React.Component {
     };
     this.onTextChange = this.onTextChange.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
-    this.changeNomineeToggle = this.changeNomineeToggle.bind(this);
   }
 
   onTextChange(e) {
@@ -83,29 +81,20 @@ class SearchBar extends React.Component {
     return resetSelections();
   }
 
-  changeNomineeToggle(value) {
-    const {
-      addFilterBy,
-      removeFilterBy,
-    } = this.props;
-    if (value) {
-      return addFilterBy({
-        status: 'Winner',
-      });
-    }
-    return removeFilterBy('status');
-  }
-
   render() {
     const {
       totalPledged,
       totalPledgedOnBallot,
-      filterBy,
+      filterToWinners,
+      electionYear,
     } = this.props;
-    const copyMap = filterBy.status.length === 1 ? 'candidates took the Pledge and won!' : 'candidates have taken the Town Hall Pledge';
+    const copyMap = filterToWinners ? 'candidates took the Pledge and won!' : 'candidates have taken the Town Hall Pledge';
+    const header = isCurrentYear(electionYear) ? (<h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {copyMap} </h2>) :
+      (<h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {copyMap} <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>);
+
     return (
       <Affix className="search-bar">
-        <h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {copyMap} <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>
+        {header}
         <p>Find candidates in your district:</p>
         <SearchInput
           submitHandler={this.searchHandler}
@@ -117,6 +106,8 @@ class SearchBar extends React.Component {
 
 const mapStateToProps = state => ({
   filterBy: getFilterBy(state),
+  filterToWinners: getFilterToWinners(state),
+  electionYear: getElectionYear(state),
   totalPledged: allTotalPledged(state),
   totalPledgedOnBallot: allPledgersOnBallot(state),
   userSelections: state.selections,
@@ -129,7 +120,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 SearchBar.propTypes = {
-  filterBy: PropTypes.shape({}).isRequired,
+  electionYear: PropTypes.number.isRequired,
+  filterToWinners: PropTypes.bool.isRequired,
   resetSelections: PropTypes.func.isRequired,
   searchByZip: PropTypes.func.isRequired,
   setDistrict: PropTypes.func.isRequired,

@@ -11,8 +11,11 @@ import {
   getUsState,
   getDistricts,
   getFilterBy,
+  getFilterToWinners,
+  getElectionYear,
 } from '../selections/selectors';
-import { INCLUDE_STATUS } from '../../components/constants';
+import { INCLUDE_STATUS, STILL_ACTIVE, STATUS_WON } from '../../components/constants';
+import { isCurrentYear } from '../../utils';
 
 export const getAllPledgers = state => state.pledgers.allPledgers;
 
@@ -36,12 +39,20 @@ export const allTotalPledged = createSelector([getAllPledgers], (allPledgers) =>
   }, 0);
 });
 
-export const allPledgersOnBallot = createSelector([getAllPledgers, getFilterBy], (allPledgers, filterObj) => {
+export const allPledgersOnBallot = createSelector([getAllPledgers, getFilterToWinners, getElectionYear], (allPledgers, onlyShowWinners, year) => {
   if (!allPledgers) {
     return null;
   }
+  if (isCurrentYear(year)) {
+    return reduce(allPledgers, (acc, pledgersInState) => {
+      acc += filter(pledgersInState, person => person.pledged && includes(STILL_ACTIVE, person.status)).length;
+      return acc;
+    }, 0);
+  }
+  const includeArray = onlyShowWinners ? [STATUS_WON] : INCLUDE_STATUS;
+
   return reduce(allPledgers, (acc, pledgersInState) => {
-    acc += filter(pledgersInState, person => person.pledged && includes(filterObj.status, person.status)).length;
+    acc += filter(pledgersInState, person => person.pledged && includes(includeArray, person.status)).length;
     return acc;
   }, 0);
 });
@@ -70,7 +81,7 @@ export const groupByStateAndDistrict = createSelector(
           acc[cur.district].push(cur);
         }
       } else if (cur.city) {
-        const key = `${cur.role} - ${cur.city}`
+        const key = `${cur.role} - ${cur.city}`;
         if (!acc[key]) {
           acc[key] = [];
         }

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import FilterBar from '../FilterBar';
 import './style.scss';
@@ -6,10 +7,11 @@ import './style.scss';
 export default class Legend extends React.Component {
   render() {
     const {
-      addFilterBy,
+      toggleFilterToWinners,
       filterBy,
       removeFilterBy,
       isCurrentYear,
+      showOnlyWinners,
     } = this.props;
 
     return (
@@ -17,7 +19,7 @@ export default class Legend extends React.Component {
         {!isCurrentYear && (
         <FilterBar
           className="filterBar"
-          addFilterBy={addFilterBy}
+          toggleFilterToWinners={toggleFilterToWinners}
           filterBy={filterBy}
           removeFilterBy={removeFilterBy}
         />)}
@@ -42,7 +44,7 @@ export default class Legend extends React.Component {
             <dt className="mayor-pledger" />
             <dd>Mayor <strong>Town Hall Pledge</strong></dd>
           </li>
-          {filterBy.status.length > 1 &&
+          {!isCurrentYear && !showOnlyWinners &&
           <React.Fragment>
             <li className="map-legend-li hide-if-no-webgl">
               <dt className="missing-member-senate" />
@@ -59,3 +61,11 @@ export default class Legend extends React.Component {
     );
   }
 }
+
+Legend.propTypes = {
+  toggleFilterToWinners: PropTypes.func.isRequired,
+  filterBy: PropTypes.string,
+  showOnlyWinners: PropTypes.bool.isRequired,
+  removeFilterBy: PropTypes.func.isRequired,
+  isCurrentYear: PropTypes.bool.isRequired,
+};

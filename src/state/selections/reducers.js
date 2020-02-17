@@ -4,10 +4,11 @@ import { STATUS_WON, STATUS_NOMINEE, STATUS_ACTIVE } from '../../components/cons
 export const initialState = {
   currentElectionYear: '2020',
   districts: [],
-  filterBy: {
-    pledged: [true, false],
-    status: [STATUS_WON, STATUS_NOMINEE, STATUS_ACTIVE],
-  },
+  filterToWinners: false,
+  // filterBy: {
+  //   pledged: [true, false],
+  //   status: [STATUS_WON, STATUS_NOMINEE, STATUS_ACTIVE],
+  // },
   filters: [],
   usState: '',
   zipcode: '',
@@ -44,6 +45,11 @@ const filtersReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         filters: payload,
+      };
+    case 'TOGGLE_FILTER_TO_WINNERS':
+      return {
+        ...state,
+        filterToWinners: payload,
       };
     case 'ADD_FILTER_BY':
       return {

@@ -6,3 +6,4 @@ export const STATUS_WON = 'Winner';
 export const STATUS_NOMINEE = 'Nominee';
 export const STATUS_ACTIVE = 'Active Primary Candidate';
 export const INCLUDE_STATUS = [STATUS_NOMINEE, STATUS_WON];
+export const STILL_ACTIVE = [STATUS_ACTIVE, STATUS_NOMINEE, STATUS_WON]
