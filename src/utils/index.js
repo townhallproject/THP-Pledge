@@ -28,6 +28,9 @@ export const flattenPledgers = pledgerObject => flatten(values(pledgerObject));
 export const totalIncumbentsForParty = (pledgerObject, party, incumbent) =>
   filter(flattenPledgers(pledgerObject), { incumbent, party, pledged: true }).length;
 
+export const totalIncumbentsFor3rdParty = (pledgerObject, incumbent) =>
+  filter(flattenPledgers(pledgerObject), person => person.incumbent === incumbent && person.pledged === true && person.party !== 'R' && person.party !== 'D').length;
+
 export const zeroPadding = (district) => {
   const zeros = '00';
   const districtString = district.toString();
