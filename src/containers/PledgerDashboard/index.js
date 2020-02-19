@@ -62,7 +62,6 @@ class PledgerDashboard extends React.Component {
   renderMap() {
     const {
       allDoYourJobDistricts,
-      filterBy,
       mayorFeatures,
       pledgersByState,
       resetSelections,
@@ -131,7 +130,7 @@ class PledgerDashboard extends React.Component {
         />
         {this.renderMap()}
 
-        {!isCurrentYear && <CounterBar
+        {<CounterBar
           allPledgers={allPledgers}
         />}
         <div className="footer" />
@@ -168,8 +167,8 @@ PledgerDashboard.propTypes = {
   allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   allPledgers: PropTypes.shape({}),
   filterBy: PropTypes.shape({}).isRequired,
-  mayorGeojson: PropTypes.shape({}),
   getInitialPledgers: PropTypes.func.isRequired,
+  mayorGeojson: PropTypes.shape({}),
   pledgersByDistrict: PropTypes.shape({}),
   pledgersByState: PropTypes.shape({}),
   resetSelections: PropTypes.func.isRequired,
@@ -178,6 +177,7 @@ PledgerDashboard.propTypes = {
   selectedState: PropTypes.string,
   setInitialFilters: PropTypes.func.isRequired,
   setUsState: PropTypes.func.isRequired,
+  showOnlyWinners: PropTypes.bool.isRequired,
   toggleFilterToWinners: PropTypes.func.isRequired,
   year: PropTypes.string.isRequired,
 };

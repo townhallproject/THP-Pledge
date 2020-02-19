@@ -8,12 +8,12 @@ import {
   Popover,
   Badge,
 } from 'antd';
-import { pledgerShape } from '../state/pledgers/types';
+import { pledgerShape } from '../../state/pledgers/types';
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/avatar/style/index.css');
 require('style-loader!css-loader!antd/es/tooltip/style/index.css');
-
+import './style.scss';
 /* eslint-enable */
 
 class PledgerCell extends React.Component {
@@ -43,7 +43,6 @@ class PledgerCell extends React.Component {
       };
       return titleMap[district.split('-')[0]] || null;
     };
-    
 
     const title = item.incumbent ? (
       <React.Fragment>{item.level === 'federal' ? item.role.split(' ')[0] + '.' : stateTitleMap(item.role) + '.'} {item.displayName}* <span className={item.party}>({item.party})</span>
@@ -54,7 +53,10 @@ class PledgerCell extends React.Component {
     if (item.missingMember) {
       // description = (<span className="missing-member-icon" />)
       description = (
-        <Popover title="Missing Member" content={(
+        <Popover 
+          title="Missing Member"
+          className="missing-member-popover"
+          content={(
           <React.Fragment>
             <p><Avatar size="large" src="/images/missing-member-logo.svg"/>  Has not held a single open town hall in the Congressional session.</p>
           </React.Fragment>

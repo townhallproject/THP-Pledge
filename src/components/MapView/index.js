@@ -20,7 +20,7 @@ import MapInset from '../../components/MapInset';
 import './popover.scss';
 import './style.scss';
 import MbMap from '../../utils/mapbox-map';
-import { INCLUDE_STATUS } from '../constants';
+import { INCLUDE_STATUS, STATUS_ACTIVE, STILL_ACTIVE } from '../constants';
 
 class MapView extends React.Component {
   constructor(props) {
@@ -221,6 +221,12 @@ class MapView extends React.Component {
     return tooltip;
   }
 
+  showEmptyTooltip(state, district) {
+    let tooltip = `<h4>${state} ${district}</h4>`;
+    tooltip += '<div>No one in this district has signed the pledge yet.</div>';
+    return tooltip;
+  }
+
   showDistrictTooltip(state, district) {
     const { items } = this.props;
     let tooltip = `<h4>${state} ${district}</h4>`;
@@ -236,7 +242,7 @@ class MapView extends React.Component {
       if (incumbent) {
         tooltip += `${formatPledger(incumbent)}`;
       }
-      const challengers = filter(people, person => person.incumbent === false && includes(INCLUDE_STATUS, person.status));
+      const challengers = filter(people, person => person.incumbent === false && includes(STILL_ACTIVE, person.status));
 
       challengers.forEach((item) => {
         tooltip += formatPledger(item);
@@ -275,9 +281,10 @@ class MapView extends React.Component {
           const stateAbr = properties.ABR ? properties.ABR : 'PA';
           const district = properties.DISTRICT ? properties.DISTRICT : properties.GEOID.substring(2);
           if (!items[stateAbr]) {
-            return undefined;
+            tooltip = this.showEmptyTooltip(stateAbr, Number(district));
+          } else {
+            tooltip = this.showDistrictTooltip(stateAbr, Number(district));
           }
-          tooltip = this.showDistrictTooltip(stateAbr, Number(district));
         }
         if (tooltip) {
           return this.popup.setLngLat(e.lngLat)

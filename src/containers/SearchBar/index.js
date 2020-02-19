@@ -44,10 +44,25 @@ class SearchBar extends React.Component {
     };
     this.onTextChange = this.onTextChange.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
+    this.getCopy = this.getCopy.bind(this);
   }
 
   onTextChange(e) {
     this.props.setTextFilter(e.target.value);
+  }
+
+  getCopy() {
+    const {
+      filterToWinners,
+      electionYear,
+    } = this.props;
+    if (isCurrentYear(electionYear)) {
+      return 'candidates have taken the Town Hall Pledge';
+    }
+    if (filterToWinners) {
+      return 'candidates took the Pledge and won!';
+    }
+    return 'general election candidates have taken the Town Hall Pledge';
   }
 
   searchHandler(value) {
@@ -85,12 +100,11 @@ class SearchBar extends React.Component {
     const {
       totalPledged,
       totalPledgedOnBallot,
-      filterToWinners,
       electionYear,
     } = this.props;
-    const copyMap = filterToWinners ? 'candidates took the Pledge and won!' : 'candidates have taken the Town Hall Pledge';
-    const header = isCurrentYear(electionYear) ? (<h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {copyMap} </h2>) :
-      (<h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {copyMap} <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>);
+
+    const header = isCurrentYear(electionYear) ? (<h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {this.getCopy()} </h2>) :
+      (<h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {this.getCopy()} <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>);
 
     return (
       <Affix className="search-bar">
@@ -105,9 +119,9 @@ class SearchBar extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  electionYear: getElectionYear(state),
   filterBy: getFilterBy(state),
   filterToWinners: getFilterToWinners(state),
-  electionYear: getElectionYear(state),
   totalPledged: allTotalPledged(state),
   totalPledgedOnBallot: allPledgersOnBallot(state),
   userSelections: state.selections,
