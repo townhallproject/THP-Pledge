@@ -19,7 +19,7 @@ import MapInset from '../../components/MapInset';
 import './popover.scss';
 import './style.scss';
 import MbMap from '../../utils/mapbox-map';
-import { INCLUDE_STATUS, STILL_ACTIVE } from '../constants';
+import { STILL_ACTIVE } from '../constants';
 
 class MapView extends React.Component {
   constructor(props) {
@@ -188,7 +188,7 @@ class MapView extends React.Component {
       if (itemsInState.Gov && itemsInState.Gov.length > 0) {
         tooltip += '<h4>Governor\'s race</h4>';
         itemsInState.Gov.forEach((item) => {
-          if (includes(INCLUDE_STATUS, item.status)) {
+          if (includes(STILL_ACTIVE, item.status)) {
             tooltip += formatPledger(item);
           }
         });
@@ -196,7 +196,7 @@ class MapView extends React.Component {
       if (itemsInState.Sen && itemsInState.Sen.length > 0) {
         tooltip += '<h4>Senate race</h4>';
         itemsInState.Sen.forEach((item) => {
-          if (includes(INCLUDE_STATUS, item.status)) {
+          if (includes(STILL_ACTIVE, item.status)) {
             tooltip += formatPledger(item);
           }
         });

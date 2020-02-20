@@ -11,6 +11,7 @@ import {
   MISSING_MEMBER_COLOR,
   STATUS_WON,
   STATUS_NOMINEE,
+  STILL_ACTIVE,
 } from '../../components/constants';
 import { fips, numOfDistricts } from '../../data/dictionaries';
 import { zeroPadding } from '../index';
@@ -189,7 +190,7 @@ export default class MbMap {
 
   colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState, winnersOnly) {
     const mbMap = this;
-    this.stateOutline(items);
+    this.stateOutline(items, winnersOnly);
     this.colorByDYJ(allDoYourJobDistricts, selectedState, winnersOnly);
     Object.keys(items).forEach((state) => {
       if (!items[state] || isEmpty(items[state])) {
@@ -213,27 +214,28 @@ export default class MbMap {
     });
   }
 
-  stateOutline(items) {
+  stateOutline(items, winnersOnly) {
     const mbMap = this;
     this.addStatesFillLayer();
     Object.keys(items).forEach((state) => {
       let count = 0;
       let missingMember = 0;
       Object.keys(items[state]).forEach((district) => {
-        missingMember += filter(
-          (items[state][district]),
-          ele => ele.missingMember === true &&
-          includes(includeStatuses, ele.status) &&
-          MbMap.isStateWide(district),
-        ).length;
-        count += filter(
-          (items[state][district]),
-          ele => ele.pledged === true &&
-           includes(includeStatuses, ele.status) &&
-           MbMap.isStateWide(district),
-        ).length;
+        if (MbMap.isStateWide(district)) {
+          missingMember += filter(
+            (items[state][district]),
+            ele => ele.missingMember === true &&
+            includes(includeStatuses, ele.status),
+          ).length;
+          count += filter(
+            (items[state][district]),
+            (ele) => {
+              const shouldInclude = winnersOnly ? includes([STATUS_WON], ele.status) : includes(STILL_ACTIVE, ele.status);
+              return ele.pledged === true && shouldInclude;
+            },
+          ).length;
+        }
       });
-
       mbMap.setFeatureState(
         Number(fips[state]),
         'states',
@@ -249,18 +251,19 @@ export default class MbMap {
     if (!this.map.getSource('states')) {
       this.addSources();
     }
+
     this.map.addLayer({
       id: 'states-missingmember-line',
       type: 'line',
       source: 'states',
       paint: {
         'line-color': MISSING_MEMBER_COLOR,
-        'line-width': 2,
         'line-opacity': ['case',
           ['boolean', ['feature-state', 'missingMember'], true],
           0.8,
           0,
         ],
+        'line-width': 2,
       },
     }, 'district_interactive');
     this.map.addLayer({
@@ -269,12 +272,12 @@ export default class MbMap {
       source: 'states',
       paint: {
         'line-color': PLEDGED_COLOR_DARK,
-        'line-width': 2,
         'line-opacity': ['case',
           ['boolean', ['feature-state', 'statePledged'], true],
           1,
           0,
         ],
+        'line-width': 2,
       },
     }, 'district_interactive');
   }
