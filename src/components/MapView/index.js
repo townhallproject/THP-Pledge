@@ -8,7 +8,6 @@ import geoViewport from '@mapbox/geo-viewport';
 import { stateAbrvToName } from '../../data/dictionaries';
 
 import {
-  totalPledgedInDistricts,
   zeroPadding,
   formatPledger,
 } from '../../utils';
@@ -20,7 +19,7 @@ import MapInset from '../../components/MapInset';
 import './popover.scss';
 import './style.scss';
 import MbMap from '../../utils/mapbox-map';
-import { INCLUDE_STATUS, STATUS_ACTIVE, STILL_ACTIVE } from '../constants';
+import { INCLUDE_STATUS, STILL_ACTIVE } from '../constants';
 
 class MapView extends React.Component {
   constructor(props) {
@@ -98,7 +97,8 @@ class MapView extends React.Component {
     // changing between coloring by state and coloring by district
     if (prevState.filterStyle !== this.state.filterStyle ||
       prevProps.selectedState !== this.props.selectedState ||
-      prevProps.items !== this.props.items
+      prevProps.items !== this.props.items ||
+      prevProps.winnersOnly !== this.props.winnersOnly
     ) {
       this.setDistrictLayerStyle();
       // clearing any previous popups
@@ -149,6 +149,7 @@ class MapView extends React.Component {
     const {
       mbMap,
     } = this;
+    console.log('winners only', winnersOnly);
     mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState, winnersOnly);
   }
 
@@ -201,8 +202,6 @@ class MapView extends React.Component {
           }
         });
       }
-      const totalDistricts = totalPledgedInDistricts(itemsInState);
-      tooltip += `<span>Total ${name} U.S.House pledge takers: <strong>${totalDistricts}</strong></span>`;
     } else {
       this.setState({ popoverColor: 'popover-no-data' });
       tooltip += '<div><em>No current candidates have taken the pledge</em></div>';

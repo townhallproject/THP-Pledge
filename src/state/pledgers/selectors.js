@@ -50,7 +50,6 @@ export const allPledgersOnBallot = createSelector([getAllPledgers, getFilterToWi
     }, 0);
   }
   const includeArray = onlyShowWinners ? [STATUS_WON] : INCLUDE_STATUS;
-
   return reduce(allPledgers, (acc, pledgersInState) => {
     acc += filter(pledgersInState, person => person.pledged && includes(includeArray, person.status)).length;
     return acc;
@@ -59,20 +58,16 @@ export const allPledgersOnBallot = createSelector([getAllPledgers, getFilterToWi
 
 export const groupByStateAndDistrict = createSelector(
   [
-    getFilterBy,
+    getFilterToWinners,
     getFilteredPledgers,
   ],
-  (filterObj, allPledgers) => {
+  (onlyShowWinners, allPledgers) => {
     if (!allPledgers) {
       return null;
     }
     return mapValues(allPledgers, allPledgersInState => reduce(allPledgersInState, (acc, cur) => {
-      let include = true;
-      forEach(filterObj, (value, key) => {
-        if (!includes(value, cur[key])) {
-          include = false;
-        }
-      });
+      const include = onlyShowWinners ? cur.status === STATUS_WON && cur.pledged : true;
+
       if (cur.district) {
         if (!acc[cur.district]) {
           acc[cur.district] = [];
