@@ -1,10 +1,7 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import {
-  Tag,
-  Switch,
-} from 'antd';
+import { Switch } from 'antd';
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/popover/style/index.css');
@@ -16,6 +13,7 @@ import './style.scss';
 const FilterBar = (props) => {
   const {
     toggleFilterToWinners,
+    showOnlyWinners,
   } = props;
 
   function changeNomineeToggle(value) {
@@ -32,6 +30,7 @@ const FilterBar = (props) => {
         onChange={changeNomineeToggle}
         checkedChildren="Pledged winners"
         unCheckedChildren="All nominees"
+        defaultChecked={showOnlyWinners}
       />
 
     </div>
@@ -39,7 +38,7 @@ const FilterBar = (props) => {
 };
 
 FilterBar.propTypes = {
-  allPledgers: PropTypes.shape({}).isRequired,
+  showOnlyWinners: PropTypes.bool.isRequired,
   toggleFilterToWinners: PropTypes.func.isRequired,
 };
 

@@ -21,6 +21,7 @@ export default class Legend extends React.Component {
           className="filterBar"
           toggleFilterToWinners={toggleFilterToWinners}
           filterBy={filterBy}
+          showOnlyWinners={showOnlyWinners}
           removeFilterBy={removeFilterBy}
         />)}
         <ul className="list-inline">

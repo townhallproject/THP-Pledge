@@ -3,6 +3,7 @@ import { values, reduce } from 'lodash';
 import { firebaseUrl } from '../constants';
 import { startSetDoYourJobDistricts } from '../do-your-job-district/actions';
 import { startSetPledgers } from '../pledgers/actions';
+import { isCurrentYear } from '../../utils';
 
 export const setDistrict = payload => ({
   payload,
@@ -50,6 +51,13 @@ export const toggleFilterToWinners = payload => ({
 
 export const switchElectionYear = payload => (dispatch) => {
   dispatch(setElectionYear());
+  if (isCurrentYear(payload)) {
+    // if we are looking at a current election, want to turn off filter to winners
+    dispatch(toggleFilterToWinners(false));
+  } else {
+    // by default, when looking at past elections, show winners only
+    dispatch(toggleFilterToWinners(true));
+  }
   Promise.all([dispatch(startSetDoYourJobDistricts(payload)), dispatch(startSetPledgers(payload))]).then(() => {
     dispatch(setElectionYear(payload));
   });
