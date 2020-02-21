@@ -442,6 +442,7 @@ MapView.propTypes = {
   searchByDistrict: PropTypes.func.isRequired,
   selectedState: PropTypes.string,
   setUsState: PropTypes.func.isRequired,
+  winnersOnly: PropTypes.func.isRequired,
 };
 
 MapView.defaultProps = {
