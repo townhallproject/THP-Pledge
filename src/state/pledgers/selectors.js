@@ -10,7 +10,6 @@ import { createSelector } from 'reselect';
 import {
   getUsState,
   getDistricts,
-  getFilterBy,
   getFilterToWinners,
   getElectionYear,
 } from '../selections/selectors';
@@ -21,7 +20,7 @@ export const getAllPledgers = state => state.pledgers.allPledgers;
 
 export const getMayorFeatures = state => state.pledgers.mayorFeatures;
 
-export const getFilteredPledgers = createSelector([getAllPledgers], (allPledgers) => {
+export const getMappedValuePledgers = createSelector([getAllPledgers], (allPledgers) => {
   if (!allPledgers) {
     return null;
   }
@@ -59,7 +58,7 @@ export const allPledgersOnBallot = createSelector([getAllPledgers, getFilterToWi
 export const groupByStateAndDistrict = createSelector(
   [
     getFilterToWinners,
-    getFilteredPledgers,
+    getMappedValuePledgers,
   ],
   (onlyShowWinners, allPledgers) => {
     if (!allPledgers) {
@@ -67,7 +66,6 @@ export const groupByStateAndDistrict = createSelector(
     }
     return mapValues(allPledgers, allPledgersInState => reduce(allPledgersInState, (acc, cur) => {
       const include = onlyShowWinners ? cur.status === STATUS_WON && cur.pledged : true;
-
       if (cur.district) {
         if (!acc[cur.district]) {
           acc[cur.district] = [];

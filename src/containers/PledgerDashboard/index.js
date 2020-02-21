@@ -95,7 +95,6 @@ class PledgerDashboard extends React.Component {
       pledgersByDistrict,
       allPledgers,
       filterBy,
-      removeFilterBy,
       showOnlyWinners,
       year,
     } = this.props;
@@ -124,7 +123,6 @@ class PledgerDashboard extends React.Component {
           items={pledgersByDistrict}
           toggleFilterToWinners={toggleFilterToWinners}
           filterBy={filterBy}
-          removeFilterBy={removeFilterBy}
           isCurrentYear={isCurrentYear}
           showOnlyWinners={showOnlyWinners}
         />

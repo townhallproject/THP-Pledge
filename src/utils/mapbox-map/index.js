@@ -117,7 +117,6 @@ export default class MbMap {
     mapKeys(fips, (fip, state) => {
       thisMap.setFeatureState(Number(fip), 'states', {
         doYourJobDistrict: false,
-        statePledged: false,
         missingMember: false,
       });
       for (let step = 0; step <= numOfDistricts[state]; step++) {
@@ -127,6 +126,15 @@ export default class MbMap {
           doYourJobDistrict: false,
         });
       }
+    });
+  }
+
+  resetAllStatePledgeFlagsToFalse() {
+    const thisMap = this;
+    mapKeys(fips, (fip) => {
+      thisMap.setFeatureState(Number(fip), 'states', {
+        statePledged: false,
+      });
     });
   }
 
@@ -148,11 +156,11 @@ export default class MbMap {
 
   colorByDYJ(allDoYourJobDistricts, selectedState, winnersOnly) {
     const mbMap = this;
-    this.addStateAndDistrictDYJDLayers();
-    this.addDYJDistrictFillLayer();
     this.resetAllStateDYJFlagsToFalse();
     this.resetDoYourJobDistrictFlagsToFalse(selectedState);
     this.setAllDistrictStatesToFalse();
+    this.addStateAndDistrictDYJDLayers();
+    this.addDYJDistrictFillLayer();
     Object.keys(allDoYourJobDistricts).forEach((code) => {
       const state = code.split('-')[0];
       const districtNo = code.split('-')[1];
@@ -174,10 +182,6 @@ export default class MbMap {
     });
   }
 
-  colorStatesByPledgerAndDJYD(allDoYourJobDistricts) {
-    this.colorByDYJ(allDoYourJobDistricts);
-  }
-
   showMayorMarkers(mayorData) {
     this.addMayorLayer(mayorData);
   }
@@ -190,6 +194,7 @@ export default class MbMap {
 
   colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState, winnersOnly) {
     const mbMap = this;
+    this.resetAllStatePledgeFlagsToFalse(); // turn off all state pledge lines
     this.stateOutline(items, winnersOnly);
     this.colorByDYJ(allDoYourJobDistricts, selectedState, winnersOnly);
     Object.keys(items).forEach((state) => {

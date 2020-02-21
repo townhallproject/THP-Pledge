@@ -278,11 +278,7 @@ class MapView extends React.Component {
         } else {
           const stateAbr = properties.ABR ? properties.ABR : 'PA';
           const district = properties.DISTRICT ? properties.DISTRICT : properties.GEOID.substring(2);
-          if (!items[stateAbr]) {
-            tooltip = this.showEmptyTooltip(stateAbr, Number(district));
-          } else {
-            tooltip = this.showDistrictTooltip(stateAbr, Number(district));
-          }
+          tooltip = this.showDistrictTooltip(stateAbr, Number(district));
         }
         if (tooltip) {
           return this.popup.setLngLat(e.lngLat)
