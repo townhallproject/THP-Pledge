@@ -25,14 +25,7 @@ export default class Legend extends React.Component {
           removeFilterBy={removeFilterBy}
         />)}
         <ul className="list-inline">
-          {/* <li className="map-legend-li hide-if-no-webgl">
-            <dt className="statewide-dyjd" />
-            <dd><strong>Do Your Job</strong> State</dd>
-          </li>
-          <li className="map-legend-li hide-if-no-webgl">
-            <dt className="district-dyjd" />
-            <dd><strong>Do Your Job</strong> District</dd>
-          </li> */}
+
           <li className="map-legend-li hide-if-no-webgl">
             <dt className="statewide-pledger" />
             <dd>Governor/U.S. Senate <strong>Town Hall Pledge</strong></dd>
@@ -45,6 +38,18 @@ export default class Legend extends React.Component {
             <dt className="mayor-pledger" />
             <dd>Mayor <strong>Town Hall Pledge</strong></dd>
           </li>
+          {!isCurrentYear && (
+            <React.Fragment>
+              <li className="map-legend-li hide-if-no-webgl">
+                <dt className="statewide-dyjd" />
+                <dd><strong>Do Your Job</strong> State</dd>
+              </li>
+              <li className="map-legend-li hide-if-no-webgl">
+                <dt className="district-dyjd" />
+                <dd><strong>Do Your Job</strong> District</dd>
+              </li>
+            </React.Fragment>
+          )}
           {!isCurrentYear && !showOnlyWinners &&
           <React.Fragment>
             <li className="map-legend-li hide-if-no-webgl">
