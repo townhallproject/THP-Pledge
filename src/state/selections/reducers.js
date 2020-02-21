@@ -1,12 +1,14 @@
 import { uniqBy } from 'lodash';
-import { STATUS_WON } from '../../components/constants';
+import { STATUS_WON, STATUS_NOMINEE, STATUS_ACTIVE } from '../../components/constants';
 
-const initialState = {
+export const initialState = {
+  currentElectionYear: '2020',
   districts: [],
-  filterBy: {
-    pledged: [true],
-    status: [STATUS_WON],
-  },
+  filterToWinners: false,
+  // filterBy: {
+  //   pledged: [true, false],
+  //   status: [STATUS_WON, STATUS_NOMINEE, STATUS_ACTIVE],
+  // },
   filters: [],
   usState: '',
   zipcode: '',
@@ -14,6 +16,11 @@ const initialState = {
 
 const filtersReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case 'SWITCH_ELECTION_YEAR':
+      return {
+        ...state,
+        currentElectionYear: payload,
+      };
     case 'RESET_SELECTIONS':
       return {
         ...state,
@@ -38,6 +45,11 @@ const filtersReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         filters: payload,
+      };
+    case 'TOGGLE_FILTER_TO_WINNERS':
+      return {
+        ...state,
+        filterToWinners: payload,
       };
     case 'ADD_FILTER_BY':
       return {

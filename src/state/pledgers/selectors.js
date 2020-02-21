@@ -10,13 +10,17 @@ import { createSelector } from 'reselect';
 import {
   getUsState,
   getDistricts,
-  getFilterBy,
+  getFilterToWinners,
+  getElectionYear,
 } from '../selections/selectors';
-import { INCLUDE_STATUS } from '../../components/constants';
+import { INCLUDE_STATUS, STILL_ACTIVE, STATUS_WON } from '../../components/constants';
+import { isCurrentYear } from '../../utils';
 
 export const getAllPledgers = state => state.pledgers.allPledgers;
 
-export const getFilteredPledgers = createSelector([getAllPledgers], (allPledgers) => {
+export const getMayorFeatures = state => state.pledgers.mayorFeatures;
+
+export const getMappedValuePledgers = createSelector([getAllPledgers], (allPledgers) => {
   if (!allPledgers) {
     return null;
   }
@@ -34,38 +38,48 @@ export const allTotalPledged = createSelector([getAllPledgers], (allPledgers) =>
   }, 0);
 });
 
-export const allPledgersOnBallot = createSelector([getAllPledgers, getFilterBy], (allPledgers, filterObj) => {
+export const allPledgersOnBallot = createSelector([getAllPledgers, getFilterToWinners, getElectionYear], (allPledgers, onlyShowWinners, year) => {
   if (!allPledgers) {
     return null;
   }
+  if (isCurrentYear(year)) {
+    return reduce(allPledgers, (acc, pledgersInState) => {
+      acc += filter(pledgersInState, person => person.pledged && includes(STILL_ACTIVE, person.status)).length;
+      return acc;
+    }, 0);
+  }
+  const includeArray = onlyShowWinners ? [STATUS_WON] : INCLUDE_STATUS;
   return reduce(allPledgers, (acc, pledgersInState) => {
-    acc += filter(pledgersInState, person => person.pledged && includes(filterObj.status, person.status)).length;
+    acc += filter(pledgersInState, person => person.pledged && includes(includeArray, person.status)).length;
     return acc;
   }, 0);
 });
 
 export const groupByStateAndDistrict = createSelector(
   [
-    getFilterBy,
-    getFilteredPledgers,
+    getFilterToWinners,
+    getMappedValuePledgers,
   ],
-  (filterObj, allPledgers) => {
+  (onlyShowWinners, allPledgers) => {
     if (!allPledgers) {
       return null;
     }
     return mapValues(allPledgers, allPledgersInState => reduce(allPledgersInState, (acc, cur) => {
-      let include = true;
-      forEach(filterObj, (value, key) => {
-        if (!includes(value, cur[key])) {
-          include = false;
-        }
-      });
+      const include = onlyShowWinners ? cur.status === STATUS_WON && cur.pledged : true;
       if (cur.district) {
         if (!acc[cur.district]) {
           acc[cur.district] = [];
         }
         if (include) {
           acc[cur.district].push(cur);
+        }
+      } else if (cur.city) {
+        const key = `${cur.role} - ${cur.city}`;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        if (include) {
+          acc[key].push(cur);
         }
       } else {
         if (!acc[cur.role]) {

@@ -1,38 +1,26 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import {
-  Tag,
-  Switch,
-} from 'antd';
+import { Switch } from 'antd';
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/popover/style/index.css');
 require('style-loader!css-loader!antd/es/switch/style/index.css');
 import './style.scss';
-import { 
-  STATUS_WON, 
-  STATUS_NOMINEE,
-  INCLUDE_STATUS,
-} from '../constants';
+
 /* eslint-enable */
 
 const FilterBar = (props) => {
   const {
-    addFilterBy, 
+    toggleFilterToWinners,
+    showOnlyWinners,
   } = props;
 
   function changeNomineeToggle(value) {
     if (value) {
-      return addFilterBy({
-        pledged: [true],
-        status: [STATUS_WON],
-      });
+      return toggleFilterToWinners(true);
     }
-    return addFilterBy({
-      pledged: [true, false],
-      status: INCLUDE_STATUS,
-    });
+    return toggleFilterToWinners(false);
   }
 
   return (
@@ -40,9 +28,9 @@ const FilterBar = (props) => {
         Showing:
       <Switch
         onChange={changeNomineeToggle}
-        defaultChecked
         checkedChildren="Pledged winners"
         unCheckedChildren="All nominees"
+        defaultChecked={showOnlyWinners}
       />
 
     </div>
@@ -50,8 +38,8 @@ const FilterBar = (props) => {
 };
 
 FilterBar.propTypes = {
-  allPledgers: PropTypes.shape({}).isRequired,
-  addFilterBy: PropTypes.func.isRequired,
+  showOnlyWinners: PropTypes.bool.isRequired,
+  toggleFilterToWinners: PropTypes.func.isRequired,
 };
 
 export default FilterBar;

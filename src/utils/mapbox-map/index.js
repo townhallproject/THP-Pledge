@@ -11,6 +11,7 @@ import {
   MISSING_MEMBER_COLOR,
   STATUS_WON,
   STATUS_NOMINEE,
+  STILL_ACTIVE,
 } from '../../components/constants';
 import { fips, numOfDistricts } from '../../data/dictionaries';
 import { zeroPadding } from '../index';
@@ -93,11 +94,30 @@ export default class MbMap {
     map.on('click', callback);
   }
 
+  setAllDistrictStatesToFalse() {
+    const thisMap = this;
+
+    mapKeys(fips, (fip, state) => {
+      thisMap.setFeatureState(Number(fip), 'states', {
+        pledged: false,
+      });
+      for (let step = 0; step <= numOfDistricts[state]; step++) {
+        const districtPadded = zeroPadding(step);
+        const geoID = `${fip}${districtPadded}`;
+        thisMap.setFeatureState(Number(geoID), 'districts', {
+          missingMember: false,
+          pledged: false,
+        });
+      }
+    });
+  }
+
   resetAllStateDYJFlagsToFalse() {
     const thisMap = this;
     mapKeys(fips, (fip, state) => {
       thisMap.setFeatureState(Number(fip), 'states', {
         doYourJobDistrict: false,
+        missingMember: false,
       });
       for (let step = 0; step <= numOfDistricts[state]; step++) {
         const districtPadded = zeroPadding(step);
@@ -106,6 +126,15 @@ export default class MbMap {
           doYourJobDistrict: false,
         });
       }
+    });
+  }
+
+  resetAllStatePledgeFlagsToFalse() {
+    const thisMap = this;
+    mapKeys(fips, (fip) => {
+      thisMap.setFeatureState(Number(fip), 'states', {
+        statePledged: false,
+      });
     });
   }
 
@@ -127,11 +156,11 @@ export default class MbMap {
 
   colorByDYJ(allDoYourJobDistricts, selectedState, winnersOnly) {
     const mbMap = this;
-    this.addStateAndDistrictDYJDLayers();
-    this.addDYJDistrictFillLayer();
-
     this.resetAllStateDYJFlagsToFalse();
     this.resetDoYourJobDistrictFlagsToFalse(selectedState);
+    this.setAllDistrictStatesToFalse();
+    this.addStateAndDistrictDYJDLayers();
+    this.addDYJDistrictFillLayer();
     Object.keys(allDoYourJobDistricts).forEach((code) => {
       const state = code.split('-')[0];
       const districtNo = code.split('-')[1];
@@ -153,13 +182,20 @@ export default class MbMap {
     });
   }
 
-  colorStatesByPledgerAndDJYD(allDoYourJobDistricts) {
-    this.colorByDYJ(allDoYourJobDistricts);
+  showMayorMarkers(mayorData) {
+    this.addMayorLayer(mayorData);
+  }
+
+  updateMayorMarkers(mayorData) {
+    if (mayorData.length) {
+      this.addMayorLayer(mayorData);
+    }
   }
 
   colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState, winnersOnly) {
     const mbMap = this;
-    this.stateOutline(items);
+    this.resetAllStatePledgeFlagsToFalse(); // turn off all state pledge lines
+    this.stateOutline(items, winnersOnly);
     this.colorByDYJ(allDoYourJobDistricts, selectedState, winnersOnly);
     Object.keys(items).forEach((state) => {
       if (!items[state] || isEmpty(items[state])) {
@@ -171,7 +207,7 @@ export default class MbMap {
         const geoid = fipsId + districtId;
         const pledged = filter((items[state][district]), { pledged: true }).length;
         const missingMember = filter((items[state][district]), { missingMember: true }).length;
- 
+
         mbMap.setFeatureState(
           Number(geoid),
           'districts', {
@@ -183,27 +219,28 @@ export default class MbMap {
     });
   }
 
-  stateOutline(items) {
+  stateOutline(items, winnersOnly) {
     const mbMap = this;
     this.addStatesFillLayer();
     Object.keys(items).forEach((state) => {
       let count = 0;
       let missingMember = 0;
       Object.keys(items[state]).forEach((district) => {
-        missingMember += filter(
-          (items[state][district]),
-          ele => ele.missingMember === true &&
-          includes(includeStatuses, ele.status) &&
-          MbMap.isStateWide(district),
-        ).length;
-        count += filter(
-          (items[state][district]),
-          ele => ele.pledged === true &&
-           includes(includeStatuses, ele.status) &&
-           MbMap.isStateWide(district),
-        ).length;
+        if (MbMap.isStateWide(district)) {
+          missingMember += filter(
+            (items[state][district]),
+            ele => ele.missingMember === true &&
+            includes(includeStatuses, ele.status),
+          ).length;
+          count += filter(
+            (items[state][district]),
+            (ele) => {
+              const shouldInclude = winnersOnly ? includes([STATUS_WON], ele.status) : includes(STILL_ACTIVE, ele.status);
+              return ele.pledged === true && shouldInclude;
+            },
+          ).length;
+        }
       });
-
       mbMap.setFeatureState(
         Number(fips[state]),
         'states',
@@ -219,18 +256,19 @@ export default class MbMap {
     if (!this.map.getSource('states')) {
       this.addSources();
     }
+
     this.map.addLayer({
       id: 'states-missingmember-line',
       type: 'line',
       source: 'states',
       paint: {
         'line-color': MISSING_MEMBER_COLOR,
-        'line-width': 2,
         'line-opacity': ['case',
           ['boolean', ['feature-state', 'missingMember'], true],
           0.8,
           0,
         ],
+        'line-width': 2,
       },
     }, 'district_interactive');
     this.map.addLayer({
@@ -239,12 +277,12 @@ export default class MbMap {
       source: 'states',
       paint: {
         'line-color': PLEDGED_COLOR_DARK,
-        'line-width': 2,
         'line-opacity': ['case',
           ['boolean', ['feature-state', 'statePledged'], true],
           1,
           0,
         ],
+        'line-width': 2,
       },
     }, 'district_interactive');
   }
@@ -347,6 +385,28 @@ export default class MbMap {
       source: 'districts',
       type: 'fill',
     }, 'state border');
+  }
+
+  addMayorLayer(data) {
+    if (!data.length) {
+      return;
+    }
+    this.map.addLayer({
+      id: 'mayor-markers',
+      source: {
+        data: {
+          features: data,
+          type: 'FeatureCollection',
+        },
+        type: 'geojson',
+      },
+      type: 'circle',
+      paint: {
+        'circle-color': PLEDGED_COLOR_LIGHT,
+        'circle-opacity': 1,
+        'circle-stroke-color': PLEDGED_COLOR_DARK,
+      },
+    });
   }
 
   setFeatureState(featureId, source, state) {

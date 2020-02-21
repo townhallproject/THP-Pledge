@@ -2,7 +2,10 @@ import React from 'react';
 import { Popover } from 'antd';
 
 import PropTypes from 'prop-types';
-import { totalIncumbentsForParty } from '../../utils';
+import {
+  totalIncumbentsForParty,
+  totalIncumbentsFor3rdParty,
+} from '../../utils';
 
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/popover/style/index.css');
@@ -12,16 +15,9 @@ import './style.scss';
 const CounterBar = (props) => {
   const totalDReps = (totalIncumbentsForParty(props.allPledgers, 'D', true));
   const totalDCandidates = (totalIncumbentsForParty(props.allPledgers, 'D', false));
-  const totalIReps = (
-    totalIncumbentsForParty(props.allPledgers, 'I', true) +
-    totalIncumbentsForParty(props.allPledgers, 'G', true) +
-    totalIncumbentsForParty(props.allPledgers, 'L', true)
-  );
-  const totalICandidates = (
-    totalIncumbentsForParty(props.allPledgers, 'I', false) +
-    totalIncumbentsForParty(props.allPledgers, 'G', false) +
-    totalIncumbentsForParty(props.allPledgers, 'L', false)
-  );
+  const totalIReps = totalIncumbentsFor3rdParty(props.allPledgers, true);
+
+  const totalICandidates = totalIncumbentsFor3rdParty(props.allPledgers, false);
   const totalRCandidates = (totalIncumbentsForParty(props.allPledgers, 'R', false));
   const totalRReps = (totalIncumbentsForParty(props.allPledgers, 'R', true));
 

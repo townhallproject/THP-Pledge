@@ -1,6 +1,9 @@
 import superagent from 'superagent';
 import { values, reduce } from 'lodash';
 import { firebaseUrl } from '../constants';
+import { startSetDoYourJobDistricts } from '../do-your-job-district/actions';
+import { startSetPledgers } from '../pledgers/actions';
+import { isCurrentYear } from '../../utils';
 
 export const setDistrict = payload => ({
   payload,
@@ -14,6 +17,11 @@ export const setUsState = payload => ({
 
 export const resetSelections = () => ({
   type: 'RESET_SELECTIONS',
+});
+
+export const setElectionYear = payload => ({
+  payload,
+  type: 'SWITCH_ELECTION_YEAR',
 });
 
 export const setFilters = payload => ({
@@ -35,6 +43,25 @@ export const setInitialFilters = payload => ({
   payload,
   type: 'SET_INITIAL_FILTERS',
 });
+
+export const toggleFilterToWinners = payload => ({
+  payload,
+  type: 'TOGGLE_FILTER_TO_WINNERS',
+});
+
+export const switchElectionYear = payload => (dispatch) => {
+  dispatch(setElectionYear());
+  if (isCurrentYear(payload)) {
+    // if we are looking at a current election, want to turn off filter to winners
+    dispatch(toggleFilterToWinners(false));
+  } else {
+    // by default, when looking at past elections, show winners only
+    dispatch(toggleFilterToWinners(true));
+  }
+  Promise.all([dispatch(startSetDoYourJobDistricts(payload)), dispatch(startSetPledgers(payload))]).then(() => {
+    dispatch(setElectionYear(payload));
+  });
+};
 
 export const getDistrictFromZip = payload => (dispatch) => {
   if (!payload.query) {
