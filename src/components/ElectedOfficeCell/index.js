@@ -15,14 +15,13 @@ const gridStyle = {
 };
 
 const getCardOrder = (electedOffice) => {
-
-  if (electedOffice.includes("Sen")) {
+  if (electedOffice.includes('Sen')) {
     return -3;
   }
-  if (electedOffice.includes("Gov")) {
+  if (electedOffice.includes('Gov')) {
     return -2;
   }
-  if (electedOffice.includes("Mayor")) {
+  if (electedOffice.includes('Mayor')) {
     return -1;
   }
 
@@ -32,20 +31,20 @@ const getCardOrder = (electedOffice) => {
   }
 
   // If we end up here, we're processing a State Legislature
-  var stateElectedOffice = electedOffice.split('-')[0];
-  var stateElectedOfficeNumber = electedOffice.split('-')[1];
-  switch(stateElectedOffice) {
-    case "SD":
+  const stateElectedOffice = electedOffice.split('-')[0];
+  const stateElectedOfficeNumber = electedOffice.split('-')[1];
+  switch (stateElectedOffice) {
+    case 'SD':
       return 500 + stateElectedOfficeNumber;
-    case "HD":
+    case 'HD':
       return 1000 + stateElectedOfficeNumber;
-    case "LD":
+    case 'LD':
       return 1500 + stateElectedOfficeNumber;
     default:
       return 2000; // we shouldn't end up here
   }
   return 2000; // we should never end up here, but if there's a card case we haven't handled
-               // we would rather the card be displayed last in the order
+  // we would rather the card be displayed last in the order
 };
 
 const getPeopleOrder = (pledger) => {
@@ -69,19 +68,18 @@ class ElectedOfficeCell extends React.Component {
     } = this.props;
     let isDoYourJobDistrict;
     if (doYourJobDistricts.length > 0 && !isNaN(Number(district))) {
-      // rep 
+      // rep
       isDoYourJobDistrict = find(doYourJobDistricts, (ele) => {
         const testDistrict = Number(ele.district) === 0 ? 1 : Number(ele.district);
         return testDistrict === Number(district);
       });
     } else if (doYourJobDistricts.length > 0) {
       // sen
-      isDoYourJobDistrict = find(
-        doYourJobDistricts, (ele) => {
-          const dyjdStateRank = ele.key.split('-')[1];
-          const thiDistrictStateRank = district.split(' ')[1];
-          return typeof ele.district === 'string' && dyjdStateRank === thiDistrictStateRank;
-        });
+      isDoYourJobDistrict = find(doYourJobDistricts, (ele) => {
+        const dyjdStateRank = ele.key.split('-')[1];
+        const thiDistrictStateRank = district.split(' ')[1];
+        return typeof ele.district === 'string' && dyjdStateRank === thiDistrictStateRank;
+      });
     }
     return isDoYourJobDistrict;
   }
@@ -111,6 +109,7 @@ class ElectedOfficeCell extends React.Component {
         const isDoYourJob = !!this.isDoYourJob(electedOffice);
         return (
           <Card
+            key={title}
             style={gridStyle}
             title={(
               <React.Fragment>{title} {isDoYourJob ? <span className="do-your-job-icon-small" /> : null }</React.Fragment>)}

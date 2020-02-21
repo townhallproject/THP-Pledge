@@ -4,10 +4,7 @@ import {
   Card,
   Badge,
 } from 'antd';
-import {
-  mapKeys,
-  filter,
-} from 'lodash';
+import { filter } from 'lodash';
 
 import { PLEDGED_COLOR_DARK } from '../constants';
 import ElectedOfficeCell from '../ElectedOfficeCell';
@@ -25,7 +22,10 @@ class Table extends React.Component {
     const {
       items,
       allDoYourJobDistricts,
+      isCurrentYear,
     } = this.props;
+
+    const emptyMessage = isCurrentYear ? 'No candidates have taken the pledge yet in this state' : 'No winning candidates took the pledge in this state';
     return Object.keys(items)
       .map((state) => {
         const doYourJobDistricts = filter(allDoYourJobDistricts, ele => (ele.state === state));
@@ -57,7 +57,7 @@ class Table extends React.Component {
               }}
             >
               {totalPledgedInState(items[state]) === 0 ? (
-                <span>No winning candidates took the pledge in this state</span>) : (<ElectedOfficeCell
+                <span>{emptyMessage}</span>) : (<ElectedOfficeCell
                   key={`${state}-cell`}
                   stateName={state}
                   items={items[state]}
@@ -72,6 +72,7 @@ class Table extends React.Component {
 
 Table.propTypes = {
   allDoYourJobDistricts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  isCurrentYear: PropTypes.bool.isRequired,
   items: PropTypes.shape({}).isRequired,
 };
 

@@ -1,5 +1,6 @@
-const initialState = {
+export const initialState = {
   allPledgers: null,
+  mayorFeatures: null,
 };
 
 const pledgerReducer = (state = initialState, action) => {
@@ -8,6 +9,11 @@ const pledgerReducer = (state = initialState, action) => {
       return {
         ...state,
         allPledgers: action.pledgers,
+      };
+    case 'SET_MAYOR_GEOJSON':
+      return {
+        ...state,
+        mayorFeatures: action.features,
       };
     default:
       return state;

@@ -8,7 +8,6 @@ import geoViewport from '@mapbox/geo-viewport';
 import { stateAbrvToName } from '../../data/dictionaries';
 
 import {
-  totalPledgedInDistricts,
   zeroPadding,
   formatPledger,
 } from '../../utils';
@@ -20,7 +19,7 @@ import MapInset from '../../components/MapInset';
 import './popover.scss';
 import './style.scss';
 import MbMap from '../../utils/mapbox-map';
-import { INCLUDE_STATUS } from '../constants';
+import { STILL_ACTIVE } from '../constants';
 
 class MapView extends React.Component {
   constructor(props) {
@@ -81,17 +80,20 @@ class MapView extends React.Component {
       }
       const stateBB = bboxes[bbname];
       return this.focusMap(stateBB);
+    } else if (!selectedState && this.props.selectedState) {
+      // reset to national view
+      this.toggleStateMask();
+      this.setInitialStyles();
+      this.map.metadata.level = 'state';
+      this.setState({ filterStyle: 'state' });
+      return this.map.fitBounds([[-128.8, 23.6], [-65.4, 50.2]]);
     }
-
-    // reset to national view
-    this.toggleStateMask();
-    this.setInitialStyles();
-    this.map.metadata.level = 'state';
-    this.setState({ filterStyle: 'state' });
-    return this.map.fitBounds([[-128.8, 23.6], [-65.4, 50.2]]);
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const {
+      mbMap,
+    } = this;
     // changing between coloring by state and coloring by district
     if (prevState.filterStyle !== this.state.filterStyle ||
       prevProps.selectedState !== this.props.selectedState ||
@@ -100,6 +102,9 @@ class MapView extends React.Component {
       this.setDistrictLayerStyle();
       // clearing any previous popups
       this.popup.remove();
+    }
+    if (this.props.mayorFeatures.length && !prevProps.mayorFeatures.length) {
+      mbMap.updateMayorMarkers(this.props.mayorFeatures);
     }
   }
 
@@ -111,10 +116,7 @@ class MapView extends React.Component {
     const {
       map,
     } = this;
-    const {
-      winnersOnly,
-    } = this.props;
-    this.colorDistrictsByPledgersAndDJYD(winnersOnly);
+    this.colorDistrictsByPledgersAndDJYD();
 
     this.hideLayer('dyj-district-level-color-fill');
     if (map.getLayer('districts-fill')) {
@@ -141,10 +143,12 @@ class MapView extends React.Component {
       selectedState,
       allDoYourJobDistricts,
       winnersOnly,
+      mayorFeatures,
     } = this.props;
     const {
       mbMap,
     } = this;
+    console.log('winners only', winnersOnly);
     mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState, winnersOnly);
   }
 
@@ -184,7 +188,7 @@ class MapView extends React.Component {
       if (itemsInState.Gov && itemsInState.Gov.length > 0) {
         tooltip += '<h4>Governor\'s race</h4>';
         itemsInState.Gov.forEach((item) => {
-          if (includes(INCLUDE_STATUS, item.status)) {
+          if (includes(STILL_ACTIVE, item.status)) {
             tooltip += formatPledger(item);
           }
         });
@@ -192,17 +196,32 @@ class MapView extends React.Component {
       if (itemsInState.Sen && itemsInState.Sen.length > 0) {
         tooltip += '<h4>Senate race</h4>';
         itemsInState.Sen.forEach((item) => {
-          if (includes(INCLUDE_STATUS, item.status)) {
+          if (includes(STILL_ACTIVE, item.status)) {
             tooltip += formatPledger(item);
           }
         });
       }
-      const totalDistricts = totalPledgedInDistricts(itemsInState);
-      tooltip += `<span>Total ${name} U.S.House pledge takers: <strong>${totalDistricts}</strong></span>`;
     } else {
       this.setState({ popoverColor: 'popover-no-data' });
       tooltip += '<div><em>No current candidates have taken the pledge</em></div>';
     }
+    return tooltip;
+  }
+
+  showMayorTooltip(properties) {
+    let tooltip = `<h4>${properties.city}, ${properties.state}</h4>`;
+
+    if (properties.numberOfPledgers > 0) {
+      tooltip += `<div>${properties.numberOfPledgers} mayoral candidates have taken the pledge. </div>`;
+    } else {
+      tooltip += '<div>No one in this city has signed the pledge yet.</div>';
+    }
+    return tooltip;
+  }
+
+  showEmptyTooltip(state, district) {
+    let tooltip = `<h4>${state} ${district}</h4>`;
+    tooltip += '<div>No one in this district has signed the pledge yet.</div>';
     return tooltip;
   }
 
@@ -221,7 +240,7 @@ class MapView extends React.Component {
       if (incumbent) {
         tooltip += `${formatPledger(incumbent)}`;
       }
-      const challengers = filter(people, person => person.incumbent === false && includes(INCLUDE_STATUS, person.status));
+      const challengers = filter(people, person => person.incumbent === false && includes(STILL_ACTIVE, person.status));
 
       challengers.forEach((item) => {
         tooltip += formatPledger(item);
@@ -253,13 +272,14 @@ class MapView extends React.Component {
         // NAME:"Maine"
         // STATEFP:"23"
         const { properties } = feature;
-        const stateAbr = properties.ABR ? properties.ABR : 'PA';
-        const district = properties.DISTRICT ? properties.DISTRICT : properties.GEOID.substring(2);
-        if (!items[stateAbr]) {
-          return undefined;
+        let tooltip;
+        if (properties.city) {
+          tooltip = this.showMayorTooltip(properties);
+        } else {
+          const stateAbr = properties.ABR ? properties.ABR : 'PA';
+          const district = properties.DISTRICT ? properties.DISTRICT : properties.GEOID.substring(2);
+          tooltip = this.showDistrictTooltip(stateAbr, Number(district));
         }
-        const tooltip = this.showDistrictTooltip(stateAbr, Number(district));
-        
         if (tooltip) {
           return this.popup.setLngLat(e.lngLat)
             .setHTML(tooltip)
@@ -358,7 +378,9 @@ class MapView extends React.Component {
     ];
     this.mbMap.setInitalState('main', this.setInitialStyles, bounds, {}, this.addClickListener(searchByDistrict), selectedState, this.onLoad);
     this.addPopups('district_interactive');
+    this.mbMap.addMayorLayer([]);
   }
+
 
   // Handles the highlight for districts when clicked on.
   highlightDistrict(geoid) {
