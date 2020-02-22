@@ -90,7 +90,7 @@ class Nav extends React.Component {
           <Menu.Item
             className="social-icons"
           >
-            <a data-toggle="tab" className="linkOut" href="#contact"><Icon type="mail" /></a>
+            <a data-toggle="tab" className="linkOut" href="mailto:info@townhallproject.com"><Icon type="mail" /></a>
           </Menu.Item>
           <Divider type="vertical" />
           <Menu.Item>
