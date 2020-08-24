@@ -64,6 +64,11 @@ export const startSetPledgers = year => (dispatch) => {
 
     const pledgers = mapValues(allPledgers, pledgersInstate =>
       values(pledgersInstate).filter((ele) => {
+        // for at large districts
+        // eslint-disable-next-line eqeqeq
+        if (ele.district == 0) {
+          ele.district = 1;
+        }
         if (ele.incumbent) {
           return true;
         }
