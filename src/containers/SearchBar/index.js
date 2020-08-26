@@ -57,7 +57,7 @@ class SearchBar extends React.Component {
       electionYear,
     } = this.props;
     if (isCurrentYear(electionYear)) {
-      return 'candidates have taken the Town Hall Pledge';
+      return `candidates in ${electionYear} have taken the Town Hall Pledge`;
     }
     if (filterToWinners) {
       return 'candidates took the Pledge and won!';
