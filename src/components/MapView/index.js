@@ -280,7 +280,7 @@ class MapView extends React.Component {
       return undefined;
     });
     map.on('mouseleave', 'district_interactive', () => {
-      // this.popup.remove();
+      this.popup.remove();
     });
   }
 
