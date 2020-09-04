@@ -7,6 +7,9 @@ export function takenThePledge(record) {
   return record.pledged ? ' has taken the pledge.' : ' has not taken the pledge.';
 }
 
+export const isActiveCandidate = person => STILL_ACTIVE.includes(person.status);
+export const isActivePledger = person => (person.pledged && STILL_ACTIVE.includes(person.status));
+
 export const totalPledgedInState = itemsInState => Object.keys(itemsInState)
   .reduce((acc, cur) => {
     acc += filter(itemsInState[cur], 'pledged').length;
@@ -29,16 +32,14 @@ export const totalIncumbentsForParty = (pledgerObject, party, incumbent) =>
   filter(flattenPledgers(pledgerObject), person =>
     person.incumbent === incumbent &&
     person.party === party &&
-    person.pledged &&
-    STILL_ACTIVE.includes(person.status)).length;
+    person.pledged).length;
 
 export const totalIncumbentsFor3rdParty = (pledgerObject, incumbent) =>
   filter(flattenPledgers(pledgerObject), person =>
     person.incumbent === incumbent &&
     person.pledged === true &&
     person.party !== 'R' &&
-    person.party !== 'D' &&
-    STILL_ACTIVE.includes(person.status)).length;
+    person.party !== 'D').length;
 
 export const zeroPadding = (district) => {
   const zeros = '00';

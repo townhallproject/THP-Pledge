@@ -103,7 +103,7 @@ class SearchBar extends React.Component {
       electionYear,
     } = this.props;
 
-    const header = isCurrentYear(electionYear) ? (<h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {this.getCopy()} </h2>) :
+    const header = isCurrentYear(electionYear) ? (<h2>{totalPledged || (<Icon type="loading" />)} {this.getCopy()} </h2>) :
       (<h2>{totalPledgedOnBallot || (<Icon type="loading" />)} {this.getCopy()} <small>({totalPledged || (<Icon type="loading" />)} total)</small></h2>);
 
     return (

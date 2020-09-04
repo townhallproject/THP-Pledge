@@ -5,7 +5,7 @@ import { batchActions } from 'redux-batched-actions';
 
 
 import { firebaseUrl } from '../constants';
-import { switchElectionYear } from '../selections/actions';
+import { isActiveCandidate } from '../../utils';
 
 export const setPledgers = pledgers => ({
   pledgers,
@@ -55,7 +55,7 @@ const makeMayorGeoJson = pledgers => (dispatch) => {
 
 const filterByStatus = ele => (ele.status === 'Lost Primary' && !ele.pledged) || !ele.status;
 
-const filterByPledged = ele => ele.pledged;
+const filterByPledged = ele => ele.pledged || isActiveCandidate(ele);
 
 export const startSetPledgers = year => (dispatch) => {
   const url = `${firebaseUrl}/town_hall_pledges/${year}.json`;

@@ -14,6 +14,7 @@ import { pledgerShape } from '../../state/pledgers/types';
 require('style-loader!css-loader!antd/es/avatar/style/index.css');
 require('style-loader!css-loader!antd/es/tooltip/style/index.css');
 import './style.scss';
+import { isElement } from 'lodash';
 /* eslint-enable */
 
 class PledgerCell extends React.Component {
@@ -30,7 +31,7 @@ class PledgerCell extends React.Component {
       'pledge-status': true,
       pledged: item.pledged,
     });
-
+  
     if (!item.displayName) {
       return null;
     }

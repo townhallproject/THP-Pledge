@@ -19,7 +19,6 @@ import MapInset from '../../components/MapInset';
 import './popover.scss';
 import './style.scss';
 import MbMap from '../../utils/mapbox-map';
-import { STILL_ACTIVE } from '../constants';
 
 class MapView extends React.Component {
   constructor(props) {
@@ -188,17 +187,13 @@ class MapView extends React.Component {
       if (itemsInState.Gov && itemsInState.Gov.length > 0) {
         tooltip += '<h4>Governor\'s race</h4>';
         itemsInState.Gov.forEach((item) => {
-          if (includes(STILL_ACTIVE, item.status)) {
-            tooltip += formatPledger(item);
-          }
+          tooltip += formatPledger(item);
         });
       }
       if (itemsInState.Sen && itemsInState.Sen.length > 0) {
         tooltip += '<h4>Senate race</h4>';
         itemsInState.Sen.forEach((item) => {
-          if (includes(STILL_ACTIVE, item.status)) {
-            tooltip += formatPledger(item);
-          }
+          tooltip += formatPledger(item);
         });
       }
     } else {
@@ -208,6 +203,7 @@ class MapView extends React.Component {
     return tooltip;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   showMayorTooltip(properties) {
     let tooltip = `<h4>${properties.city}, ${properties.state}</h4>`;
 
@@ -219,6 +215,7 @@ class MapView extends React.Component {
     return tooltip;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   showEmptyTooltip(state, district) {
     let tooltip = `<h4>${state} ${district}</h4>`;
     tooltip += '<div>No one in this district has signed the pledge yet.</div>';
@@ -240,7 +237,7 @@ class MapView extends React.Component {
       if (incumbent) {
         tooltip += `${formatPledger(incumbent)}`;
       }
-      const challengers = filter(people, person => person.incumbent === false && includes(STILL_ACTIVE, person.status));
+      const challengers = filter(people, person => person.incumbent === false);
 
       challengers.forEach((item) => {
         tooltip += formatPledger(item);

@@ -15,10 +15,10 @@ import './style.scss';
 const CounterBar = (props) => {
   const totalDReps = (totalIncumbentsForParty(props.allPledgers, 'D', true));
   const totalDCandidates = (totalIncumbentsForParty(props.allPledgers, 'D', false));
-  
+
   const totalIReps = totalIncumbentsFor3rdParty(props.allPledgers, true);
   const totalICandidates = totalIncumbentsFor3rdParty(props.allPledgers, false);
-  
+
   const totalRReps = (totalIncumbentsForParty(props.allPledgers, 'R', true));
   const totalRCandidates = (totalIncumbentsForParty(props.allPledgers, 'R', false));
 
