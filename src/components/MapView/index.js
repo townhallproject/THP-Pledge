@@ -2,15 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   filter,
-  includes,
 } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
-import { stateAbrvToName } from '../../data/dictionaries';
 
-import {
-  zeroPadding,
-  formatPledger,
-} from '../../utils';
+import { zeroPadding } from '../../utils';
+import { formatPersonRow } from './popover';
 
 import bboxes from '../../data/bboxes';
 import states from '../../data/states';
@@ -179,7 +175,6 @@ class MapView extends React.Component {
 
   showStateTooltip(state) {
     const { items } = this.props;
-    const name = stateAbrvToName[state];
     const itemsInState = items[state];
     let tooltip = '';
     if (itemsInState) {
@@ -187,13 +182,13 @@ class MapView extends React.Component {
       if (itemsInState.Gov && itemsInState.Gov.length > 0) {
         tooltip += '<h4>Governor\'s race</h4>';
         itemsInState.Gov.forEach((item) => {
-          tooltip += formatPledger(item);
+          tooltip += formatPersonRow(item);
         });
       }
       if (itemsInState.Sen && itemsInState.Sen.length > 0) {
         tooltip += '<h4>Senate race</h4>';
         itemsInState.Sen.forEach((item) => {
-          tooltip += formatPledger(item);
+          tooltip += formatPersonRow(item);
         });
       }
     } else {
@@ -235,12 +230,12 @@ class MapView extends React.Component {
     if (people.length) {
       const incumbent = filter(people, 'incumbent')[0];
       if (incumbent) {
-        tooltip += `${formatPledger(incumbent)}`;
+        tooltip += `${formatPersonRow(incumbent)}`;
       }
       const challengers = filter(people, person => person.incumbent === false);
 
       challengers.forEach((item) => {
-        tooltip += formatPledger(item);
+        tooltip += formatPersonRow(item);
       });
     } else {
       tooltip += '<div>No one in this district has signed the pledge yet.</div>';
@@ -255,7 +250,6 @@ class MapView extends React.Component {
       closeButton: true,
       closeOnClick: true,
     });
-    const { items } = this.props;
 
     map.on('mousemove', (e) => {
       const features = map.queryRenderedFeatures(e.point, { layers: [layer, 'district_interactive_pa'] });
@@ -286,7 +280,7 @@ class MapView extends React.Component {
       return undefined;
     });
     map.on('mouseleave', 'district_interactive', () => {
-      this.popup.remove();
+      // this.popup.remove();
     });
   }
 

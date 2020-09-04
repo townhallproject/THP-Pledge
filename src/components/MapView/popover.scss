@@ -2,6 +2,9 @@
 @import "../../style/mixins/popover";
 @import "../../style/mixins/popover-tip";
 
+.mapboxgl-popup .lost {
+  filter: opacity(0.5);
+}
 // default case
 .popover-has-data{
   .mapboxgl-popup-content {
