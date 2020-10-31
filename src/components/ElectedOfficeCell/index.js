@@ -109,7 +109,7 @@ class ElectedOfficeCell extends React.Component {
         const isDoYourJob = !!this.isDoYourJob(electedOffice);
         return (
           <Card
-            key={title}
+            key={`${stateName}-${electedOffice}`}
             style={gridStyle}
             title={(
               <React.Fragment>{title} {isDoYourJob ? <span className="do-your-job-icon-small" /> : null }</React.Fragment>)}
