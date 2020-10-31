@@ -3,6 +3,7 @@ import {
   mapKeys,
   isEmpty,
   includes,
+  isNaN,
 } from 'lodash';
 import {
   DYJD_COLOR,
@@ -163,7 +164,7 @@ export default class MbMap {
     this.addDYJDistrictFillLayer();
     Object.keys(allDoYourJobDistricts).forEach((code) => {
       const state = code.split('-')[0];
-      const districtNo = code.split('-')[1];
+      let districtNo = code.split('-')[1];
       if (selectedState && state !== selectedState) {
         return;
       }
@@ -175,6 +176,9 @@ export default class MbMap {
           doYourJobDistrict: true,
         });
       } else {
+        if (districtNo === '00') {
+          districtNo = '01';
+        }
         mbMap.setFeatureState(Number(fips[state] + districtNo), 'districts', {
           doYourJobDistrict: true,
         });
@@ -350,17 +354,17 @@ export default class MbMap {
     }
     this.map.addLayer({
       id: 'dyj-states-outline',
-      type: 'line',
-      source: 'states',
       paint: {
         'line-color': DYJD_COLOR,
-        'line-width': 2,
         'line-opacity': ['case',
           ['boolean', ['feature-state', 'doYourJobDistrict'], true],
           1,
           0,
         ],
+        'line-width': 2,
       },
+      source: 'states',
+      type: 'line',
     });
 
     this.map.addLayer({

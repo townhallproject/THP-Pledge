@@ -1,12 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon } from 'antd';
+import { Button } from 'antd';
 import { connect } from 'react-redux';
 import Nav from '../../components/Nav';
 
-import DYJDModal from '../../components/DYJD_Modal';
-
-import { DYJD_COLOR, PLEDGED_COLOR } from '../../components/constants';
 import SignPledge from '../../components/SignPledge';
 
 import { startSetDoYourJobDistricts } from '../../state/do-your-job-district/actions';
@@ -34,7 +31,7 @@ class Header extends React.Component {
       getDoYourJobDistricts,
       electionYear,
     } = this.props;
-    // getDoYourJobDistricts(electionYear);
+    getDoYourJobDistricts(electionYear);
   }
 
   toggleInfo() {
@@ -77,9 +74,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  changeYear: year => dispatch(switchElectionYear(year)),
   getDoYourJobDistricts: year => dispatch(startSetDoYourJobDistricts(year)),
   startSetPledgers: year => dispatch(startSetPledgers(year)),
-  changeYear: year => dispatch(switchElectionYear(year)),
 });
 
 Header.propTypes = {
