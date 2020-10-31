@@ -23,8 +23,11 @@ class IssueFilterTags extends React.Component {
     onFilterChanged(this.state.selectedTags);
   }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({ selectedTags: newProps.selectedFilters });
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedFilters !== prevProps.selectedFilters) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ selectedTags: this.props.selectedFilters });
+    }
   }
 
   handleChange(tag, checked) {

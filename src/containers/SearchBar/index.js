@@ -134,7 +134,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 SearchBar.propTypes = {
-  electionYear: PropTypes.number.isRequired,
+  electionYear: PropTypes.string.isRequired,
   filterToWinners: PropTypes.bool.isRequired,
   resetSelections: PropTypes.func.isRequired,
   searchByZip: PropTypes.func.isRequired,

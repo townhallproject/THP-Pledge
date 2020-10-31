@@ -18,21 +18,19 @@ class MapInset extends React.Component {
   componentDidMount() {
     this.initializeMap();
   }
-
-  componentWillReceiveProps(newProps) {
+  
+  componentDidUpdate(prevProps) {
     const {
       allDoYourJobDistricts,
       winnersOnly,
+      items,
     } = this.props;
     const {
       mbMap,
     } = this;
-    if (newProps.winnersOnly !== winnersOnly) {
-      mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, newProps.items, null, newProps.winnersOnly);
+    if (prevProps.winnersOnly !== winnersOnly) {
+      mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, null, winnersOnly);
     }
-  }
-
-  componentDidUpdate() {
     this.map.resize();
   }
 

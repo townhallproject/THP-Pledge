@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { difference } from 'lodash';
 import moment from 'moment';
 
 import {
@@ -18,7 +17,6 @@ import { startSetPledgers } from '../../state/pledgers/actions';
 import {
   getUsState,
   getDistricts,
-  getFilterBy,
   getElectionYear,
   getFilterToWinners,
 } from '../../state/selections/selectors';
@@ -35,7 +33,6 @@ import Table from '../../components/Table';
 
 import './style.scss';
 import Legend from '../../components/Legend';
-import { STATUS_WON } from '../../components/constants';
 
 class PledgerDashboard extends React.Component {
   constructor(props) {
@@ -161,7 +158,7 @@ PledgerDashboard.propTypes = {
   allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   allPledgers: PropTypes.shape({}),
   getInitialPledgers: PropTypes.func.isRequired,
-  mayorGeojson: PropTypes.shape({}),
+  mayorFeatures: PropTypes.arrayOf(PropTypes.shape({})),
   pledgersByDistrict: PropTypes.shape({}),
   pledgersByState: PropTypes.shape({}),
   resetSelections: PropTypes.func.isRequired,
@@ -177,6 +174,7 @@ PledgerDashboard.propTypes = {
 
 PledgerDashboard.defaultProps = {
   allPledgers: null,
+  mayorFeatures: [],
   pledgersByDistrict: null,
   pledgersByState: null,
   selectedDistricts: [],
