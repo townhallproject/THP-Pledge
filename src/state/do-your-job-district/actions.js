@@ -1,7 +1,4 @@
-import {
-  values,
-  mapValues,
-} from 'lodash';
+import { mapValues } from 'lodash';
 import request from 'superagent';
 import { firebaseUrl } from '../constants';
 

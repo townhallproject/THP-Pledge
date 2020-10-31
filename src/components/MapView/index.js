@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  filter,
-} from 'lodash';
+import { filter } from 'lodash';
 import geoViewport from '@mapbox/geo-viewport';
 
 import { zeroPadding } from '../../utils';
@@ -143,7 +141,6 @@ class MapView extends React.Component {
     const {
       mbMap,
     } = this;
-    console.log('winners only', winnersOnly);
     mbMap.colorDistrictsByPledgersAndDJYD(allDoYourJobDistricts, items, selectedState, winnersOnly);
   }
 

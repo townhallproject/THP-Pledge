@@ -72,6 +72,7 @@ export const startSetPledgers = year => (dispatch) => {
         if (ele.incumbent) {
           return true;
         }
+        // eslint-disable-next-line eqeqeq
         if (year == moment().year()) {
           return filterByPledged(ele);
         }
