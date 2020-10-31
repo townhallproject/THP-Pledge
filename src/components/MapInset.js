@@ -129,19 +129,18 @@ class MapInset extends React.Component {
 MapInset.propTypes = {
   allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   bounds: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-  items: PropTypes.arrayOf(PropTypes.shape({})),
+  items: PropTypes.shape({}),
   mapId: PropTypes.string.isRequired,
   resetSelections: PropTypes.func.isRequired,
   selectedState: PropTypes.string,
   setUsState: PropTypes.func.isRequired,
   stateName: PropTypes.string.isRequired,
-  winnersOnly: PropTypes.bool,
+  winnersOnly: PropTypes.bool.isRequired,
 };
 
 MapInset.defaultProps = {
-  items: [],
+  items: {},
   selectedState: '',
-  winnersOnly: true,
 };
 
 export default MapInset;

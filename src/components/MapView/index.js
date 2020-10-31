@@ -137,7 +137,6 @@ class MapView extends React.Component {
       selectedState,
       allDoYourJobDistricts,
       winnersOnly,
-      mayorFeatures,
     } = this.props;
     const {
       mbMap,
@@ -453,7 +452,7 @@ MapView.propTypes = {
   searchByDistrict: PropTypes.func.isRequired,
   selectedState: PropTypes.string,
   setUsState: PropTypes.func.isRequired,
-  winnersOnly: PropTypes.func.isRequired,
+  winnersOnly: PropTypes.bool.isRequired,
 };
 
 MapView.defaultProps = {

@@ -71,7 +71,7 @@ class Table extends React.Component {
 }
 
 Table.propTypes = {
-  allDoYourJobDistricts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   isCurrentYear: PropTypes.bool.isRequired,
   items: PropTypes.shape({}).isRequired,
 };

@@ -8,8 +8,6 @@ export default class Legend extends React.Component {
   render() {
     const {
       toggleFilterToWinners,
-      filterBy,
-      removeFilterBy,
       isCurrentYear,
       showOnlyWinners,
     } = this.props;
@@ -20,9 +18,7 @@ export default class Legend extends React.Component {
         <FilterBar
           className="filterBar"
           toggleFilterToWinners={toggleFilterToWinners}
-          filterBy={filterBy}
           showOnlyWinners={showOnlyWinners}
-          removeFilterBy={removeFilterBy}
         />)}
         <ul className="list-inline">
 
@@ -65,9 +61,7 @@ export default class Legend extends React.Component {
 }
 
 Legend.propTypes = {
-  toggleFilterToWinners: PropTypes.func.isRequired,
-  filterBy: PropTypes.string,
-  showOnlyWinners: PropTypes.bool.isRequired,
-  removeFilterBy: PropTypes.func.isRequired,
   isCurrentYear: PropTypes.bool.isRequired,
+  showOnlyWinners: PropTypes.bool.isRequired,
+  toggleFilterToWinners: PropTypes.func.isRequired,
 };

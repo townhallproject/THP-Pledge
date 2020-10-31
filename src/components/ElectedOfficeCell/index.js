@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Card } from 'antd';
-import { find } from 'lodash';
+import { List, Card, Popover } from 'antd';
+import {
+  find,
+  isNaN,
+} from 'lodash';
 import { getTitle } from '../../data/dictionaries';
 import PledgerCell from '../PledgerCell';
 import { DYJD_COLOR } from '../constants';
 /* eslint-disable */
 require('style-loader!css-loader!antd/es/list/style/index.css');
+require('style-loader!css-loader!antd/es/popover/style/index.css');
 /* eslint-enable */
 
 const gridStyle = {
@@ -41,10 +45,8 @@ const getCardOrder = (electedOffice) => {
     case 'LD':
       return 1500 + stateElectedOfficeNumber;
     default:
-      return 2000; // we shouldn't end up here
+      return 2000; // we should never end up here, but if there's a card case we haven't handled
   }
-  return 2000; // we should never end up here, but if there's a card case we haven't handled
-  // we would rather the card be displayed last in the order
 };
 
 const getPeopleOrder = (pledger) => {
@@ -112,7 +114,7 @@ class ElectedOfficeCell extends React.Component {
             key={`${stateName}-${electedOffice}`}
             style={gridStyle}
             title={(
-              <React.Fragment>{title} {isDoYourJob ? <span className="do-your-job-icon-small" /> : null }</React.Fragment>)}
+              <React.Fragment>{title} {isDoYourJob ? <Popover title="Do your job district" content="Incumbent hasn't held any townhalls since 2016, and their opponent has taken the pledge"><span className="do-your-job-icon-small" /></Popover> : null }</React.Fragment>)}
             extra="Pledged"
             bordered={isDoYourJob}
             className="district-card"
@@ -139,13 +141,13 @@ class ElectedOfficeCell extends React.Component {
 }
 
 ElectedOfficeCell.propTypes = {
-  doYourJobDistricts: PropTypes.shape({}),
+  doYourJobDistricts: PropTypes.arrayOf(PropTypes.shape({})),
   items: PropTypes.shape({}),
   stateName: PropTypes.string.isRequired,
 };
 
 ElectedOfficeCell.defaultProps = {
-  doYourJobDistricts: {},
+  doYourJobDistricts: [],
   items: {},
 };
 

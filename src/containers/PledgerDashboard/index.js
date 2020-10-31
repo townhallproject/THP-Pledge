@@ -94,7 +94,6 @@ class PledgerDashboard extends React.Component {
       allDoYourJobDistricts,
       pledgersByDistrict,
       allPledgers,
-      filterBy,
       showOnlyWinners,
       year,
     } = this.props;
@@ -122,7 +121,6 @@ class PledgerDashboard extends React.Component {
         <Legend
           items={pledgersByDistrict}
           toggleFilterToWinners={toggleFilterToWinners}
-          filterBy={filterBy}
           isCurrentYear={isCurrentYear}
           showOnlyWinners={showOnlyWinners}
         />
@@ -140,19 +138,17 @@ class PledgerDashboard extends React.Component {
 const mapStateToProps = state => ({
   allDoYourJobDistricts: getDoYourJobDistricts(state),
   allPledgers: getAllPledgers(state),
-  filterBy: getFilterBy(state),
   mayorFeatures: getMayorFeatures(state),
   pledgersByDistrict: getPledgersByDistrict(state),
   pledgersByState: getPledgersByUsState(state),
-  showOnlyWinners: getFilterToWinners(state),
   selectedDistricts: getDistricts(state),
   selectedState: getUsState(state),
+  showOnlyWinners: getFilterToWinners(state),
   year: getElectionYear(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   getInitialPledgers: year => dispatch(startSetPledgers(year)),
-  removeFilterBy: filter => dispatch(selectionActions.removeFilterBy(filter)),
   resetSelections: () => dispatch(selectionActions.resetSelections()),
   searchByDistrict: val => dispatch(selectionActions.setDistrict(val)),
   setFilters: filters => dispatch(selectionActions.setFilters(filters)),
@@ -164,7 +160,6 @@ const mapDispatchToProps = dispatch => ({
 PledgerDashboard.propTypes = {
   allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   allPledgers: PropTypes.shape({}),
-  filterBy: PropTypes.shape({}).isRequired,
   getInitialPledgers: PropTypes.func.isRequired,
   mayorGeojson: PropTypes.shape({}),
   pledgersByDistrict: PropTypes.shape({}),
