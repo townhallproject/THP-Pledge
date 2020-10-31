@@ -43,18 +43,24 @@ class MapView extends React.Component {
     this.initializeMap();
   }
 
-  componentWillReceiveProps(nextProps) {
+  // eslint-disable-next-line consistent-return
+  componentDidUpdate(prevProps, prevState) {
+    const {
+      mbMap,
+    } = this;
     const {
       selectedState,
       districts,
-    } = nextProps;
-    this.map.metadata = { selectedState: nextProps.selectedState };
+    } = prevProps;
+
+    this.map.metadata = { selectedState: this.props.selectedState };
     if (selectedState) {
       this.toggleStateMask(selectedState);
       let bbname = selectedState.toUpperCase();
       this.map.metadata.level = 'districts';
 
       if (this.state.filterStyle === 'state') {
+        // eslint-disable-next-line react/no-did-update-set-state
         this.setState({ filterStyle: 'district' });
       }
 
@@ -67,7 +73,7 @@ class MapView extends React.Component {
         const selectObj = {
           district: districtPadded,
           geoID,
-          state: nextProps.selectedState,
+          state: this.props.selectedState,
         };
         this.districtSelect(selectObj);
       }
@@ -78,15 +84,10 @@ class MapView extends React.Component {
       this.toggleStateMask();
       this.setInitialStyles();
       this.map.metadata.level = 'state';
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ filterStyle: 'state' });
       return this.map.fitBounds([[-128.8, 23.6], [-65.4, 50.2]]);
     }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const {
-      mbMap,
-    } = this;
     // changing between coloring by state and coloring by district
     if (prevState.filterStyle !== this.state.filterStyle ||
       prevProps.selectedState !== this.props.selectedState ||
@@ -447,6 +448,7 @@ MapView.propTypes = {
   allDoYourJobDistricts: PropTypes.shape({}).isRequired,
   districts: PropTypes.arrayOf(PropTypes.number),
   items: PropTypes.shape({}).isRequired,
+  mayorFeatures: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   resetSelections: PropTypes.func.isRequired,
   searchByDistrict: PropTypes.func.isRequired,
   selectedState: PropTypes.string,
