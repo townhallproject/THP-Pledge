@@ -1,8 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import {
-  batchActions,
   enableBatching,
-  batchDispatchMiddleware,
 } from 'redux-batched-actions';
 
 import thunk from 'redux-thunk';
