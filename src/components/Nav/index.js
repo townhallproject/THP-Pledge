@@ -77,13 +77,13 @@ class Nav extends React.Component {
           <Menu.Item
             className="social-icons"
           >
-            <a className="linkOut" href="https://twitter.com/townhallproject" target="_blank"><Icon type="twitter" aria-hidden="true" />
+            <a className="linkOut" href="https://twitter.com/townhallproject" target="_blank" rel="noreferrer"><Icon type="twitter" aria-hidden="true" />
             </a>
           </Menu.Item>
           <Menu.Item
             className="social-icons"
           >
-            <a className="linkOut" href="https://www.facebook.com/TownHallProject/" target="_blank"><Icon type="facebook" aria-hidden="true" />
+            <a className="linkOut" href="https://www.facebook.com/TownHallProject/" target="_blank" rel="noreferrer"><Icon type="facebook" aria-hidden="true" />
             </a>
           </Menu.Item>
           <Menu.Item

@@ -37,7 +37,7 @@ class Table extends React.Component {
 
                 <React.Fragment>
                   <span>
-                  Total pledged:
+                    Total pledged:
                   </span>
                   <Badge count={totalPledgedInState(items[state]) ? totalPledgedInState(items[state]) : 0} style={{ backgroundColor: PLEDGED_COLOR_DARK }} />
                   <div className="card-footer">* Incumbent

@@ -25,7 +25,7 @@ const FilterBar = (props) => {
 
   return (
     <div className="container-fluid filter-bar">
-        Showing:
+      Showing:
       <Switch
         onChange={changeNomineeToggle}
         checkedChildren="Pledged winners"

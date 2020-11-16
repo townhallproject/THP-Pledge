@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 
 import {
   getAllPledgers,
@@ -95,7 +94,7 @@ class PledgerDashboard extends React.Component {
       showOnlyWinners,
       year,
     } = this.props;
-    const isCurrent = isCurrentYear(year)
+    const isCurrent = isCurrentYear(year);
     if (this.state.init) {
       return (<SearchBar
         items={pledgersByDistrict}
