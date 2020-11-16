@@ -3,7 +3,7 @@ import { uniqBy } from 'lodash';
 export const initialState = {
   currentElectionYear: '2020',
   districts: [],
-  filterToWinners: false,
+  filterToWinners: true,
   filters: [],
   usState: '',
   zipcode: '',

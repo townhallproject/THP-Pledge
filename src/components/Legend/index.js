@@ -11,7 +11,6 @@ export default class Legend extends React.Component {
       isCurrentYear,
       showOnlyWinners,
     } = this.props;
-
     return (
       <div className="map-legend">
         {!isCurrentYear && (

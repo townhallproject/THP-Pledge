@@ -49,7 +49,6 @@ class Nav extends React.Component {
     const {
       electionYear,
     } = this.props;
-    console.log(electionYear);
     return (<React.Fragment>Election Year {electionYear || <Icon type="loading" /> } <Icon type="caret-down" /></React.Fragment>);
   }
 

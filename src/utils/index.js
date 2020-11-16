@@ -47,4 +47,4 @@ export const zeroPadding = (district) => {
   return zeros.substring(0, zeros.length - districtString.length) + districtString;
 };
 
-export const isCurrentYear = year => year === moment().year().toString();
+export const isCurrentYear = year => year === moment().add(2, 'M').year().toString();

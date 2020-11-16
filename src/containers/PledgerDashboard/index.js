@@ -33,6 +33,7 @@ import Table from '../../components/Table';
 
 import './style.scss';
 import Legend from '../../components/Legend';
+import { isCurrentYear } from '../../utils';
 
 class PledgerDashboard extends React.Component {
   constructor(props) {
@@ -94,8 +95,7 @@ class PledgerDashboard extends React.Component {
       showOnlyWinners,
       year,
     } = this.props;
-    const isCurrentYear = year === moment().year().toString();
-
+    const isCurrent = isCurrentYear(year)
     if (this.state.init) {
       return (<SearchBar
         items={pledgersByDistrict}
@@ -108,7 +108,7 @@ class PledgerDashboard extends React.Component {
           <Table
             allDoYourJobDistricts={allDoYourJobDistricts}
             items={pledgersByDistrict}
-            isCurrentYear={isCurrentYear}
+            isCurrentYear={isCurrent}
           />
         </div>
         <SearchBar
@@ -118,7 +118,7 @@ class PledgerDashboard extends React.Component {
         <Legend
           items={pledgersByDistrict}
           toggleFilterToWinners={toggleFilterToWinners}
-          isCurrentYear={isCurrentYear}
+          isCurrentYear={isCurrent}
           showOnlyWinners={showOnlyWinners}
         />
         {this.renderMap()}
