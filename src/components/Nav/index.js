@@ -92,10 +92,7 @@ class Nav extends React.Component {
             <a data-toggle="tab" className="linkOut" href="mailto:info@townhallproject.com"><Icon type="mail" /></a>
           </Menu.Item>
           <Divider type="vertical" />
-          <Menu.Item>
-            <a href="//townhallproject.com" rel="noopener noreferrer" target="_blank" className="linkOut"><div className="main-site" /> Main site </a>
-          </Menu.Item>
-          <Button href="https://secure.actblue.com/contribute/page/townhallproject" className="linkOut btn" id="donate-button" role="button" target="_blank">Donate</Button>
+
         </Menu>
 
       </div>
