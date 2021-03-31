@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Icon,
-  Button,
   Menu,
   Divider,
 } from 'antd';
@@ -77,19 +76,13 @@ class Nav extends React.Component {
           <Menu.Item
             className="social-icons"
           >
-            <a className="linkOut" href="https://twitter.com/townhallproject" target="_blank" rel="noreferrer"><Icon type="twitter" aria-hidden="true" />
+            <a className="linkOut" href="https://twitter.com/townhallpledge" target="_blank" rel="noreferrer"><Icon type="twitter" aria-hidden="true" />
             </a>
           </Menu.Item>
           <Menu.Item
             className="social-icons"
           >
-            <a className="linkOut" href="https://www.facebook.com/TownHallProject/" target="_blank" rel="noreferrer"><Icon type="facebook" aria-hidden="true" />
-            </a>
-          </Menu.Item>
-          <Menu.Item
-            className="social-icons"
-          >
-            <a data-toggle="tab" className="linkOut" href="mailto:info@townhallproject.com"><Icon type="mail" /></a>
+            <a data-toggle="tab" className="linkOut" href="mailto:info@townhallpledge.com"><Icon type="mail" /></a>
           </Menu.Item>
           <Divider type="vertical" />
 
