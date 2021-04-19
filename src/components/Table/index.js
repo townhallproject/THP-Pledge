@@ -26,15 +26,23 @@ class Table extends React.Component {
     } = this.props;
 
     const emptyMessage = isCurrentYear ? 'No candidates have taken the pledge yet in this state' : 'No winning candidates took the pledge in this state';
-    return Object.keys(items)
+    const stateAbbreviations = Object.keys(items);
+
+    stateAbbreviations.sort((a, b) => {
+      const stateA = stateAbrvToName[a].toLowerCase();
+      const stateB = stateAbrvToName[b].toLowerCase();
+      if (stateA < stateB) return -1;
+      if (stateA > stateB) return 1;
+      return 0;
+    });
+
+    return stateAbbreviations
       .map((state) => {
         const doYourJobDistricts = filter(allDoYourJobDistricts, ele => (ele.state === state));
         return (
-          <React.Fragment>
+          <React.Fragment key={state}>
             <Card
-              key={state}
               extra={items[state] && totalPledgedInState(items[state]) > 0 ? (
-
                 <React.Fragment>
                   <span>
                     Total pledged:
