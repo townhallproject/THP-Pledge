@@ -32,7 +32,7 @@
     "eslint": "^4.19.1",
     "http-server": "^0.12.3",
     "livereload": "^0.9.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "moment": "^2.22.1",
     "prop-types": "^15.7.2",
     "react": "^16.3.2",
