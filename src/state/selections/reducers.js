@@ -1,9 +1,9 @@
 import { uniqBy } from 'lodash';
 
 export const initialState = {
-  currentElectionYear: '2020',
+  currentElectionYear: '2022',
   districts: [],
-  filterToWinners: true,
+  filterToWinners: false,
   filters: [],
   usState: '',
   zipcode: '',

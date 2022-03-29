@@ -12,7 +12,7 @@
     "deploy": "gh-pages -d build",
     "build": "webpack --config webpack.prod.js",
     "prebuild": "rm -rf build/bundle.*",
-    "watch": "webpack-dev-server --inline --hot --public --config webpack.config.js"
+    "start": "webpack-dev-server --inline --hot --public --config webpack.config.js"
   },
   "repository": {
     "type": "git",

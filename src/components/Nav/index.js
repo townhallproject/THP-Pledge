@@ -39,6 +39,7 @@ class Nav extends React.Component {
         <Menu.Item key="2018" onClick={this.handleYearSwitch}>2018</Menu.Item>
         {/* <Menu.Item key="2019" onClick={this.handleYearSwitch}>2019</Menu.Item> */}
         <Menu.Item key="2020" onClick={this.handleYearSwitch}>2020</Menu.Item>
+        <Menu.Item key="2022" onClick={this.handleYearSwitch}>2022</Menu.Item>
 
       </MenuItemGroup>
     );
