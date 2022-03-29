@@ -63,7 +63,11 @@ class Nav extends React.Component {
         >
           <Menu.Item>
             <a className="navbar-brand" href="/">
-              <img src="images/THP_logo_horizontal_simple_pledge.png" className="d-inline-block align-top" alt="Town Hall Project Pledge" />
+              <img
+                src="images/townhallpledge_logo.png"
+                className="d-inline-block align-top"
+                alt="Town Hall Pledge"
+              />
             </a>
           </Menu.Item>
           <SubMenu title={this.renderMenuTitle()}>
